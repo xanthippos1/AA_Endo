@@ -2,7 +2,7 @@
 
 - **Purpose**: Digitize and archive handwritten notes of a Greek Endocrinologist (Dr. Dimitrios G. Bougiouklis, Thessaloniki)
 - **Long-term goal**: Build a complete system/application this endocrinologist can use to both lookup old notes, as well as enter new notes from either a desktop app or an iPad/iPhone
-- **Current phase**: Digitizing individual patient notes into structured Word documents. We are using "Version 7" (v7) as the standard format going forward.
+- **Current phase**: Digitizing individual patient notes into structured Word documents using "Version 7" (v7) format.
 
 ## General Instructions
 
@@ -12,165 +12,144 @@
 - The notes are in Greek. Keep all transcriptions in Greek. English words appear mostly for medications or medical terms.
 - Dates are in European format (DD/MM/YYYY)
 - AMKA numbers: mask all but last 4 digits (e.g. *******0891)
-- This specific endocrinologist has a consistent system in how he takes notes — patterns are documented in `transcription_knowledge.json`
+
+## How to Transcribe a New Patient — Step by Step
+
+**This is the procedure. Follow it exactly.**
+
+### Step 1: Setup
+
+1. Install dependency if not already present: `npm install docx`
+2. Read `transcription_knowledge.json` — it contains confirmed abbreviations, known misread patterns, corrections from previous patients, and medical term dictionary. USE THIS KNOWLEDGE to avoid repeating known mistakes.
+
+### Step 2: Prepare the Source Image
+
+- Source JPGs are in `original_jpg/` (full 1700x2366 resolution, converted from PDF via `pdftoppm -jpeg -jpegopt quality=95 -r 72`). There may also be manually cropped versions prefixed with `x` in `redacted/`.
+- View the JPG image(s) to read the handwriting.
+- Note the image dimensions — you'll need width and height in pixels for the image embedding step.
+
+### Step 3: Copy and Adapt the Template Script
+
+1. **Copy `v7_template_generator.js`** to a new file named `create_patientXXX_v7.js` (where XXX is the patient number)
+2. Update the CONFIGURATION section at top:
+   - `IMAGE_FILES`: set paths and pixel dimensions for each page's JPG
+   - `OUTPUT_PATH`: set to `./transcribed/v7/PatientXXX_N_digitized_v7.docx`
+   - `PATIENT_AMKA`: set masked AMKA or `"[Δεν καταγράφηκε]"`
+3. Replace the `transcriptionChildren` array with actual transcribed content (see Step 4)
+
+### Step 4: Transcribe the Handwriting
+
+Read the JPG image and transcribe the content into the template's section structure. **Use the helper functions from the template — do NOT try to create docx elements from scratch.**
+
+**Section order (matches doctor's consistent note structure):**
+
+| Row | Sections (side by side) | Function |
+|-----|------------------------|----------|
+| 1 | ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ \| ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ | `twoBoxRow(...)` |
+| 2 | ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ \| ΠΑΡΟΥΣΑ ΝΟΣΟΣ | `twoBoxRow(...)` |
+| 3 | ΠΑΡΑΠΟΜΠΗ \| ΑΝΑΜΝΗΣΤΙΚΟ | `twoBoxRow(...)` |
+| 4 | ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ (3 or 4 columns) | `threeBoxRow(...)` or `fourBoxRow(...)` |
+| 5 | ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ | `fullWidthBox(...)` with `examTable(...)` |
+| 6 | ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ | `fullWidthBox(...)` with `labTable(...)` |
+| 7 | ΟΔΗΓΙΕΣ | `fullWidthBox(...)` |
+
+**Color coding rules — critical for correct output:**
+- `medical("text")` → PURPLE + UPPERCASE + BOLD — use for ALL disease names, medical conditions, anatomical terms
+- `drug("text")` → PURPLE + UPPERCASE + BOLD — use for ALL medication/pharmaceutical names
+- `uncertain("text")` → RED + [text?] brackets — use when handwriting is unclear
+- `uncertainNum("text")` → RED (no brackets) — use for uncertain numbers/dates
+- `normal("text")` → black regular text
+- `bold("text")` → black bold text (use for labels)
+- `nLine([...children])` → creates a numbered row with mixed formatting
+- `nLabelVal("Label", "value")` → shortcut for "Label: Value" rows
+
+**Multiple visits**: If the note contains more than one visit date, add each as a separate `ΕΠΙΣΚΕΨΗ N — DD/MM/YYYY` heading. For visit 2+, patient demographics can reference visit 1: `nLine([italic("Βλ. Επίσκεψη 1 (χωρίς αλλαγές)")])`.
+
+### Step 5: Generate the Document
+
+```bash
+node create_patientXXX_v7.js
+```
+
+This produces the .docx in `transcribed/v7/`. The script automatically:
+- Numbers all content rows sequentially (01, 02, ...)
+- Appends original scan image(s) as full-page images in a separate docx section
+- Applies fit-to-page scaling to images
+- Adds page numbers in footer
+
+### Step 6: Update Knowledge Base
+
+After transcription, update `transcription_knowledge.json`:
+- Add any new medical terms to `common_medical_terms`
+- Add any new medications to `medication_names.seen`
+- Add any new confirmed abbreviations
+- Log uncertain readings in `transcription_stats`
+- Note any new handwriting patterns
 
 ## Folder Structure
 
 ```
 AA_Endo/
-├── CLAUDE.md                              # This file — project context
-├── transcription_knowledge.json           # Knowledge base (abbreviations, corrections, patterns, medical terms)
-├── original/                              # Original scanned PDFs (Patient001-005)
-├── original_jpg/                          # Full-resolution JPGs converted from PDFs (1700x2366px, quality 95)
+├── CLAUDE.md                              # This file — project instructions
+├── v7_template_generator.js               # TEMPLATE SCRIPT — copy this for each new patient
+├── transcription_knowledge.json           # Knowledge base — READ BEFORE EVERY TRANSCRIPTION
+├── original/                              # Original scanned PDFs
+├── original_jpg/                          # Full-resolution JPGs (1700x2366, quality 95)
 │   ├── Patient001_1.jpg ... Patient001_5.jpg
 │   ├── Patient002_1.jpg, Patient002_2.jpg
 │   ├── Patient003_3.jpg
 │   ├── Patient004_1.jpg
 │   └── Patient005_1.jpg, Patient005_2.jpg
 ├── transcribed/
-│   ├── v0/ through v6/                    # Earlier format iterations (superseded by v7)
+│   ├── v0/ through v6/                    # Superseded — ignore
 │   └── v7/                                # Current production format
-│       ├── Patient004_1_digitized_v7.docx
-│       └── Patient005_1_digitized_v7.docx
-├── Patient004_1_digitized_v3.pdf          # Legacy — an early PDF output
-└── xPatient004_digitized_gpt54_v1.docx    # ChatGPT comparison attempt
+│       ├── Patient004_1_digitized_v7.docx # 88 rows, 2 visits — reference output
+│       └── Patient005_1_digitized_v7.docx # 112 rows, 2 visits — reference output
+├── Patient004_1_digitized_v3.pdf          # Legacy
+└── xPatient004_digitized_gpt54_v1.docx    # ChatGPT comparison (poor quality)
 ```
-
-Note: The `redacted/` folder was used for cropped JPGs with patient name redaction (prefixed with `x`). Some cropped versions (xPatient004_1.jpg, xPatient005_1.jpg, xPatient005_2.jpg) may still exist there. The `original_jpg/` folder contains full-resolution, un-cropped conversions from the original PDFs.
 
 ## PDF to JPG Conversion
 
-The original PDFs are scans of paper that is smaller than A4/Letter, so there is white space from the scanner bed around them. Key details:
-- Native resolution inside all PDFs: 1700x2366 pixels, 72 DPI
-- The raw images inside the PDFs are stored upside-down (180° rotation) — the PDF has a transformation matrix to display them correctly. **Do NOT use `pdfimages` for extraction** as it ignores the transform. Use `pdftoppm` instead.
-- Conversion command: `pdftoppm -jpeg -jpegopt quality=95 -r 72 -singlefile input.pdf output_prefix`
-- Automated cropping was attempted but the contrast between paper and scanner bed is too subtle for reliable detection. Manual cropping via Windows Paint/Photos (one save cycle is fine) or using the `x`-prefixed pre-cropped versions is recommended.
+- Native resolution: 1700x2366 pixels, 72 DPI
+- **Do NOT use `pdfimages`** — it ignores the PDF's rotation transform and produces upside-down images
+- Correct command: `pdftoppm -jpeg -jpegopt quality=95 -r 72 -singlefile input.pdf output_prefix`
 
-## Version 7 (v7) Document Format — THE CURRENT STANDARD
+## Knowledge Base
 
-v7 is a **hybrid format**: structured digital transcription followed by the original handwritten scan appended as a full-page image at the end of the document. This gives the doctor both searchable/editable digital text AND the original for reference.
+`transcription_knowledge.json` contains everything learned from previous transcriptions:
 
-### Transcription Section Structure
+- **abbreviations.confirmed**: e.g. κφ = κανονικά φυσιολογικά, ΦΤ = φυσιολογικές τιμές
+- **handwriting_patterns.confirmed**: e.g. year 2↔9 confusion, ΕΜΜΗΝΟΠΑΥΣΗ misread patterns
+- **hallucination_warnings**: Cases where AI generated exam items NOT in the original scan — cross-reference every line against the image
+- **corrections_log**: Row-by-row corrections from doctor review of Patient004
+- **common_medical_terms**: Greek→English medical dictionary (60+ terms)
+- **medication_names**: Running list of drugs seen in notes
 
-Each patient document is generated by a Node.js script using the `docx` npm package. The transcription section uses:
+## Correction Workflow
 
-**Page layout**: A4 with 2cm margins, headers showing "ΙΑΤΡΙΚΟ ΣΗΜΕΙΩΜΑ — ΕΝΔΟΚΡΙΝΟΛΟΓΙΚΟ" and footers with page numbers
+1. Doctor reviews .docx output
+2. Doctor provides corrections as "Row XX: X should be Y"
+3. Corrections added to `transcription_knowledge.json` under `corrections_log`
+4. Knowledge improves accuracy of future transcriptions
+5. Uncertain readings (red `[text?]`) are priority items for doctor review
 
-**Section boxes** (organized as horizontal pairs in rows):
-- Row 1: ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ (patient demographics) | ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ (social/lifestyle)
-- Row 2: ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ (current medication) | ΠΑΡΟΥΣΑ ΝΟΣΟΣ (presenting illness)
-- Row 3: ΠΑΡΑΠΟΜΠΗ (referral) | ΑΝΑΜΝΗΣΤΙΚΟ (medical history)
-- Row 4: ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ — 3 or 4 columns: Self | Πατέρας | Μητέρα | (Αδέρφια if applicable)
-- Row 5: ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ (clinical examination)
-- Row 6: ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ (lab results — can be empty placeholder)
-- Row 7: ΟΔΗΓΙΕΣ (instructions/orders)
+## Patients Status
 
-Multiple visits for the same patient appear in the same document, separated by visit date headers.
+| Patient | Pages | v7 Status | Doctor Review |
+|---------|-------|-----------|---------------|
+| 001 | 5 | **Not started** | No |
+| 002 | 2 | **Not started** | No |
+| 003 | 1 | **Not started** | No |
+| 004 | 1 | **v7 complete** (88 rows, 2 visits) | Partial (rows 1-38) |
+| 005 | 2 | **v7 complete** (112 rows, 2 visits) | No |
 
-**Row numbering**: Every content line gets a sequential gray number (01, 02, ...) using Courier New size 14, color #999999. This lets the doctor reference specific lines for corrections.
+## Critical Lessons (Do Not Ignore)
 
-**Color coding**:
-- Medical terms and drug names: PURPLE (#7B2D8E) + UPPERCASE + BOLD
-- Uncertain readings: RED (#CC0000) with `[text?]` brackets
-- Section titles: BLUE (#2E75B6) + BOLD
-- Row numbers: GRAY (#999999)
-
-**Font**: Arial, size 18 (half-points, so 9pt) for normal text, size 16 for small text
-
-### Appended Original Scan Section
-
-The original JPG scan is appended in a **separate docx section** with different page properties:
-- A4 page size (11906 x 16838 DXA)
-- Minimal margins: 0.5cm all sides (284 DXA)
-- No headers or footers
-- Image scaled using **fit-to-page logic**: calculate both width-scale (793/imgW) and height-scale (1138/imgH), use whichever is smaller. Available area at 96 DPI: 793px wide × 1138px tall.
-- Multiple pages = multiple ImageRun elements with `pageBreakBefore: true` on subsequent pages
-
-**Critical technical note**: docx-js `ImageRun` transformation uses pixels at 96 DPI. You MUST use a separate docx section for the image pages because you cannot mix different margin sizes within one section.
-
-### Fit-to-Page Helper Function
-
-```javascript
-const MAX_IMG_W = 793;   // A4 width minus 0.5cm margins at 96 DPI
-const MAX_IMG_H = 1138;  // A4 height minus 0.5cm margins at 96 DPI
-function fitToPage(imgW, imgH) {
-  const scaleW = MAX_IMG_W / imgW;
-  const scaleH = MAX_IMG_H / imgH;
-  const scale = Math.min(scaleW, scaleH);
-  return { width: Math.round(imgW * scale), height: Math.round(imgH * scale) };
-}
-```
-
-### Generating a v7 Document
-
-The v7 generator scripts are Node.js files using the `docx` npm package. They were created in the Cowork session's temp directory and are NOT in the repo. However, the pattern is well-established:
-
-1. Read `transcription_knowledge.json` for known abbreviations, patterns, corrections
-2. View the source JPG image (from `original_jpg/` or a cropped version)
-3. Transcribe the handwriting into structured sections
-4. Generate the .docx using `docx` package with the formatting rules above
-5. Append the original scan image(s) in a separate section
-6. Save to `transcribed/v7/PatientXXX_N_digitized_v7.docx`
-
-**Dependencies**: `docx` npm package (install with `npm install docx`)
-
-**Timing benchmarks**: Patient004 (1 page, 88 rows) ≈ 4.5 min pure transcription; Patient005 (2 pages, 112 rows) ≈ 4 min (faster due to established patterns)
-
-## Knowledge Base & Correction Workflow
-
-- **Knowledge file**: `transcription_knowledge.json` — accumulates abbreviations, patterns, corrections, and medical terms across ALL transcriptions
-- **ALWAYS read `transcription_knowledge.json` before transcribing a new note** — use confirmed abbreviations, known patterns, and past corrections to improve accuracy
-- **Correction flow**: Doctor reviews .docx → provides corrections (either annotated in Word or as "Row XX: X should be Y") → corrections get added to `transcription_knowledge.json` under `corrections_log` → knowledge improves future transcriptions
-- **Uncertain readings**: Marked in red with `[text?]` in the document — these are the priority items for doctor review
-
-### What's in the Knowledge Base
-
-- `doctor_profile`: Name, specialty, location
-- `formatting_rules`: Color codes, phone format, AMKA masking
-- `abbreviations.confirmed`: Known shorthand (e.g. κφ = κανονικά φυσιολογικά)
-- `abbreviations.unconfirmed_ask_doctor`: Need doctor confirmation
-- `note_structure`: Consistent template the doctor follows
-- `handwriting_patterns.confirmed`: Known misread patterns (e.g. 2↔9 confusion in years)
-- `handwriting_patterns.hallucination_warnings`: Cases where the AI generated exam items that were NOT in the original scan — critical to avoid
-- `corrections_log`: Row-by-row corrections from doctor review
-- `common_medical_terms`: Greek→English medical term dictionary (display in PURPLE + UPPERCASE)
-- `medication_names`: Running list of drugs seen in notes
-- `transcription_stats`: Per-patient timing and accuracy stats
-- `document_format_v7`: Technical details of the current format
-- `note_structure_observations`: Patient-specific structural differences
-
-## Patients Processed So Far
-
-| Patient | Pages | Source Files | v7 Status | Doctor Review |
-|---------|-------|-------------|-----------|---------------|
-| 001 | 5 | Patient001_1 through _5 | Not started | No |
-| 002 | 2 | Patient002_1, _2 | Not started | No |
-| 003 | 1 | Patient003_3 | Not started | No |
-| 004 | 1 | Patient004_1 | **v7 complete** (88 rows, 2 visits) | Partial (rows 1-38 from v2) |
-| 005 | 2 | Patient005_1, _2 | **v7 complete** (112 rows, 2 visits) | No |
-
-## Important Lessons Learned
-
-1. **Hallucination risk**: The AI sometimes generates plausible-looking exam items that are NOT in the original scan. Always cross-reference every transcribed line against the actual image. See `hallucination_warnings` in the knowledge base.
-
-2. **Year confusion**: The handwriting makes 2 and 9 look similar. Flag uncertain years in red.
-
-3. **Don't use `pdfimages`** for PDF→JPG conversion — it ignores the PDF's rotation transform and produces upside-down images. Use `pdftoppm` instead.
-
-4. **JPG vs PNG for embedding in docx**: JPG at quality 75 is 7x smaller than PNG for scans with no visible quality loss. Use JPG.
-
-5. **docx section separation**: You MUST use a separate section for the appended original images because they need different margins (0.5cm) than the transcription section (2cm).
-
-6. **Fit-to-page is mandatory**: Always check both width and height constraints for image embedding and use whichever is more limiting. Previous attempts that only checked width resulted in images overflowing the page.
-
-7. **Patient names must be redacted**: The `x` prefix on JPG filenames in `redacted/` indicates the patient name has been obscured. When transcribing, use "Ασθενής XXX" format, not actual names.
-
-8. **Version progression**: We went through v0-v6 before settling on v7. Earlier versions tried different approaches including cropped section images (v6 approach 1, rejected) and various layout tweaks. v7's hybrid approach (digital text + appended original) is the agreed standard.
-
-## Next Steps / Open Work
-
-- **Patient001 through Patient003**: Need v7 transcription. Source JPGs are in `original_jpg/`.
-- **Doctor review**: Patient004 v7 and Patient005 v7 need full doctor review. Corrections should be entered into `transcription_knowledge.json`.
-- **Unconfirmed abbreviations**: Several abbreviations in the knowledge base need doctor confirmation (Χ/Γ, ΑΙ, SE, 6λφ, Κ.Ο., ΠΔΚ).
-- **Cropping automation**: Automated cropping of scanner bed whitespace was attempted but the contrast between paper and scanner bed is too subtle. Manual cropping or a better detection algorithm needed.
-- **Future features**: Clickable row-number-to-handwriting linking (better suited for a web app), correction UI with autocomplete/medical dictionary, voice dictation support.
+1. **Hallucination risk**: AI sometimes generates plausible exam items NOT in the scan. Cross-reference EVERY line against the image.
+2. **Year confusion**: 2 and 9 look similar in this handwriting. Flag uncertain years in red.
+3. **Use the template script**: Do NOT write docx generation code from scratch. Copy `v7_template_generator.js` and adapt it. The template contains all the exact formatting, sizing, and structure that took many iterations to get right.
+4. **Image embedding requires separate docx section**: Transcription uses 2cm margins, appended scans use 0.5cm margins. These MUST be in different docx sections.
+5. **Fit-to-page**: Always use `fitToPage(imgW, imgH)` for image sizing — checks both width and height constraints.
+6. **JPG for scans**: JPG at quality 75-95 is 7x smaller than PNG with no visible loss.
+7. **Patient names**: Always redact. Use "Ασθενής XXX" format.
