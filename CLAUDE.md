@@ -1,54 +1,176 @@
 ## Project Overview
 
-- **Purpose**: Digitize and archive handwritten notes of an Endocrinologist
-- **Approach:**: The ultimate goal is to build a complete system/application this endocrinologist can use to both lookup old notes, as well as enter new notes from either a desktop app or an ipad/iPhone. 
-- **First Pass**: We will start with a small step, first attempting to convert a single two page note corresponding to 2-3 patient visits of a single client.
+- **Purpose**: Digitize and archive handwritten notes of a Greek Endocrinologist (Dr. Dimitrios G. Bougiouklis, Thessaloniki)
+- **Long-term goal**: Build a complete system/application this endocrinologist can use to both lookup old notes, as well as enter new notes from either a desktop app or an iPad/iPhone
+- **Current phase**: Digitizing individual patient notes into structured Word documents. We are using "Version 7" (v7) as the standard format going forward.
 
-## General instructions
+## General Instructions
 
-- **only check into git repository when I ask you to**
-- **dont use pip or uv pip to install ANYTHING, always ask me to install manually**
-- **do not store any names you scan. convert the name to a number/id upon scanning**
-- The notes are in Greek. You will need to digitize this but keep it all in Greek. There will be english words mostly corresponding to medications or metical terms.
-- This specific endocrinologist has a system in how he takes notes, which we will learn and exploit over time.
-- For the time being we just want to make an initial pass to see how good the charactor recongnition software is at transcribing/digitizing handwritten notes in Greek.
-
-## TASKS
-
-### TASK 1: Scan and convert first snan into a  digitized note
-
-- files: Patient004_1.pdf
-- This is a scan of handwritten notes for single patient. We will call them Patient 004.
-- Dates are in european format (DD/MM/YYYY)
-- This note contains notes from two separate visits of the patient.
-- Think carefully about what tools/languages/packages we will use for OCR, etc.
-- I am not knowledgeable in this area so we will have to do carefully research about best practices.
-- We are not worried at this stage about the larger scope of building a full application. Just with the more narrow task of being able to digitize these notes as accurately as possible. If we get the words, phrases, sentences, dates, medical terms accurately into electronic form on a document by document basis, we will be able to figure out how to organize/store etc a large number of notes and patients. First let's deal with this narrow task.
-- Please research carefully what technologies are available for this type of task.
-- This digitization needs to be done with as little manual work as possible There are thousands of notes.
-- Output format: Word (.docx) with row numbers for easy correction reference
+- **Only check into git repository when explicitly asked**
+- **Do not use pip or uv pip to install ANYTHING — always ask the user to install manually**
+- **Do not store any patient names. Convert names to a number/ID upon scanning (e.g. "Ασθενής 004")**
+- The notes are in Greek. Keep all transcriptions in Greek. English words appear mostly for medications or medical terms.
+- Dates are in European format (DD/MM/YYYY)
 - AMKA numbers: mask all but last 4 digits (e.g. *******0891)
+- This specific endocrinologist has a consistent system in how he takes notes — patterns are documented in `transcription_knowledge.json`
 
-### TASK 2: Reorganize document
+## Folder Structure
 
-- Place the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ and the ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ sections in two boxes next to each other (horizontal)
-- In general we will place everythin in sections.
-- Place ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ and ΠΑΡΟΥΣΑ ΝΟΣΟΣ also in two boxes horizontally
-- ΠΑΡΑΠΟΜΠΗ and ΑΝΑΜΝΗΣΤΙΚΟ also in two boxes horizontally
-- So, three rows so far
-- ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ should be three boxes, Self left, Πατέρας middle and Μητέρα right
-- There should be a section for ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ (left emptyin the first visit, just have the placeholder)
-- A box for ΟΔΗΓΙΕΣ at the end.
+```
+AA_Endo/
+├── CLAUDE.md                              # This file — project context
+├── transcription_knowledge.json           # Knowledge base (abbreviations, corrections, patterns, medical terms)
+├── original/                              # Original scanned PDFs (Patient001-005)
+├── original_jpg/                          # Full-resolution JPGs converted from PDFs (1700x2366px, quality 95)
+│   ├── Patient001_1.jpg ... Patient001_5.jpg
+│   ├── Patient002_1.jpg, Patient002_2.jpg
+│   ├── Patient003_3.jpg
+│   ├── Patient004_1.jpg
+│   └── Patient005_1.jpg, Patient005_2.jpg
+├── transcribed/
+│   ├── v0/ through v6/                    # Earlier format iterations (superseded by v7)
+│   └── v7/                                # Current production format
+│       ├── Patient004_1_digitized_v7.docx
+│       └── Patient005_1_digitized_v7.docx
+├── Patient004_1_digitized_v3.pdf          # Legacy — an early PDF output
+└── xPatient004_digitized_gpt54_v1.docx    # ChatGPT comparison attempt
+```
 
+Note: The `redacted/` folder was used for cropped JPGs with patient name redaction (prefixed with `x`). Some cropped versions (xPatient004_1.jpg, xPatient005_1.jpg, xPatient005_2.jpg) may still exist there. The `original_jpg/` folder contains full-resolution, un-cropped conversions from the original PDFs.
+
+## PDF to JPG Conversion
+
+The original PDFs are scans of paper that is smaller than A4/Letter, so there is white space from the scanner bed around them. Key details:
+- Native resolution inside all PDFs: 1700x2366 pixels, 72 DPI
+- The raw images inside the PDFs are stored upside-down (180° rotation) — the PDF has a transformation matrix to display them correctly. **Do NOT use `pdfimages` for extraction** as it ignores the transform. Use `pdftoppm` instead.
+- Conversion command: `pdftoppm -jpeg -jpegopt quality=95 -r 72 -singlefile input.pdf output_prefix`
+- Automated cropping was attempted but the contrast between paper and scanner bed is too subtle for reliable detection. Manual cropping via Windows Paint/Photos (one save cycle is fine) or using the `x`-prefixed pre-cropped versions is recommended.
+
+## Version 7 (v7) Document Format — THE CURRENT STANDARD
+
+v7 is a **hybrid format**: structured digital transcription followed by the original handwritten scan appended as a full-page image at the end of the document. This gives the doctor both searchable/editable digital text AND the original for reference.
+
+### Transcription Section Structure
+
+Each patient document is generated by a Node.js script using the `docx` npm package. The transcription section uses:
+
+**Page layout**: A4 with 2cm margins, headers showing "ΙΑΤΡΙΚΟ ΣΗΜΕΙΩΜΑ — ΕΝΔΟΚΡΙΝΟΛΟΓΙΚΟ" and footers with page numbers
+
+**Section boxes** (organized as horizontal pairs in rows):
+- Row 1: ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ (patient demographics) | ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ (social/lifestyle)
+- Row 2: ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ (current medication) | ΠΑΡΟΥΣΑ ΝΟΣΟΣ (presenting illness)
+- Row 3: ΠΑΡΑΠΟΜΠΗ (referral) | ΑΝΑΜΝΗΣΤΙΚΟ (medical history)
+- Row 4: ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ — 3 or 4 columns: Self | Πατέρας | Μητέρα | (Αδέρφια if applicable)
+- Row 5: ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ (clinical examination)
+- Row 6: ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ (lab results — can be empty placeholder)
+- Row 7: ΟΔΗΓΙΕΣ (instructions/orders)
+
+Multiple visits for the same patient appear in the same document, separated by visit date headers.
+
+**Row numbering**: Every content line gets a sequential gray number (01, 02, ...) using Courier New size 14, color #999999. This lets the doctor reference specific lines for corrections.
+
+**Color coding**:
+- Medical terms and drug names: PURPLE (#7B2D8E) + UPPERCASE + BOLD
+- Uncertain readings: RED (#CC0000) with `[text?]` brackets
+- Section titles: BLUE (#2E75B6) + BOLD
+- Row numbers: GRAY (#999999)
+
+**Font**: Arial, size 18 (half-points, so 9pt) for normal text, size 16 for small text
+
+### Appended Original Scan Section
+
+The original JPG scan is appended in a **separate docx section** with different page properties:
+- A4 page size (11906 x 16838 DXA)
+- Minimal margins: 0.5cm all sides (284 DXA)
+- No headers or footers
+- Image scaled using **fit-to-page logic**: calculate both width-scale (793/imgW) and height-scale (1138/imgH), use whichever is smaller. Available area at 96 DPI: 793px wide × 1138px tall.
+- Multiple pages = multiple ImageRun elements with `pageBreakBefore: true` on subsequent pages
+
+**Critical technical note**: docx-js `ImageRun` transformation uses pixels at 96 DPI. You MUST use a separate docx section for the image pages because you cannot mix different margin sizes within one section.
+
+### Fit-to-Page Helper Function
+
+```javascript
+const MAX_IMG_W = 793;   // A4 width minus 0.5cm margins at 96 DPI
+const MAX_IMG_H = 1138;  // A4 height minus 0.5cm margins at 96 DPI
+function fitToPage(imgW, imgH) {
+  const scaleW = MAX_IMG_W / imgW;
+  const scaleH = MAX_IMG_H / imgH;
+  const scale = Math.min(scaleW, scaleH);
+  return { width: Math.round(imgW * scale), height: Math.round(imgH * scale) };
+}
+```
+
+### Generating a v7 Document
+
+The v7 generator scripts are Node.js files using the `docx` npm package. They were created in the Cowork session's temp directory and are NOT in the repo. However, the pattern is well-established:
+
+1. Read `transcription_knowledge.json` for known abbreviations, patterns, corrections
+2. View the source JPG image (from `original_jpg/` or a cropped version)
+3. Transcribe the handwriting into structured sections
+4. Generate the .docx using `docx` package with the formatting rules above
+5. Append the original scan image(s) in a separate section
+6. Save to `transcribed/v7/PatientXXX_N_digitized_v7.docx`
+
+**Dependencies**: `docx` npm package (install with `npm install docx`)
+
+**Timing benchmarks**: Patient004 (1 page, 88 rows) ≈ 4.5 min pure transcription; Patient005 (2 pages, 112 rows) ≈ 4 min (faster due to established patterns)
 
 ## Knowledge Base & Correction Workflow
 
-- **Knowledge file**: `transcription_knowledge.json` — accumulates abbreviations, patterns, corrections, and medical terms across all transcriptions
-- **Always read `transcription_knowledge.json` before transcribing a new note** — use confirmed abbreviations, known patterns, and past corrections to improve accuracy
-- **Row numbers**: Every content row in the output .docx gets a sequential number (01, 02, ...) so the doctor can reference specific locations for corrections
+- **Knowledge file**: `transcription_knowledge.json` — accumulates abbreviations, patterns, corrections, and medical terms across ALL transcriptions
+- **ALWAYS read `transcription_knowledge.json` before transcribing a new note** — use confirmed abbreviations, known patterns, and past corrections to improve accuracy
 - **Correction flow**: Doctor reviews .docx → provides corrections (either annotated in Word or as "Row XX: X should be Y") → corrections get added to `transcription_knowledge.json` under `corrections_log` → knowledge improves future transcriptions
 - **Uncertain readings**: Marked in red with `[text?]` in the document — these are the priority items for doctor review
 
-## Conversion from .pdf to cropped .jpg PROMPT
+### What's in the Knowledge Base
 
-- The PDFs are scans of pieces of paper that are smaller than A4 or Letter size. Which is why there is white space around them. But the border of the handwritten note can be clearly seen with the white background of the scanner bed. Can you crop this to the boundaries of the handwritten note and save the cropped image as jpg? Do this for Patient001_?.pdf (five pages). The orginals were moved to the ./original/ subfolder. Place the cropped jpg versions in ./redacted/ subfolder maintaining the prefix name for each file.
+- `doctor_profile`: Name, specialty, location
+- `formatting_rules`: Color codes, phone format, AMKA masking
+- `abbreviations.confirmed`: Known shorthand (e.g. κφ = κανονικά φυσιολογικά)
+- `abbreviations.unconfirmed_ask_doctor`: Need doctor confirmation
+- `note_structure`: Consistent template the doctor follows
+- `handwriting_patterns.confirmed`: Known misread patterns (e.g. 2↔9 confusion in years)
+- `handwriting_patterns.hallucination_warnings`: Cases where the AI generated exam items that were NOT in the original scan — critical to avoid
+- `corrections_log`: Row-by-row corrections from doctor review
+- `common_medical_terms`: Greek→English medical term dictionary (display in PURPLE + UPPERCASE)
+- `medication_names`: Running list of drugs seen in notes
+- `transcription_stats`: Per-patient timing and accuracy stats
+- `document_format_v7`: Technical details of the current format
+- `note_structure_observations`: Patient-specific structural differences
+
+## Patients Processed So Far
+
+| Patient | Pages | Source Files | v7 Status | Doctor Review |
+|---------|-------|-------------|-----------|---------------|
+| 001 | 5 | Patient001_1 through _5 | Not started | No |
+| 002 | 2 | Patient002_1, _2 | Not started | No |
+| 003 | 1 | Patient003_3 | Not started | No |
+| 004 | 1 | Patient004_1 | **v7 complete** (88 rows, 2 visits) | Partial (rows 1-38 from v2) |
+| 005 | 2 | Patient005_1, _2 | **v7 complete** (112 rows, 2 visits) | No |
+
+## Important Lessons Learned
+
+1. **Hallucination risk**: The AI sometimes generates plausible-looking exam items that are NOT in the original scan. Always cross-reference every transcribed line against the actual image. See `hallucination_warnings` in the knowledge base.
+
+2. **Year confusion**: The handwriting makes 2 and 9 look similar. Flag uncertain years in red.
+
+3. **Don't use `pdfimages`** for PDF→JPG conversion — it ignores the PDF's rotation transform and produces upside-down images. Use `pdftoppm` instead.
+
+4. **JPG vs PNG for embedding in docx**: JPG at quality 75 is 7x smaller than PNG for scans with no visible quality loss. Use JPG.
+
+5. **docx section separation**: You MUST use a separate section for the appended original images because they need different margins (0.5cm) than the transcription section (2cm).
+
+6. **Fit-to-page is mandatory**: Always check both width and height constraints for image embedding and use whichever is more limiting. Previous attempts that only checked width resulted in images overflowing the page.
+
+7. **Patient names must be redacted**: The `x` prefix on JPG filenames in `redacted/` indicates the patient name has been obscured. When transcribing, use "Ασθενής XXX" format, not actual names.
+
+8. **Version progression**: We went through v0-v6 before settling on v7. Earlier versions tried different approaches including cropped section images (v6 approach 1, rejected) and various layout tweaks. v7's hybrid approach (digital text + appended original) is the agreed standard.
+
+## Next Steps / Open Work
+
+- **Patient001 through Patient003**: Need v7 transcription. Source JPGs are in `original_jpg/`.
+- **Doctor review**: Patient004 v7 and Patient005 v7 need full doctor review. Corrections should be entered into `transcription_knowledge.json`.
+- **Unconfirmed abbreviations**: Several abbreviations in the knowledge base need doctor confirmation (Χ/Γ, ΑΙ, SE, 6λφ, Κ.Ο., ΠΔΚ).
+- **Cropping automation**: Automated cropping of scanner bed whitespace was attempted but the contrast between paper and scanner bed is too subtle. Manual cropping or a better detection algorithm needed.
+- **Future features**: Clickable row-number-to-handwriting linking (better suited for a web app), correction UI with autocomplete/medical dictionary, voice dictation support.
