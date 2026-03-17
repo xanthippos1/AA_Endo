@@ -1,0 +1,6 @@
+See if you can transcribe this in an organized way. Here is an example of how to organize it in the digitized document. 
+That was created by Claude. It has errors. I want to see if you can do a better job. 
+Just use the organization as an example, use your own OCR to generate text. 
+It is in Greek and we want it transcribed to Greek. Take your time and try to make as few errors as possible. 
+Medical terms and drugs should in purple. Titles in Blue. Anything you are not 99% certain of should be in Red. 
+These are an endocrinologists notes on a patient.

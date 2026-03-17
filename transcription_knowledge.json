@@ -1,0 +1,209 @@
+{
+  "version": "1.1",
+  "description": "Knowledge base for improving handwritten Greek medical note transcription. Updated with corrections from doctor review.",
+  "last_updated": "2026-03-16",
+
+  "doctor_profile": {
+    "name": "Dr. Dimitrios G. Bougiouklis",
+    "specialty": "Endocrinologist / Diabetologist",
+    "location": "Thessaloniki",
+    "note_language": "Greek with English medical terms",
+    "date_format": "DD/MM/YYYY"
+  },
+
+  "formatting_rules": {
+    "medical_terms": "PURPLE (#7B2D8E) + UPPERCASE — all disease names, conditions, medical terms",
+    "drug_names": "PURPLE (#7B2D8E) + UPPERCASE — all pharmaceutical/medication names",
+    "uncertain_text": "RED (#CC0000) + [text?] — words not recognized or not in dictionary",
+    "uncertain_numbers": "RED (#CC0000) — any number not 99% certain",
+    "phone_format": "XXXX XXX XXX (e.g. 6981 597 086)",
+    "amka_format": "Mask all but last 4 digits (e.g. *******0891)"
+  },
+
+  "abbreviations": {
+    "confirmed": {
+      "κφ": "κανονικά φυσιολογικά (normal)",
+      "ΦΤ": "φυσιολογικές τιμές (normal range)",
+      "ΟΛΛ": "Οξεία Λεμφοβλαστική Λευχαιμία (ALL - Acute Lymphoblastic Leukemia)",
+      "ΤΑΚ": "τακτικός (regular/normal)",
+      "ΑΝ": "αναπνευστικό (respiratory) - used before κφ",
+      "Φ": "Φυσιολογικό or negative (when used for allergies = No)",
+      "ΤΚΕ": "Ταχύτητα Καθίζησης Ερυθρών (ESR - Erythrocyte Sedimentation Rate)",
+      "Χρ.": "Χρόνια (Chronic) — prefix for chronic conditions",
+      "ΠΔΚ": "needs confirmation — seen in clinical exam after Οιδήματα"
+    },
+    "unconfirmed_ask_doctor": {
+      "Χ/Γ": "Seen after surgical procedures — possibly Χειρουργείο/Γενικό? ASK DOCTOR",
+      "ΑΙ": "Seen after Ακουστικό νευρίνωμα — possibly αριστερό (left)? ASK DOCTOR",
+      "SE": "Seen in cardiac exam — possibly systolic ejection? ASK DOCTOR",
+      "6λφ": "Unknown — seen next to Μητέρα in family history. ASK DOCTOR",
+      "Κ.Ο.": "Seen in instructions — possibly Κλινικός Ομιλιτικός? ASK DOCTOR",
+      "ΠΔΚ": "Seen after Οιδήματα in clinical exam. ASK DOCTOR"
+    }
+  },
+
+  "note_structure": {
+    "description": "The doctor follows a consistent template for each patient visit",
+    "sections_visit": [
+      "Patient demographics (name, DOB, address, phone, AMKA)",
+      "Social/lifestyle (profession, smoking, alcohol, allergies)",
+      "Current medication",
+      "Presenting illness",
+      "Referral source",
+      "Medical history (numbered items)",
+      "Family history: Self | Father | Mother (3-column). Mother section includes ΕΜΜΗΝΟΠΑΥΣΗ age.",
+      "Clinical examination (vitals + systems review + diagram)",
+      "Lab results (empty placeholder if none for this visit)",
+      "Instructions/orders (numbered)"
+    ]
+  },
+
+  "handwriting_patterns": {
+    "confirmed": {
+      "ΕΜΜΗΝΟΠΑΥΣΗ_looks_like_ΕΝΗΜΕΡΩΤΗΣ": "In handwriting, ΕΜΜΗΝΟΠΑΥΣΗ can be misread as ΕΝΗΜΕΡΩΤΗΣ — look for it in family history context followed by age",
+      "Υπεραλδοστερονισμία_was_ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ": "Misread ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ as Υπεραλδοστερονισμία — similar letter patterns",
+      "Προαλβουμινημία_was_ΠΡΟΔΙΑΒΗΤΗΣ": "Misread ΠΡΟΔΙΑΒΗΤΗΣ as Προαλβουμινημία — ΠΡΟ prefix correct but rest differs",
+      "2019_was_2012": "Year misread — 2 can look like 9 in this handwriting. Flag uncertain years in red."
+    },
+    "suspected": {
+      "description": "Patterns we think we see but need doctor confirmation",
+      "items": [
+        "Doctor writes circled numbers ①②③ for enumerated items",
+        "κφ is used as shorthand across all exam systems to mean normal",
+        "Lab reference ranges written as (ΦΤ: X-Y) or (ΦΤ < X)",
+        "Arrow → used to indicate 'leads to' or 'result is'",
+        "Elevated values may be underlined"
+      ]
+    },
+    "hallucination_warnings": [
+      "Patient004: Θυρεοειδής (ΤΑΚ) and Μασχάλες (κφ) were NOT in the original scan but were generated. Be careful not to add exam items that aren't present.",
+      "Always cross-reference every exam line against the scan. Do not assume standard exam items are present."
+    ]
+  },
+
+  "corrections_log": {
+    "description": "Corrections from doctor review. Each entry maps to a row number in the digitized document.",
+    "Patient004_1_v2": [
+      { "row": "title", "original": "ΙΑΤΡΙΚΟ ΣΗΜΕΙΩΜΑ (duplicate line)", "corrected": "Remove duplicate", "note": "Title appeared twice" },
+      { "row": 3, "original": "6981597086", "corrected": "6981 597 086", "note": "Phone numbers should always be formatted as XXXX XXX XXX" },
+      { "row": 11, "original": "(Ψυχ.)", "corrected": "(φίλη)", "note": "Referral was from a friend, not a psychiatrist. The original handwriting was φίλη, not Ψυχ. Note: Ψυχ. IS a valid abbreviation for Ψυχίατρος (Psychiatrist) — the error was in reading the handwriting, not the abbreviation meaning." },
+      { "row": 12, "original": "ΟΛΛ — 2019", "corrected": "ΟΛΛ — 2012", "note": "Year was 2012 not 2019. 2 misread as 9." },
+      { "row": 14, "original": "Υπεραλδοστερονισμία", "corrected": "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "note": "Father's condition was hyperlipidemia, not hyperaldosteronism." },
+      { "row": 15, "original": "[Προαλβουμινημία?]", "corrected": "ΠΡΟΔΙΑΒΗΤΗΣ", "note": "Father's condition was prediabetes. ΠΡΟ prefix was correct." },
+      { "row": 18, "original": "Χρ. Προστατίτιδα", "corrected": "ΧΡ. ΠΡΟΣΤΑΤΙΤΙΔΑ", "note": "Χρ. = Χρόνια (Chronic). Format: abbreviation + full condition name." },
+      { "row": 20, "original": "Εμμηνόπαυση: 50 χρ. (under mother)", "corrected": "Confirmed correct placement under Μητέρα", "note": "In original, this was written to the left of the mother section." },
+      { "row": "31-32", "original": "Missing row", "corrected": "Add ΟΙΔΗΜΑΤΑ ΠΔΚ between Νευρολογικά and next item", "note": "Edema finding was present in original but missed in transcription." },
+      { "row": 32, "original": "Θυρεοειδής ΤΑΚ", "corrected": "ΑΓΓΕΙΑΚΑ", "note": "This should be Αγγειακά (Vascular). Θυρεοειδής was not in the original." },
+      { "row": 33, "original": "Μασχάλες κφ", "corrected": "REMOVE — not in original", "note": "This exam item was hallucinated. Not present in original scan." },
+      { "row": 38, "original": "50/39/6/3/1", "corrected": "50/39/8/3/1", "note": "Eosinophils was 8 not 6." }
+    ]
+  },
+
+  "common_medical_terms": {
+    "description": "Greek medical terms frequently seen in this doctor's notes. Display in PURPLE + UPPERCASE.",
+    "terms": {
+      "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ": "Hyperlipidemia",
+      "ΠΡΟΔΙΑΒΗΤΗΣ": "Prediabetes",
+      "ΝΕΦΡΟΛΙΘΙΑΣΗ": "Nephrolithiasis (kidney stones)",
+      "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ": "Acoustic neuroma",
+      "ΟΜΟΚΥΣΤΕΪΝΗ": "Homocysteine",
+      "ΦΕΡΡΙΤΙΝΗ": "Ferritin",
+      "ΤΕΣΤΟΣΤΕΡΟΝΗ": "Testosterone",
+      "ΚΡΕΑΤΙΝΙΝΗ": "Creatinine",
+      "ΧΟΛΗΣΤΕΡΟΛΗ": "Cholesterol",
+      "ΤΡΙΓΛΥΚΕΡΙΔΙΑ": "Triglycerides",
+      "ΟΥΡΙΚΟ ΟΞΥ": "Uric acid",
+      "ΦΥΛΛΙΚΟ ΟΞΥ": "Folic acid",
+      "ΔΙΑΤΑΡΑΧΗ ΥΠΝΟΥ": "Sleep disorder",
+      "ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ": "Weight loss",
+      "ΕΜΜΗΝΟΠΑΥΣΗ": "Menopause",
+      "ΠΡΟΣΤΑΤΙΤΙΔΑ": "Prostatitis",
+      "ΟΙΔΗΜΑΤΑ": "Edema",
+      "ΟΛΛ": "Acute Lymphoblastic Leukemia (ALL)",
+      "ΕΝΔΟΓΕΝΕΣ ΒΡΟΓΧΙΚΟ ΑΣΘΜΑ": "Endogenous Bronchial Asthma",
+      "ΑΓΓΕΙΟΠΛΑΣΤΙΚΗ": "Angioplasty",
+      "ΣΤΕΦΑΝΙΑΙΑ ΑΝΤΙΜΕΤΩΠΙΣΗ": "Coronary intervention",
+      "ΕΝΔΟΜΗΤΡΙΩΣΗ": "Endometriosis",
+      "ΙΝΟΘΥΛΩΜΑ ΜΗΤΡΑΣ": "Uterine fibroid",
+      "ΔΥΣΚΟΙΛΙΟΤΗΤΑ": "Constipation",
+      "ΚΡΥΟΘΕΣΙΑ ΤΡΑΧΗΛΟΥ": "Cryotherapy of cervix",
+      "ΤΡΑΧΗΛΙΤΙΣ": "Cervicitis",
+      "ΑΘΕΡΟΣΚΛΗΡΥΝΣΗ": "Atherosclerosis",
+      "ΟΣΤΕΟΠΕΝΙΑ": "Osteopenia",
+      "ΟΣΤΕΟΠΟΡΩΣΗ": "Osteoporosis",
+      "ΣΠΟΝΔΥΛΩΣΗ": "Spondylosis",
+      "ΧΟΛΟΚΥΣΤΕΚΤΟΜΗ": "Cholecystectomy",
+      "ΡΕΥΜΑΤΟΕΙΔΗΣ ΑΡΘΡΙΤΙΔΑ": "Rheumatoid arthritis",
+      "ΑΥΤΟΑΝΟΣΗ ΘΥΡΕΟΠΑΘΕΙΑ": "Autoimmune thyroid disease",
+      "ΧΟΛΟΛΙΘΟΙ": "Gallstones",
+      "ΣΤΕΦ. ΝΟΣΟΣ": "Coronary disease"
+    }
+  },
+
+  "medication_names": {
+    "description": "Medications/pharmaceuticals seen in notes. Display in PURPLE + UPPERCASE. Maintain as running database.",
+    "seen": ["ZOLOFT", "SERETIDE", "TRIATEC", "MINITRAN", "EFECOL", "MARNOVER", "ZIRUS", "LECALCIF"]
+  },
+
+  "transcription_stats": {
+    "Patient004_1_v7": {
+      "total_rows": 88,
+      "uncertain_rows": ["12 (year 2012 — known correction)", "21 (6λφ)", "16-17 (ΑΙ, Χ/Γ)", "27 (SE cardiac)", "31 (ΠΔΚ)", "88 (Αξονογραφία, RadNet)"],
+      "date_transcribed": "2026-03-17",
+      "source_format": "JPG (xPatient004_1.jpg, 619x867px, 271KB)",
+      "output_format": "v7 hybrid — transcription + original JPG appended as full page",
+      "wall_time": "~14 min (including 3 iterations fixing image sizing)",
+      "pure_transcription_time": "~4.5 min (read KB + transcribe + generate docx)",
+      "output_size": "283KB",
+      "reviewed_by_doctor": "partial (rows 1-38 from earlier versions)"
+    },
+    "Patient004_1_v2": {
+      "total_rows": 88,
+      "uncertain_rows": ["21 (6λφ)", "88 (Αξονογραφία, RadNet)"],
+      "date_transcribed": "2026-03-16",
+      "reviewed_by_doctor": "partial (rows 1-38)"
+    },
+    "Patient005_1_v1": {
+      "total_rows": 112,
+      "uncertain_rows": [
+        "10 (κοπρ. επίπεδα — medication context unclear)",
+        "12 (Ξενοδοτόλου — referral surname)",
+        "14 (Διαδέλωση, χιλ. — coronary procedure details)",
+        "16 (ΑΡΝΕΣΑΡ — unclear word after endometriosis)",
+        "17 (Πολυποδ., Χοληδόχος — gallbladder polyp details)",
+        "20 (Πολυποδές χοληδόχου — duplicate of item 17?)",
+        "30 (ΝΙΚΑ — unclear word before ΚΑΤΑΓΜΑΤΑ)",
+        "33 (Ca Προστάτου under mother — seems wrong for female)",
+        "35 (ΣΑΠ — sibling condition unclear)",
+        "40 (Εμμηνόπαυση age 37 — uncertain number)",
+        "Multiple ultrasound rows (48-60) — very dense handwriting, many uncertain readings",
+        "74-83 (Visit 2 instructions — multiple uncertain drug names and dosages)"
+      ],
+      "date_transcribed": "2026-03-16",
+      "reviewed_by_doctor": "no"
+    }
+  },
+
+  "document_format_v7": {
+    "description": "Hybrid format: structured digital transcription followed by original scan appended at end",
+    "approach": "Digitize metadata accurately (patient info, dates, meds, labs), accept imperfect clinical note transcription, append original for reference",
+    "source_format": "JPG preferred over PNG (7x smaller for scans, no visible quality loss)",
+    "image_embedding": "Original scan goes in a SEPARATE docx section with minimal margins (0.5cm), no headers/footers, image scaled to fill page using transformation width matching page width at 96 DPI",
+    "image_sizing_lesson": "docx-js ImageRun transformation uses pixels at 96 DPI. A4 with 0.5cm margins = 793px wide x 1138px tall. Must use separate section for different margins — cannot mix margin sizes within one section.",
+    "fit_to_page_rule": "Always fit-to-page: calculate scaleW = 793/imgW, scaleH = 1138/imgH, use Math.min(scaleW, scaleH). This ensures the ENTIRE image fits regardless of aspect ratio. Wide images are width-constrained, tall images are height-constrained.",
+    "jpg_quality": "75 at 150 DPI is sweet spot for scan embedding (~1.5MB/page). For small source images already at screen res, just embed as-is."
+  },
+
+  "note_structure_observations": {
+    "Patient005": {
+      "differences_from_004": [
+        "No AMKA recorded for this patient",
+        "Family history includes siblings (not just parents)",
+        "Gynecological history section (new — female patient)",
+        "Multiple diagnostic tests between visits (TRIPLEX, ECHO, DEXA)",
+        "Much denser note — 2 pages vs Patient004's single page",
+        "Follow-up visit includes additional medication (ΠΡΟΣΘΕΤΗ ΑΓΩΓΗ)"
+      ]
+    }
+  }
+}
