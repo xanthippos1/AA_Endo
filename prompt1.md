@@ -1,0 +1,2 @@
+- Try to transcribe patient 002 original_jpg scans into a single Patient002_1_digitized_v7.docx folowing the guidelines in the CLAUDE.md file and the knowledge we've built on this project so far. We've already converted/digitized patients 004 and 005 using v7 methodology.
+- count the number of tokens and the ammount of time it takes you. Use Opus 4.6 model.
