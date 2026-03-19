@@ -30,7 +30,8 @@
       "Φ": "Φυσιολογικό or negative (when used for allergies = No)",
       "ΤΚΕ": "Ταχύτητα Καθίζησης Ερυθρών (ESR - Erythrocyte Sedimentation Rate)",
       "Χρ.": "Χρόνια (Chronic) — prefix for chronic conditions",
-      "ΠΔΚ": "needs confirmation — seen in clinical exam after Οιδήματα"
+      "ΠΔΚ": "needs confirmation — seen in clinical exam after Οιδήματα",
+      "ΣΥΝΤΞ.": "Συνταξιούχος (Retired) — prefix before profession"
     },
     "unconfirmed_ask_doctor": {
       "Χ/Γ": "Seen after surgical procedures — possibly Χειρουργείο/Γενικό? ASK DOCTOR",
@@ -143,7 +144,13 @@
       "ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ ΗΠΑΤΟΣ": "Fatty liver infiltration / NAFLD",
       "ΛΕΥΧΑΙΜΙΑ": "Leukemia",
       "ΠΡΩΤΟΠΑΘΗΣ ΥΠΕΡΑΛΔΟΣΤΕΡΟΝΙΣΜΟΣ": "Primary hyperaldosteronism (Conn's syndrome)",
-      "Ca ΠΝΕΥΜΟΝΑ": "Lung cancer"
+      "Ca ΠΝΕΥΜΟΝΑ": "Lung cancer",
+      "ΑΓΚΥΛΟΠΟΙΗΤΙΚΗ ΣΠΟΝΔΥΛΙΤΙΔΑ": "Ankylosing spondylitis",
+      "ΣΠΟΝΔΥΛΙΚΑ ΚΑΤΑΓΜΑΤΑ": "Vertebral fractures",
+      "ΠΟΛΥΠΟΔΑΣ ΧΟΛΗΔΟΧΟΥ ΚΥΣΤΕΩΣ": "Gallbladder polyp",
+      "ΔΙΑΣΤΟΛΙΚΗ ΔΥΣΛΕΙΤΟΥΡΓΙΑ": "Diastolic dysfunction",
+      "ΧΟΛΟΛΙΘΙΑΣΗ": "Cholelithiasis (gallstones)",
+      "Ca ΠΡΟΣΤΑΤΟΥ": "Prostate cancer"
     }
   },
 
