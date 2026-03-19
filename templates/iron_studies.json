@@ -1,0 +1,16 @@
+{
+  "panel_id": "IRON_STUDIES",
+  "greek_title": "Μελέτη Σιδήρου",
+  "english_title": "Iron Studies",
+  "tests": [
+    { "name": "Fe (Σίδηρος)",    "alt_names": ["Serum Iron", "Fe"],                   "unit": "μg/dL",  "range_m": "55-160",  "range_f": "40-155",  "plausible_min": 10,  "plausible_max": 300, "notes": "Diurnal variation — higher in AM" },
+    { "name": "Φερριτίνη",       "alt_names": ["Ferritin"],                            "unit": "ng/mL",  "range_m": "30-566",  "range_f": "15-205",  "plausible_min": 1,   "plausible_max": 5000, "notes": "Storage marker. Premenopausal F: 15-150 typical. >300 in premenopausal F is notable" },
+    { "name": "TIBC",            "alt_names": ["Ολική ικανότητα δέσμ. σιδήρου"],       "unit": "μg/dL",  "range": "240-450",   "plausible_min": 100, "plausible_max": 700, "notes": "Elevated in iron deficiency" },
+    { "name": "Κορεσμός Τρανσφερρίνης", "alt_names": ["Transferrin Saturation", "TSAT"], "unit": "%",    "range": "20-50",     "plausible_min": 5,   "plausible_max": 100 },
+    { "name": "Τρανσφερρίνη",    "alt_names": ["Transferrin"],                         "unit": "mg/dL",  "range": "200-360",   "plausible_min": 50,  "plausible_max": 600 }
+  ],
+  "ocr_traps": {
+    "Fe_vs_F": "Fe (iron) vs F (cortisol) — completely different. Fe range 40-160, Cortisol range 5-25",
+    "Ferritin_range_sex": "Ferritin normal differs greatly M/F. 303 in a premenopausal female is elevated. 303 in a male is normal"
+  }
+}

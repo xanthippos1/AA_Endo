@@ -1,0 +1,21 @@
+{
+  "panel_id": "THYROID",
+  "greek_title": "Θυρεοειδικό Panel",
+  "english_title": "Thyroid Function Panel",
+  "tests": [
+    { "name": "TSH",       "alt_names": ["Θυρεοτροπίνη"],                    "unit": "mIU/L",  "range": "0,4-4,0",   "plausible_min": 0.01, "plausible_max": 100,  "notes": "Some labs 0,27-4,2 or 0,5-5,0. Primary screening test" },
+    { "name": "FT4",       "alt_names": ["Ελεύθερη T4", "Free T4"],          "unit": "ng/dL",  "range": "0,7-1,9",   "plausible_min": 0.1,  "plausible_max": 7,    "notes": "Also reported as pmol/L (range 12-22)" },
+    { "name": "FT3",       "alt_names": ["Ελεύθερη T3", "Free T3"],          "unit": "pg/mL",  "range": "2,3-4,2",   "plausible_min": 0.5,  "plausible_max": 15,   "notes": "Not always ordered. Also reported as pmol/L (range 3,5-6,5)" },
+    { "name": "TT4",       "alt_names": ["Συνολική T4", "Total T4"],         "unit": "μg/dL",  "range": "5,0-12,0",  "plausible_min": 1,    "plausible_max": 25 },
+    { "name": "TT3",       "alt_names": ["Συνολική T3", "Total T3"],         "unit": "ng/dL",  "range": "80-220",    "plausible_min": 30,   "plausible_max": 500 },
+    { "name": "Anti-TPO",  "alt_names": ["Αντι-TPO", "TPOAb"],              "unit": "IU/mL",  "range": "<35",       "plausible_min": 0,    "plausible_max": 3000, "notes": "Doctor's notes use ΦΤ <150 — different lab assay" },
+    { "name": "Anti-Tg",   "alt_names": ["Αντι-Tg", "TgAb", "Anti-Tj"],     "unit": "IU/mL",  "range": "<20",       "plausible_min": 0,    "plausible_max": 3000, "notes": "Doctor's notes use ΦΤ <150" },
+    { "name": "TRAb",      "alt_names": ["TSI", "Αντισώματα υποδοχέων TSH"], "unit": "IU/L",   "range": "<0,55",     "plausible_min": 0,    "plausible_max": 50,   "notes": "Graves' disease marker" }
+  ],
+  "ocr_traps": {
+    "Anti-Tg_garbled": "Google reads 'Anti-Tg' as 'Anti-Tj' or 'Anti-T1' — if it's next to Anti-TPO, it's Anti-Tg",
+    "FT4_vs_FT3": "Handwriting 4 and 3 confused. FT4 range ~0,7-1,9; FT3 range ~2,3-4,2 — the value itself disambiguates",
+    "TSH_decimal": "TSH is typically 0,5-5,0 with two decimals (e.g., 2,18). If you read '218' it's 2,18",
+    "Ab_negative": "Antibodies reported as 'Ab (-)' means both Anti-TPO and Anti-Tg are negative"
+  }
+}

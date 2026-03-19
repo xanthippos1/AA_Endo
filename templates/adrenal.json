@@ -1,0 +1,22 @@
+{
+  "panel_id": "ADRENAL",
+  "greek_title": "Επινεφριδιακή Λειτουργία",
+  "english_title": "Adrenal Function Panel",
+  "tests": [
+    { "name": "ACTH",                "alt_names": ["Αδρενοκορτικοτροπίνη"],           "unit": "pg/mL",     "range": "7-63",     "plausible_min": 1,   "plausible_max": 500,  "notes": "Morning (7-10am). Time-critical" },
+    { "name": "F (Κορτιζόλη)",       "alt_names": ["Cortisol", "Κορτιζόλη πρωινή"],   "unit": "μg/dL",     "range": "5-25",     "plausible_min": 0.5, "plausible_max": 60,   "notes": "Morning cortisol. Diurnal rhythm: AM high, PM low" },
+    { "name": "PRA",                 "alt_names": ["Ρενίνη", "Δραστ. Ρενίνης"],       "unit": "ng/mL/h",   "range": "0,5-6,4",  "plausible_min": 0,   "plausible_max": 30,   "notes": "Plasma Renin Activity. Suppressed PRA + high aldosterone = Conn's" },
+    { "name": "ALDo",                "alt_names": ["Αλδοστερόνη", "Aldosterone"],      "unit": "ng/dL",     "range": "3-10",     "plausible_min": 0,   "plausible_max": 100,  "notes": "Supine range. Upright: 5-30" },
+    { "name": "ALDo/PRA ratio",      "alt_names": ["ARR"],                              "unit": "ratio",     "range": "<30",      "plausible_min": 0,   "plausible_max": 1000, "notes": "Screening for primary hyperaldosteronism. >30-50 is positive screen" },
+    { "name": "DHEA-S",              "alt_names": ["DHEA-θειικό"],                      "unit": "μg/dL",     "range": "varies by age/sex", "plausible_min": 10, "plausible_max": 700, "notes": "Declines with age. F 18-29yr: 145-395, F 40-49yr: 32-240" },
+    { "name": "17-OH Progesterone",  "alt_names": ["17-OHP", "17-υδροξυπρογεστερόνη"], "unit": "ng/mL",     "range_m": "0,5-2,0", "range_f": "0,5-1,5", "plausible_min": 0, "plausible_max": 20, "notes": "CAH screening. Follicular phase for females" },
+    { "name": "Ανδροστενεδιόνη",     "alt_names": ["Androstenedione"],                 "unit": "ng/mL",     "range": "0,6-3,1",  "plausible_min": 0,   "plausible_max": 15 },
+    { "name": "24h Κορτιζόλη ούρων",  "alt_names": ["24h UFC"],                        "unit": "μg/24h",    "range": "<50",      "plausible_min": 0,   "plausible_max": 500,  "notes": "Cushing's screening" }
+  ],
+  "ocr_traps": {
+    "PRA_decimal": "PRA 0,18 is very low (suppressed). Don't misread as 0,18 → 18 or 1,8",
+    "ALDo_high": "ALDo 86 is clearly elevated (normal 3-10). Combined with suppressed PRA, suggests primary hyperaldosteronism",
+    "F_vs_Φ": "F = Cortisol (from English). Φ = Φυσιολογικό (normal). Context distinguishes them",
+    "ACTH_vs_ACTH8": "ACTH is sometimes written with time '8πμ' (8am) next to it — don't include the time as part of the value"
+  }
+}

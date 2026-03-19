@@ -1,0 +1,28 @@
+{
+  "panel_id": "BIOCHEMISTRY",
+  "greek_title": "Βιοχημικές",
+  "english_title": "Biochemistry / Metabolic Panel",
+  "tests": [
+    { "name": "GLU",            "alt_names": ["Glu", "Σάκχαρο", "Γλυκόζη"],     "unit": "mg/dL",  "range": "70-99",   "plausible_min": 30,  "plausible_max": 500,  "notes": "Fasting. 100-125 = prediabetes, ≥126 = diabetes" },
+    { "name": "HbA1c",          "alt_names": ["Γλυκοζ. Αιμοσφ."],                "unit": "%",      "range": "<5,7",    "plausible_min": 3,   "plausible_max": 15,   "notes": "5,7-6,4 = prediabetes, ≥6,5 = diabetes" },
+    { "name": "Ουρία",          "alt_names": ["Urea", "BUN"],                    "unit": "mg/dL",  "range": "7-20",    "plausible_min": 2,   "plausible_max": 150 },
+    { "name": "Κρεατινίνη",     "alt_names": ["Creatinine", "Κρεατ."],           "unit": "mg/dL",  "range_m": "0,6-1,2", "range_f": "0,5-1,1", "plausible_min": 0.2, "plausible_max": 15 },
+    { "name": "Ουρικό οξύ",     "alt_names": ["Uric acid"],                      "unit": "mg/dL",  "range_m": "3,5-7,2", "range_f": "2,6-6,0", "plausible_min": 1,   "plausible_max": 15 },
+    { "name": "SGOT",           "alt_names": ["AST", "Ασπαρτική αμινοτρανσφ."],  "unit": "IU/L",   "range": "<40",     "plausible_min": 5,   "plausible_max": 2000, "notes": "Also liver+muscle. Confusable with SGPT in handwriting" },
+    { "name": "SGPT",           "alt_names": ["ALT", "Αλανίνη αμινοτρανσφ."],    "unit": "IU/L",   "range": "<40",     "plausible_min": 5,   "plausible_max": 2000 },
+    { "name": "γGT",            "alt_names": ["GGT", "Γ-GT", "γ-GT"],            "unit": "IU/L",   "range": "<55",     "plausible_min": 5,   "plausible_max": 1000 },
+    { "name": "ALP",            "alt_names": ["Αλκ. Φωσφατάση"],                 "unit": "IU/L",   "range": "30-120",  "plausible_min": 10,  "plausible_max": 1000, "notes": "Also bone marker. Higher in growing children" },
+    { "name": "LDH",            "alt_names": ["Γαλακτική αφυδρογονάση"],          "unit": "IU/L",   "range": "140-280", "plausible_min": 50,  "plausible_max": 2000 },
+    { "name": "CPK",            "alt_names": ["CK", "Κρεατινική κινάση"],        "unit": "IU/L",   "range_m": "<200",  "range_f": "<170",    "plausible_min": 10,  "plausible_max": 50000, "notes": "Can be very high (>10000) in rhabdomyolysis. If >500, significant" },
+    { "name": "Αλδολάση",       "alt_names": ["Aldolase"],                        "unit": "IU/L",   "range": "1,0-7,5", "plausible_min": 0,   "plausible_max": 50,   "notes": "Muscle enzyme — ordered when CPK elevated" },
+    { "name": "Λευκωματίνη",    "alt_names": ["Albumin"],                         "unit": "g/dL",   "range": "3,5-5,0", "plausible_min": 1,   "plausible_max": 6 },
+    { "name": "Ολ. Χολερυθρίνη","alt_names": ["Bilirubin Total", "Χολ."],        "unit": "mg/dL",  "range": "0,1-1,2", "plausible_min": 0,   "plausible_max": 30 }
+  ],
+  "ocr_traps": {
+    "SGOT_vs_SGPT": "O and P look very similar in Greek handwriting — context helps (SGOT usually listed first)",
+    "SGOT_vs_gGT": "Values can be on same line. If you see '15' after SGPT, it's likely SGOT not γGT",
+    "CPK_digits": "CPK can range from 50 to 50000 — don't drop digits. 2598 is plausible. 250 vs 2598 is a critical difference",
+    "ALP_range": "Wide normal range (30-120 or 10-280 depending on lab). Don't flag mildly elevated values",
+    "LDH_vs_LDL": "LDH (enzyme) vs LDL (cholesterol) — completely different panels. LDH ~140-280, LDL ~60-190"
+  }
+}

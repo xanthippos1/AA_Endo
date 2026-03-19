@@ -1,0 +1,20 @@
+{
+  "panel_id": "PITUITARY",
+  "greek_title": "Υποφυσιακή Λειτουργία",
+  "english_title": "Pituitary Function Panel",
+  "notes": "Comprehensive pituitary assessment. Individual hormones may also appear in organ-specific panels (TSH in thyroid, ACTH in adrenal, etc.)",
+  "tests": [
+    { "name": "TSH",         "alt_names": ["Θυρεοτροπίνη"],                    "unit": "mIU/L",  "range": "0,4-4,0",   "plausible_min": 0.01, "plausible_max": 100 },
+    { "name": "ACTH",        "alt_names": ["Αδρενοκορτικοτροπίνη"],            "unit": "pg/mL",  "range": "7-63",      "plausible_min": 1,    "plausible_max": 500,  "notes": "Morning 7-10am" },
+    { "name": "FSH",         "alt_names": ["Ωοθυλακιοτρόπος"],                 "unit": "mIU/mL", "range_m": "1,5-12,4", "range_f": "varies by cycle", "plausible_min": 0.1, "plausible_max": 200 },
+    { "name": "LH",          "alt_names": ["Λυτεϊνοποιητική"],                  "unit": "mIU/mL", "range_m": "1,0-8,0",  "range_f": "varies by cycle", "plausible_min": 0.1, "plausible_max": 200 },
+    { "name": "Προλακτίνη",  "alt_names": ["Prolactin", "PRL"],                "unit": "ng/mL",  "range_m": "<18",     "range_f": "0-20",     "plausible_min": 0,    "plausible_max": 500, "notes": ">100 strongly suggests prolactinoma" },
+    { "name": "GH",          "alt_names": ["Αυξητική ορμόνη", "Growth Hormone"],"unit": "ng/mL",  "range": "<4,0",      "plausible_min": 0,    "plausible_max": 50,   "notes": "Fasting. Pulsatile — single value unreliable. Use IGF-1" },
+    { "name": "IGF-1",       "alt_names": ["Σωματομεδίνη C"],                  "unit": "ng/mL",  "range": "age-dependent", "plausible_min": 10, "plausible_max": 1000, "notes": "Better GH marker. Stable, not pulsatile. Elevated in acromegaly" },
+    { "name": "ADH",         "alt_names": ["Βαζοπρεσσίνη", "AVP"],             "unit": "pg/mL",  "range": "2-12",      "plausible_min": 0,    "plausible_max": 50,   "notes": "Posterior pituitary. Low in diabetes insipidus" }
+  ],
+  "ocr_traps": {
+    "GH_vs_GT": "GH (Growth Hormone) can be misread as GT or gGT",
+    "IGF_garbled": "IGF-1 can be garbled as 'IGF1', 'IGFI', '1GF-1'"
+  }
+}

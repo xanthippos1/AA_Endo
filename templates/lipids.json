@@ -1,0 +1,24 @@
+{
+  "panel_id": "LIPIDS",
+  "greek_title": "Λιπιδαιμικό Προφίλ",
+  "english_title": "Lipid Panel",
+  "tests": [
+    { "name": "CHOL",          "alt_names": ["ΧΟΛΗ", "Χοληστερόλη", "TC"],       "unit": "mg/dL",  "range": "<200",    "plausible_min": 80,   "plausible_max": 400, "notes": "Desirable <200, borderline 200-239, high ≥240" },
+    { "name": "HDL",           "alt_names": ["HDL-χοληστερόλη"],                  "unit": "mg/dL",  "range_m": ">40",   "range_f": ">50",     "plausible_min": 15,   "plausible_max": 120, "notes": ">60 = protective" },
+    { "name": "LDL",           "alt_names": ["LDL-χοληστερόλη"],                  "unit": "mg/dL",  "range": "<100",    "plausible_min": 30,   "plausible_max": 300, "notes": "Optimal <100, <70 if high-risk. Often calculated" },
+    { "name": "Τριγλυκερίδια", "alt_names": ["TRG", "TGL", "Τριγλ.", "Tρ"],      "unit": "mg/dL",  "range": "<150",    "plausible_min": 30,   "plausible_max": 1000, "notes": "Borderline 150-199, high 200-499, very high ≥500" }
+  ],
+  "extended_tests": [
+    { "name": "Lp(a)",              "alt_names": ["Lipoprotein(a)"],              "unit": "mg/dL",  "range": "<30",     "plausible_min": 0,    "plausible_max": 200 },
+    { "name": "ApoA1",              "alt_names": ["Αποσιτοπρωτεΐνη A1"],         "unit": "mg/dL",  "range": "101-223", "plausible_min": 50,   "plausible_max": 300 },
+    { "name": "ApoB",               "alt_names": ["Αποσιτοπρωτεΐνη B"],          "unit": "mg/dL",  "range": "<100",    "plausible_min": 30,   "plausible_max": 250 },
+    { "name": "Λόγος ApoB/ApoA1",   "alt_names": [],                              "unit": "ratio",  "range": "<0,6",    "plausible_min": 0.2,  "plausible_max": 2.0 },
+    { "name": "VLDL",               "alt_names": [],                               "unit": "mg/dL",  "range": "5-40",    "plausible_min": 2,    "plausible_max": 100, "notes": "Usually calculated as TRG/5" }
+  ],
+  "ocr_traps": {
+    "HDL_vs_HDO": "If you read 'HDO' in a lipid panel, it's HDL",
+    "LDL_vs_LDH": "LDL (cholesterol ~60-190) vs LDH (enzyme ~140-280) — different panels entirely",
+    "TRG_leading_digit": "Triglycerides typically 80-250 range. If you read '80' check it's not '180' (dropped leading 1). If >500, double-check",
+    "CHOL_scale": "Total cholesterol is typically 150-280. Values outside this are uncommon but possible"
+  }
+}

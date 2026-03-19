@@ -1,0 +1,20 @@
+{
+  "panel_id": "SEX_HORMONES_MALE",
+  "greek_title": "Ανδρικές Ορμόνες",
+  "english_title": "Male Sex Hormone Panel",
+  "tests": [
+    { "name": "Τεστοστερόνη (ολική)",  "alt_names": ["Total Testosterone", "Testo"],   "unit": "ng/dL",   "range": "265-923",    "plausible_min": 10,   "plausible_max": 1500, "notes": "Morning sample. <300 = hypogonadism" },
+    { "name": "Τεστοστερόνη (ελεύθ.)", "alt_names": ["Free Testosterone"],              "unit": "pg/mL",   "range": "50-210",     "plausible_min": 1,    "plausible_max": 400 },
+    { "name": "SHBG",                  "alt_names": ["Σφαιρίνη δέσμευσης ορμονών"],     "unit": "nmol/L",  "range": "10-57",      "plausible_min": 2,    "plausible_max": 200 },
+    { "name": "FSH",                   "alt_names": ["Ωοθυλακιοτρόπος"],                "unit": "mIU/mL",  "range": "1,5-12,4",   "plausible_min": 0.1,  "plausible_max": 150 },
+    { "name": "LH",                    "alt_names": ["Λυτεϊνοποιητική"],                 "unit": "IU/L",    "range": "1,0-8,0",    "plausible_min": 0.1,  "plausible_max": 100 },
+    { "name": "Εστραδιόλη (Ε₂)",      "alt_names": ["Estradiol"],                       "unit": "pg/mL",   "range": "10-40",      "plausible_min": 0,    "plausible_max": 100,  "notes": ">40 may indicate feminization" },
+    { "name": "Προλακτίνη",            "alt_names": ["Prolactin", "PRL"],                "unit": "ng/mL",   "range": "<18",        "plausible_min": 0,    "plausible_max": 500 },
+    { "name": "DHT",                   "alt_names": ["Διυδροτεστοστερόνη"],              "unit": "pg/mL",   "range": "250-990",    "plausible_min": 50,   "plausible_max": 1500 }
+  ],
+  "ocr_traps": {
+    "Testo_scale": "Testosterone in ng/dL for males (range 265-923) but some labs report ng/mL or nmol/L. Check units",
+    "SHBG_digits": "SHBG 278 could be 27,8 (nmol/L) or 78. If ΦΤ 10-70, then 27,8 fits. If ΦΤ 10-57, both fit but 78 would be flagged",
+    "FSH_vs_LH": "Both are gonadotropins with similar ranges. Usually listed FSH first, then LH"
+  }
+}

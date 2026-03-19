@@ -1,0 +1,24 @@
+{
+  "panel_id": "GLUCOSE_METABOLISM",
+  "greek_title": "Μεταβολισμός Γλυκόζης",
+  "english_title": "Glucose Metabolism / Diabetes Panel",
+  "tests": [
+    { "name": "GLU (νηστείας)",  "alt_names": ["Fasting Glucose", "Σάκχαρο"],    "unit": "mg/dL",   "range": "70-99",    "plausible_min": 30,  "plausible_max": 500,  "notes": "100-125 = prediabetes (IFG), ≥126 = diabetes" },
+    { "name": "HbA1c",          "alt_names": ["Γλυκοζ. Αιμοσφαιρίνη", "A1c"],   "unit": "%",       "range": "<5,7",     "plausible_min": 3,   "plausible_max": 15,   "notes": "5,7-6,4 prediabetes, ≥6,5 diabetes" },
+    { "name": "Ινσουλίνη",      "alt_names": ["Insulin", "Ins"],                  "unit": "mIU/L",   "range": "2-12",     "plausible_min": 0.5, "plausible_max": 300,  "notes": "Fasting. >12 suggests insulin resistance. >20 significant" },
+    { "name": "HOMA-IR",        "alt_names": [],                                   "unit": "score",   "range": "<1,0",     "plausible_min": 0,   "plausible_max": 30,   "notes": "Calculated: (insulin × glucose) / 405. >3,0 = significant IR" },
+    { "name": "C-πεπτίδιο",     "alt_names": ["C-peptide"],                       "unit": "ng/mL",   "range": "0,8-3,1",  "plausible_min": 0,   "plausible_max": 15,   "notes": "Endogenous insulin production marker" }
+  ],
+  "ogtt_75g": {
+    "description": "Oral Glucose Tolerance Test — 75g load",
+    "timepoints": [
+      { "time": "0 min (νηστεία)",  "normal": "<100", "igt": "100-125", "diabetes": "≥126" },
+      { "time": "120 min",          "normal": "<140", "igt": "140-199", "diabetes": "≥200" }
+    ]
+  },
+  "ocr_traps": {
+    "GLU_scale": "Glucose 92 is normal fasting. 192 is clearly diabetic. Don't confuse 92 with 192",
+    "HbA1c_vs_other": "HbA1c is a small number (4-12%). If you see '46' near biochemistry, check if it's γGT: 46 or HbA1c: 4,6",
+    "insulin_high": "Fasting insulin 56 is very high but plausible (severe IR). Don't 'correct' to 5,6"
+  }
+}

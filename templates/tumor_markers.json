@@ -1,0 +1,20 @@
+{
+  "panel_id": "TUMOR_MARKERS",
+  "greek_title": "Καρκινικοί Δείκτες",
+  "english_title": "Tumor Markers (Endocrine-Relevant)",
+  "notes": "Ordered when endocrine tumors suspected (MEN syndromes, adrenal, thyroid cancer follow-up)",
+  "tests": [
+    { "name": "Θυρεοσφαιρίνη",     "alt_names": ["Thyroglobulin", "Tg"],           "unit": "ng/mL",  "range": "<55",     "plausible_min": 0,  "plausible_max": 5000, "notes": "Thyroid cancer follow-up marker. Should be undetectable post-thyroidectomy" },
+    { "name": "Καλσιτονίνη",       "alt_names": ["Calcitonin"],                     "unit": "pg/mL",  "range_m": "<10",   "range_f": "<5",     "plausible_min": 0,  "plausible_max": 5000, "notes": "Medullary thyroid carcinoma marker" },
+    { "name": "CEA",                "alt_names": ["Καρκινοεμβρυϊκό αντιγόνο"],      "unit": "ng/mL",  "range": "<5",      "plausible_min": 0,  "plausible_max": 1000 },
+    { "name": "AFP",                "alt_names": ["Α-φετοπρωτεΐνη"],                "unit": "ng/mL",  "range": "<10",     "plausible_min": 0,  "plausible_max": 10000, "notes": "Hepatocellular / germ cell tumors" },
+    { "name": "β-hCG",              "alt_names": ["β-χοριακή γοναδοτροπίνη"],        "unit": "mIU/mL", "range": "<5",      "plausible_min": 0,  "plausible_max": 300000, "notes": "Pregnancy or germ cell tumors. In non-pregnant: <5" },
+    { "name": "Χρωμογρανίνη Α",    "alt_names": ["Chromogranin A", "CgA"],          "unit": "ng/mL",  "range": "<100",    "plausible_min": 0,  "plausible_max": 10000, "notes": "Neuroendocrine tumor marker. PPIs falsely elevate" },
+    { "name": "NSE",                "alt_names": ["Νευρώνοειδική ενολάση"],          "unit": "ng/mL",  "range": "<16,3",   "plausible_min": 0,  "plausible_max": 500 },
+    { "name": "PSA",                "alt_names": ["Προστατικό ειδικό αντιγόνο"],     "unit": "ng/mL",  "range": "<4,0",    "plausible_min": 0,  "plausible_max": 1000, "notes": "Age-dependent. Male only" }
+  ],
+  "ocr_traps": {
+    "AFP_vs_ALP": "AFP (tumor marker, <10) vs ALP (alkaline phosphatase, 30-120) — completely different",
+    "β-hCG_garbled": "Google reads β-hCG as 'β-1CG' or '0-1CG' or 'B-hCG'. If near AFP in instructions, it's β-hCG"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "version": "1.1",
   "description": "Knowledge base for improving handwritten Greek medical note transcription. Updated with corrections from doctor review.",
-  "last_updated": "2026-03-16",
+  "last_updated": "2026-03-18",
 
   "doctor_profile": {
     "name": "Dr. Dimitrios G. Bougiouklis",
@@ -77,7 +77,12 @@
     },
     "hallucination_warnings": [
       "Patient004: Θυρεοειδής (ΤΑΚ) and Μασχάλες (κφ) were NOT in the original scan but were generated. Be careful not to add exam items that aren't present.",
-      "Always cross-reference every exam line against the scan. Do not assume standard exam items are present."
+      "Always cross-reference every exam line against the scan. Do not assume standard exam items are present.",
+      "Patient005: ENTIRE lab results section (CBC + biochemistry, ~30 values) at the bottom of page 1 was MISSED in both v7 and v8. The lab block was written below the family history diagram in a dense horizontal run-on format (values crammed on lines rather than one per row). The model treated the diagram as the 'end' of page 1 and stopped reading. CRITICAL LESSON: Always scroll/read to the absolute bottom of every page. Lab results are often written BELOW diagrams, family trees, or other visual elements in a compressed format."
+    ],
+    "omission_warnings": [
+      "PATTERN: Dense horizontal lab blocks at page bottom get missed. When handwritten lab values are written in a compact run-on format (e.g., 'RBC 4,72x10⁶ HGB 13,1 HCT 41,0 MCV 88,1 MCH 27,8...' all on 2-3 lines), the model tends to stop transcribing at the visual landmark above them (e.g., a family tree diagram). After transcribing each page, ALWAYS verify: is there ANY content below the last section I transcribed? Look specifically for dense numeric blocks at the very bottom edge of the page.",
+      "Patient005 page 1: Missed CBC (RBC, HGB, HCT, MCV, MCH, MCHC, RDW, WBC, ΤΥΠΟΣ, PLT), inflammatory markers (TKE, CRP), and full biochemistry panel (GLU, Ουρία, Κρεατινίνη, Ουρικό οξύ, SGOT, SGPT, γGT, CHOL, HDL, LDL, Τριγλ) — all from 25/10/2021. These were written in 4 dense lines below the family history diagram."
     ]
   },
 
@@ -136,16 +141,162 @@
       "ΡΕΥΜΑΤΟΕΙΔΗΣ ΑΡΘΡΙΤΙΔΑ": "Rheumatoid arthritis",
       "ΑΥΤΟΑΝΟΣΗ ΘΥΡΕΟΠΑΘΕΙΑ": "Autoimmune thyroid disease",
       "ΧΟΛΟΛΙΘΟΙ": "Gallstones",
-      "ΣΤΕΦ. ΝΟΣΟΣ": "Coronary disease"
+      "ΣΤΕΦ. ΝΟΣΟΣ": "Coronary disease",
+      "ΟΖΩΔΗΣ ΒΡΟΓΧΟΚΗΛΗ": "Nodular goiter",
+      "ΒΟΥΒΩΝΟΚΗΛΗ": "Inguinal hernia",
+      "ΑΜΥΓΔΑΛΕΚΤΟΜΗ": "Tonsillectomy",
+      "ΥΣΤΕΡΕΚΤΟΜΗ": "Hysterectomy",
+      "ΘΥΡΕΟΕΙΔΕΚΤΟΜΗ": "Thyroidectomy",
+      "ΑΔΕΝΩΜΑ ΘΥΡΕΟΕΙΔΟΥΣ": "Thyroid adenoma",
+      "ΣΔ ΙΙ": "Diabetes Mellitus Type 2",
+      "ΛΟΙΜΩΞΗ ΑΠΟ ΚΟΡΩΝΟΪΟ": "COVID-19 infection",
+      "ΔΙΟΓΚΩΣΗ ΘΥΡΕΟΕΙΔΟΥΣ": "Thyroid enlargement",
+      "ΒΡΟΓΧΟΚΗΛΗ": "Goiter",
+      "ΑΔΕΝΩΜΑ ΕΠΙΝΕΦΡΙΔΙΟΥ": "Adrenal adenoma",
+      "ΙΣΧΑΙΜΙΚΑ ΕΜΦΡΑΚΤΑ ΕΓΚΕΦΑΛΟΥ": "Ischemic cerebral infarcts / strokes",
+      "ΦΛΕΒΙΚΗ ΑΝΕΠΑΡΚΕΙΑ": "Venous insufficiency",
+      "ΠΡΟΠΤΩΣΗ MV": "Mitral Valve Prolapse",
+      "ΔΙΣΚΟΚΗΛΗ": "Disc herniation",
+      "ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ ΗΠΑΤΟΣ": "Fatty liver infiltration / NAFLD",
+      "ΛΕΥΧΑΙΜΙΑ": "Leukemia",
+      "ΠΡΩΤΟΠΑΘΗΣ ΥΠΕΡΑΛΔΟΣΤΕΡΟΝΙΣΜΟΣ": "Primary hyperaldosteronism (Conn's syndrome)",
+      "Ca ΠΝΕΥΜΟΝΑ": "Lung cancer"
     }
   },
 
   "medication_names": {
     "description": "Medications/pharmaceuticals seen in notes. Display in PURPLE + UPPERCASE. Maintain as running database.",
-    "seen": ["ZOLOFT", "SERETIDE", "TRIATEC", "MINITRAN", "EFECOL", "MARNOVER", "ZIRUS", "LECALCIF"]
+    "seen": ["ZOLOFT", "SERETIDE", "TRIATEC", "MINITRAN", "EFECOL", "MARNOVER", "ZIRUS", "LECALCIF", "MEDROL", "ΒΙΤΑΜΙΝΗ C", "ZOCOR", "XANAX", "SALOSPIR", "VIBRAMYCIN", "BIA.FIX", "FILICINE", "ROSUBEN"]
   },
 
   "transcription_stats": {
+    "Patient001_1_v8": {
+      "total_rows": 187,
+      "visits": 8,
+      "uncertain_rows": [
+        "Multiple rows on pages 2-4 — VERY LOW confidence for dense handwriting sections",
+        "3 (address Ευκαρπίδη uncertain)",
+        "8 (allergy Mesalid uncertain)",
+        "9 (ZOCOR dosage uncertain)",
+        "12 (presenting illness — προυπερτασική uncertain)",
+        "14-15 (history item ② — tongue lesion description very unclear)",
+        "Father's Ψύνοι (91χρ) — completely unresolved",
+        "Ξαδέλφη — uncertain family member",
+        "Visit 1 hormones/cancer screening (page 2) — nearly all readings uncertain",
+        "Visit 2 labs — HDL 29 seems very low, needs verification",
+        "Visit 3 CT imaging and ECHO thyroid — largely illegible",
+        "Visit 3 DEXA hip T-score — note says osteopenia but value suggests osteoporosis",
+        "Visit 4 ALDo/PRA ratio 478 — strongly suggests Conn syndrome (FLAG)",
+        "Visit 5 assessment text — nearly all illegible",
+        "Visit 8 PTH 209 — extremely elevated, needs verification",
+        "Visit 8 Α1α1: 377 — test name unclear",
+        "Visit 8 instruction ⑤ — illegible"
+      ],
+      "date_transcribed": "2026-03-18",
+      "model": "claude-opus-4-6",
+      "source_format": "JPG (5 pages: 1119x1645, 1139x1672, 1116x1610, 1109x1626, 1140x1557)",
+      "output_format": "v8 hybrid — 3-phase transcription + 5 original JPGs appended",
+      "phase1_time": "~5.7 min (5 pages)",
+      "phase2_time": "~6.1 min",
+      "phase3_time": "~4.1 min",
+      "total_time": "~16 min",
+      "output_size": "2961KB",
+      "phase2_corrections": 16,
+      "phase2_flags": 30,
+      "phase2_confidence": "MEDIUM (page 1,5) / VERY LOW (pages 2-4)",
+      "reviewed_by_doctor": "no",
+      "notes": "Most complex patient: 5 pages, 8 visits spanning Oct 2014 — Dec 2019. Female, 76yr (at V1), Philologist. Presenting: Right adrenal adenoma (found on MRI 2009, stable 2012). Key findings: GLU persistently elevated (192, 198 — diabetes not formally treated?), CPK 600 (statin myopathy → ZOCOR switched to ROSUBEN), PRA suppressed 0.18 with ALDo 86 → ALDo/PRA ratio ~478 suggesting primary hyperaldosteronism (Conn), DEXA shows osteopenia/possible osteoporosis (hip T-score discrepancy), Vit D insufficient → treated with BIA.FIX. Visit 8: PTH 209 markedly elevated (prev 48.4) needs verification. Pages 2-4 extremely difficult handwriting with many illegible sections — dense specialist endocrine workup data."
+    },
+    "Patient004_1_v10": {
+      "total_rows": 100,
+      "visits": 2,
+      "uncertain_rows": [
+        "8 (τεσσ — unresolved word in social history)",
+        "15-16 (ΑΙ, Χ/Γ — unconfirmed abbreviations in father's acoustic neuroma)",
+        "21 (6λφ — unresolved notation near mother)",
+        "24 (Ύψος 1,82 — could be 1,62, digit uncertain)",
+        "27 (SE — cardiac abbreviation unconfirmed)",
+        "33 (ΠΔΚ — abbreviation after Οιδήματα, unconfirmed)",
+        "B12 value — run-on text, could be 446,20 or 1464,20",
+        "SGPT value — appears as 115 but could be 11 or 15",
+        "Testosterone 0,90 — v9 correction, still uncertain units/value",
+        "Visit 2 instructions — ECHO details, Rabest"
+      ],
+      "template_corrections": 5,
+      "v9_inherited_corrections": 6,
+      "lab_panels_identified": 10,
+      "total_lab_values": 38,
+      "within_normal": 24,
+      "abnormal": 10,
+      "still_uncertain": 4,
+      "phase2_confidence": "MEDIUM-HIGH",
+      "date_transcribed": "2026-03-18",
+      "model": "claude-opus-4-6",
+      "source_format": "JPG (Patient004_1.jpg, 1079x1648px)",
+      "output_format": "v10 lab-panel-aware — 3-phase transcription with lab panel templates + original JPG appended",
+      "phase1_time": "~1.5 min",
+      "phase2_time": "~1.5 min",
+      "phase3_time": "~2 min",
+      "total_time": "~5 min",
+      "output_size": "688KB",
+      "reviewed_by_doctor": "partial (rows 1-38 from earlier versions)",
+      "notes": "First v10 transcription. Lab panel templates used to validate all 38 lab values against plausible ranges. 5 template-based corrections (MCHC 334→33,4, Κρεατ 10→1,0, SHBG 78→27,8, Testo 19→0,90, CPK 250→2598). Inherited 6 corrections from v9 fusion (TRG 80→180, γGT 15→46, SGOT added, HbA1c removed, SHBG, Testo). Lab results grouped into 10 panels with panel sub-headings in the document. Key clinical flags: CPK 2598 (>15x ULN), ferritin 303 (elevated premenopausal F), dyslipidemia (CHOL 206, TRG 180, LDL 135), HGB/HCT elevated for female."
+    },
+    "Patient004_1_v9": {
+      "total_rows": 90,
+      "visits": 2,
+      "uncertain_rows": [
+        "8 (τεσσ — unresolved word in social history)",
+        "15-16 (ΑΙ, Χ/Γ — unconfirmed abbreviations in father's acoustic neuroma)",
+        "21 (6λφ — unresolved notation near mother)",
+        "24 (Ύψος 1,82 — could be 1,62, digit uncertain)",
+        "27 (SE — cardiac abbreviation unconfirmed)",
+        "33 (ΠΔΚ — abbreviation after Οιδήματα, unconfirmed)",
+        "Testosterone 0,90 vs 19 — units/value uncertain",
+        "82-90 (Visit 2 instructions — ECHO details, Rabest/RABEPRAZOLE)"
+      ],
+      "fusion_corrections_vs_v8": 7,
+      "fusion_agreement_rate": "82%",
+      "items_resolved_by_google": 8,
+      "items_resolved_by_claude": 12,
+      "items_still_uncertain": 11,
+      "phase2_confidence": "MEDIUM-HIGH",
+      "date_transcribed": "2026-03-18",
+      "model": "claude-opus-4-6",
+      "source_format": "JPG (Patient004_1.jpg, 1079x1648px)",
+      "google_vision_source": "visionai/Patient004_googleai.txt",
+      "output_format": "v9 fusion — Google Vision + Claude image reading, fused + medical review",
+      "output_size": "687KB",
+      "reviewed_by_doctor": "partial (rows 1-38 from earlier versions)",
+      "notes": "First v9 fusion transcription. Female, 26yr, psychology student on Zoloft. 7 corrections vs v8: TRG 80→180, CPK 250→2598 (CRITICAL — markedly elevated, consistent with doctor ordering Αλδολάση), SGOT added (15), γGT 15→46, HbA1c removed (hallucination), SHBG 78→27.8, Testosterone 19→0.90 (uncertain). Google Vision was better at: digits in dense lab lines (CPK, TRG, γGT), medication names (Αλδολάση, Rabest). Claude was better at: structure, medical abbreviations (ΟΛΛ, κφ, ΦΤ), section assignment, context. CPK 2598 is the most clinically significant correction — changes entire clinical picture from mild to severe muscle involvement."
+    },
+    "Patient004_1_v8": {
+      "total_rows": 89,
+      "visits": 2,
+      "uncertain_rows": [
+        "8 (τεσσ — unresolved word in social history)",
+        "15-16 (ΑΙ, Χ/Γ — unconfirmed abbreviations in father's acoustic neuroma)",
+        "21 (6λφ — unresolved notation near mother)",
+        "24 (Ύψος 1,82 — could be 1,62, digit uncertain)",
+        "27 (SE — cardiac abbreviation unconfirmed)",
+        "32 (ΠΔΚ — abbreviation after Οιδήματα, unconfirmed)",
+        "82-89 (Visit 2 instructions — several items hard to read: ECHO details, Αξονογραφία, RadNet)"
+      ],
+      "phase2_corrections": 7,
+      "phase2_flags": 12,
+      "phase2_confidence": "MEDIUM",
+      "date_transcribed": "2026-03-17",
+      "model": "claude-opus-4-6",
+      "source_format": "JPG (Patient004_1.jpg, 1079x1648px, 559KB)",
+      "output_format": "v8 hybrid — transcription with medical review + original JPG appended",
+      "phase1_time": "~8.7 min",
+      "phase2_time": "~1.3 min",
+      "phase3_time": "~2.5 min",
+      "total_time": "~12.5 min",
+      "output_size": "564KB",
+      "reviewed_by_doctor": "partial (rows 1-38 from earlier versions)",
+      "notes": "First v8 transcription. Female, 26yr, psychology student on Zoloft. Presenting: sleep disorder + weight loss. 2 visits. Phase 2 caught all known KB corrections proactively. Key flags: elevated ferritin (303) for premenopausal female, mildly elevated homocysteine (18.0), insufficient vitamin D (24). SUPERSEDED BY V9 — v9 found 7 lab value errors in v8."
+    },
     "Patient004_1_v7": {
       "total_rows": 88,
       "uncertain_rows": ["12 (year 2012 — known correction)", "21 (6λφ)", "16-17 (ΑΙ, Χ/Γ)", "27 (SE cardiac)", "31 (ΠΔΚ)", "88 (Αξονογραφία, RadNet)"],
@@ -162,6 +313,42 @@
       "uncertain_rows": ["21 (6λφ)", "88 (Αξονογραφία, RadNet)"],
       "date_transcribed": "2026-03-16",
       "reviewed_by_doctor": "partial (rows 1-38)"
+    },
+    "Patient005_1_v8": {
+      "total_rows": 137,
+      "visits": 2,
+      "uncertain_rows": [
+        "10 (κοπρ. επίπεδα — medication context unclear)",
+        "12 (Εμδοστονάνου — referral surname uncertain)",
+        "14 (Διαδέλωση — coronary procedure details)",
+        "16 (ARVECAP — unclear medication after endometriosis)",
+        "17 (Πολυποδες Χοληδόχου — gallbladder polyp details)",
+        "20 (Πολύποδες Χοληδόχου — duplicate of item 17?)",
+        "24 (Εμμηνόπαυση age — uncertain, could be 37/47)",
+        "25 (Κλιμακτήριος 48/52 — unclear what two numbers represent)",
+        "27 (Χημ. σα ΚΟΕ / ΤανΑΙΕΣΠΙΡΙΤΙΔΑ — very uncertain)",
+        "30 (ΝΙΚΑ ΚΑΤΑΓΜΑΤΑ — unclear word before fractures)",
+        "33 (Ca Προστάτου under mother — IMPOSSIBLE for female, flagged)",
+        "35 (ΣΑΠ — sibling condition unclear)",
+        "46 (ΑΦΙΚ — lung exam finding unclear)",
+        "Multiple ECHO rows (57-77) — very dense handwriting, VERY LOW confidence",
+        "79 (ΤΡΜ 137.3 — abbreviation unclear, possibly PTH)",
+        "85 (Β12: 2328 — very elevated, needs verification)",
+        "97-107 (Visit 2 medications and instructions — multiple uncertain names/dosages)"
+      ],
+      "date_transcribed": "2026-03-17",
+      "source_format": "JPG (Patient005_1.jpg 1140x1654, Patient005_2.jpg 1121x1633)",
+      "output_format": "v8 hybrid — 3-phase transcription + 2 original JPGs appended",
+      "phase1_time": "~15.8 min (2 pages)",
+      "phase2_time": "~4.6 min (including v7 text extraction for cross-reference)",
+      "phase3_time": "~4.6 min",
+      "total_time": "~20.4 min",
+      "output_size": "1294KB",
+      "phase2_corrections": 5,
+      "phase2_flags": 14,
+      "phase2_confidence": "MEDIUM (demographics) / LOW (imaging, Visit 2 instructions)",
+      "reviewed_by_doctor": "no",
+      "notes": "Female, 58yr, retired nurse from Serres. Presenting: thyroid function assessment. 2 visits (01/04/2021 + 10/11/2021). Complex case: coronary disease with stenting, endogenous bronchial asthma (15yr), endometriosis, uterine fibroid, chronic constipation. Key findings: subclinical hypothyroidism (TSH 4.77), autoimmune thyroid disease on ECHO, vitamin D deficiency (15.83), osteopenia on DEXA, elevated insulin (56, insulin resistance), very elevated B12 (2328), possible secondary hyperparathyroidism. Phase 2 caught DOB error (31/6→03/06), age error (60→58), address misread, allergy misread (ampicillin→shrimp+red medications). Page 2 ECHO section extremely dense with very low confidence. Weight discrepancy between visits (63→83kg) flagged."
     },
     "Patient005_1_v1": {
       "total_rows": 112,
@@ -181,6 +368,50 @@
       ],
       "date_transcribed": "2026-03-16",
       "reviewed_by_doctor": "no"
+    },
+    "Patient002_1_v2": {
+      "total_rows": 108,
+      "visits": 3,
+      "uncertain_rows": [
+        "9 (ανδούρωση — word after σταδιακή in MEDROL tapering, unknown term)",
+        "19-30 (CT ΘΩΡΑΚΟΣ — very dense imaging report, many uncertain readings)",
+        "31-44 (ECHO ΘΥΡΕΟΕΙΔΟΥΣ — dense ultrasound report, many uncertain terms)",
+        "41 (Θυρεοειδής: υπό — unclear clinical finding)",
+        "54 (ασύμμετρο, ομοιόμορφη, ένταν — scanning report terms)",
+        "55 (Αδυνέστατη, στεφανίδων σταθμών — scanning terminology)",
+        "58 (εκφορά βαθέου — scanning conclusion)",
+        "63 (Παραπομπή — instruction word uncertain)",
+        "66 (ΜΟΝΣΙΔΗΣ ΜΟΨΣΗΣ — surgeon name uncertain)",
+        "73 (αργό — ECG finding)",
+        "75-86 (ΑΡ λοβό dimensions, histopath — very dense pathology text)"
+      ],
+      "date_transcribed": "2026-03-17",
+      "source_format": "JPG (Patient002_1.jpg 1094x1629, Patient002_2.jpg 1109x1645)",
+      "output_format": "v7 hybrid — 3 visits + 2 original JPGs appended",
+      "output_size": "1374KB",
+      "reviewed_by_doctor": "no",
+      "notes": "Most complex patient so far: 3 visits including post-thyroidectomy with histopath. Very dense imaging/pathology reports. Male, 42yr, nodular goiter found incidentally on CT thorax done for COVID. Proceeded to total thyroidectomy."
+    },
+    "Patient002_1_v3": {
+      "total_rows": 94,
+      "visits": 3,
+      "uncertain_rows": [
+        "9 (ανδούρωση — word after σταδιακή in MEDROL tapering, unknown term)",
+        "19-30 (CT ΘΩΡΑΚΟΣ — very dense imaging report, many uncertain readings)",
+        "31-44 (ECHO ΘΥΡΕΟΕΙΔΟΥΣ — dense ultrasound report, many uncertain terms)",
+        "54-58 (scanning report terms)",
+        "63 (Παραπομπή — instruction word uncertain)",
+        "66 (ΜΟΝΣΙΔΗΣ ΜΟΨΣΗΣ — surgeon name uncertain)",
+        "73 (αργό — ECG finding)",
+        "75-86 (ΑΡ λοβό dimensions, histopath — very dense pathology text)"
+      ],
+      "date_transcribed": "2026-03-17",
+      "model": "claude-sonnet-4-6",
+      "source_format": "JPG (Patient002_1.jpg 1094x1629, Patient002_2.jpg 1109x1645)",
+      "output_format": "v7 hybrid — 3 visits + 2 original JPGs appended",
+      "output_size": "1373KB",
+      "reviewed_by_doctor": "no",
+      "notes": "Fresh Sonnet 4.6 run. 94 rows (vs 108 in v2). Same 3-visit structure."
     }
   },
 
@@ -189,12 +420,37 @@
     "approach": "Digitize metadata accurately (patient info, dates, meds, labs), accept imperfect clinical note transcription, append original for reference",
     "source_format": "JPG preferred over PNG (7x smaller for scans, no visible quality loss)",
     "image_embedding": "Original scan goes in a SEPARATE docx section with minimal margins (0.5cm), no headers/footers, image scaled to fill page using transformation width matching page width at 96 DPI",
-    "image_sizing_lesson": "docx-js ImageRun transformation uses pixels at 96 DPI. A4 with 0.5cm margins = 793px wide x 1138px tall. Must use separate section for different margins — cannot mix margin sizes within one section.",
-    "fit_to_page_rule": "Always fit-to-page: calculate scaleW = 793/imgW, scaleH = 1138/imgH, use Math.min(scaleW, scaleH). This ensures the ENTIRE image fits regardless of aspect ratio. Wide images are width-constrained, tall images are height-constrained.",
+    "image_sizing_lesson": "docx-js ImageRun transformation uses pixels at 96 DPI. A4 with 0.5cm margins = 200mm × 287mm content area = 756px × 1085px at 96 DPI. Use 750×1070 with ~1% safety buffer. Must use separate section for different margins — cannot mix margin sizes within one section.",
+    "fit_to_page_rule": "Always fit-to-page: calculate scaleW = 750/imgW, scaleH = 1070/imgH, use Math.min(scaleW, scaleH). This ensures the ENTIRE image fits without cropping. Wide images are width-constrained, tall images are height-constrained. CRITICAL: images must NEVER be cropped.",
     "jpg_quality": "75 at 150 DPI is sweet spot for scan embedding (~1.5MB/page). For small source images already at screen res, just embed as-is."
   },
 
   "note_structure_observations": {
+    "Patient001": {
+      "differences_from_others": [
+        "MOST PAGES (5) and MOST VISITS (8) of any patient — spans 5 years (2014-2019)",
+        "No formal clinical exam table found — doctor focused on specialist workup",
+        "Adrenal adenoma workup: PRA/ALDo/ACTh/Cortisol/Catecholamines — endocrine-specific",
+        "Cancer screening (mammography) mentioned on page 2",
+        "Multiple imaging modalities: MRI, CT, DEXA, TRIPLEX, ECHO thyroid, ECHO abdomen",
+        "Medication changes tracked across visits (ZOCOR → ROSUBEN, FILICINE stopped, BIA.FIX started)",
+        "Pages 2-4 extremely dense — specialist notes with lab values crammed into running text",
+        "Female patient — gynecological history included",
+        "Diagnosis summary box below family tree — unusual format compared to other patients"
+      ]
+    },
+    "Patient002": {
+      "differences_from_004_005": [
+        "3 visits (initial + review results + post-op) — most visits so far",
+        "Dense imaging reports: CT thorax, Echo thyroid, Scanning thyroid — all inline as running text",
+        "Histopathology report included — macro and microscopic findings",
+        "Pre-visit labs/imaging (done before first visit, results brought by patient)",
+        "Male patient, 42yr — COVID context (MEDROL treatment)",
+        "Family tree includes sibling (sister, 46yr) — used fourBoxRow",
+        "Surgeon name recorded for thyroidectomy",
+        "Pre-op labs (Ca, P, PTH, ECG) documented"
+      ]
+    },
     "Patient005": {
       "differences_from_004": [
         "No AMKA recorded for this patient",

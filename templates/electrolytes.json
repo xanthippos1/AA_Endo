@@ -1,0 +1,19 @@
+{
+  "panel_id": "ELECTROLYTES",
+  "greek_title": "Ηλεκτρολύτες",
+  "english_title": "Electrolytes",
+  "tests": [
+    { "name": "Na",   "alt_names": ["Νάτριο", "Nal"],     "unit": "mEq/L",  "range": "135-145",   "plausible_min": 110, "plausible_max": 170, "notes": "Narrow critical range. <130 or >150 is serious" },
+    { "name": "K",    "alt_names": ["Κάλιο"],              "unit": "mEq/L",  "range": "3,5-5,0",   "plausible_min": 2,   "plausible_max": 8,   "notes": "Cardiac significance. <3.0 or >6.0 is dangerous" },
+    { "name": "Ca",   "alt_names": ["Ασβέστιο"],           "unit": "mg/dL",  "range": "8,5-10,2",  "plausible_min": 5,   "plausible_max": 15,  "notes": "Also in bone metabolism panel. Correct for albumin" },
+    { "name": "P",    "alt_names": ["Φώσφορος", "PO₄"],    "unit": "mg/dL",  "range": "2,5-4,5",   "plausible_min": 1,   "plausible_max": 10,  "notes": "Inverse relationship with calcium" },
+    { "name": "Mg",   "alt_names": ["Μαγνήσιο"],           "unit": "mEq/L",  "range": "1,5-2,5",   "plausible_min": 0.5, "plausible_max": 5 },
+    { "name": "Cl",   "alt_names": ["Χλώριο"],             "unit": "mEq/L",  "range": "96-106",    "plausible_min": 80,  "plausible_max": 120 }
+  ],
+  "ocr_traps": {
+    "Ca_garbled": "Google Vision reads 'Ca' as 'Call' or 'Ca1'. The value should be ~8-12",
+    "Na_garbled": "Google reads 'Na' as 'Nal' or 'Na1'. Value should be ~135-150",
+    "K_decimal": "K is typically 3,5-5,5 with one decimal. A value of 41 is probably 4,1",
+    "P_prefix": "Google sometimes prepends digits — 'P14,5' is P: 4,5 not P: 14,5"
+  }
+}

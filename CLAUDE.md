@@ -8,7 +8,7 @@
 
 - **Only check into git repository when explicitly asked**
 - **Do not use pip or uv pip to install ANYTHING — always ask the user to install manually**
-- **Do not store any patient names. Convert names to a number/ID upon scanning (e.g. "Ασθενής 004")**
+- **Patient names are whited out in the scans.** Use the patient ID as the name (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name.
 - The notes are in Greek. Keep all transcriptions in Greek. English words appear mostly for medications or medical terms.
 - Dates are in European format (DD/MM/YYYY)
 - AMKA numbers: mask all but last 4 digits (e.g. *******0891)
@@ -22,24 +22,36 @@
 1. Install dependency if not already present: `npm install docx`
 2. Read `transcription_knowledge.json` — it contains confirmed abbreviations, known misread patterns, corrections from previous patients, and medical term dictionary. USE THIS KNOWLEDGE to avoid repeating known mistakes.
 
-### Step 2: Prepare the Source Image
+### Step 2: Transcribe Each Page (One at a Time)
 
-- Source JPGs are in `original_jpg/` (full 1700x2366 resolution, converted from PDF via `pdftoppm -jpeg -jpegopt quality=95 -r 72`). There may also be manually cropped versions prefixed with `x` in `redacted/`.
-- View the JPG image(s) to read the handwriting.
-- Note the image dimensions — you'll need width and height in pixels for the image embedding step.
+**TOKEN MANAGEMENT**: Patients may have 1-5 pages. Loading all images at once exceeds token limits for 3+ pages. Transcribe ONE page at a time:
 
-### Step 3: Copy and Adapt the Template Script
+1. Find all `./original_jpg/PatientXXX_N.jpg` files for the patient.
+2. For EACH page, one at a time:
+   a. Read the single JPG image. Note its pixel dimensions (width × height).
+   b. Transcribe everything into a structured plain-text file: `_notes_PatientXXX_pageN.txt`
+   c. Include ALL content: visit dates, patient details, medications, diagnoses, exam findings, lab values, instructions. Mark uncertain readings with `[?]`.
+   d. Note the image dimensions at top of file (e.g., `IMAGE: 1700x2366`)
+   e. Move on to the next page — do NOT keep the previous image in context.
 
-1. **Copy `v7_template_generator.js`** to a new file named `create_patientXXX_v7.js` (where XXX is the patient number)
-2. Update the CONFIGURATION section at top:
-   - `IMAGE_FILES`: set paths and pixel dimensions for each page's JPG
+- Source JPGs are pre-cropped in `original_jpg/` (varying dimensions, typically around 1700x2366 pixels).
+- Patient names are whited out in the scans. Use the patient ID as the name (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name.
+
+### Step 3: Assemble the Generator Script
+
+After ALL pages are transcribed to .txt files, proceed — NO images needed from this point on.
+
+1. Read all `_notes_PatientXXX_pageN.txt` files from Step 2.
+2. **Copy `v7_template_generator.js`** to a new file named `create_patientXXX_v7.js`
+3. Update the CONFIGURATION section at top:
+   - `IMAGE_FILES`: set paths and pixel dimensions for each page's JPG (from IMAGE: lines in each .txt)
    - `OUTPUT_PATH`: set to `./transcribed/v7/PatientXXX_N_digitized_v7.docx`
    - `PATIENT_AMKA`: set masked AMKA or `"[Δεν καταγράφηκε]"`
-3. Replace the `transcriptionChildren` array with actual transcribed content (see Step 4)
+4. Replace the `transcriptionChildren` array with actual transcribed content (see Step 4)
 
-### Step 4: Transcribe the Handwriting
+### Step 4: Build the Transcription Content
 
-Read the JPG image and transcribe the content into the template's section structure. **Use the helper functions from the template — do NOT try to create docx elements from scratch.**
+Convert the plain-text notes from Step 2 into the template's code format. **Use the helper functions from the template — do NOT try to create docx elements from scratch.**
 
 **Section order (matches doctor's consistent note structure):**
 
@@ -153,3 +165,5 @@ AA_Endo/
 5. **Fit-to-page**: Always use `fitToPage(imgW, imgH)` for image sizing — checks both width and height constraints.
 6. **JPG for scans**: JPG at quality 75-95 is 7x smaller than PNG with no visible loss.
 7. **Patient names**: Always redact. Use "Ασθενής XXX" format.
+8. **NEVER nest Paragraphs**: `nLine()`, `nLabelVal()` return `Paragraph` objects. NEVER wrap them in `new Paragraph({children: [nLine(...)]})` — this creates paragraph-inside-paragraph which produces a corrupt .docx that Word refuses to open. Use `nLine(...)` directly as a content item in `fullWidthBox()` arrays.
+9. **Structural validation**: The template includes a `validateDocStructure()` function that runs automatically before generating. If it finds nesting errors, it will print the exact location and exit with FATAL. Fix all errors before retrying.

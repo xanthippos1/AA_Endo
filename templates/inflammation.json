@@ -1,0 +1,14 @@
+{
+  "panel_id": "INFLAMMATION",
+  "greek_title": "Δείκτες Φλεγμονής",
+  "english_title": "Inflammatory Markers",
+  "tests": [
+    { "name": "ΤΚΕ",  "alt_names": ["ESR", "Ταχ. Καθίζησης"], "unit": "mm/hr",  "range_m": "<15",  "range_f": "<20",  "plausible_min": 0, "plausible_max": 120, "notes": "Increases with age — rough rule: M: age/2, F: (age+10)/2" },
+    { "name": "CRP",  "alt_names": ["C-αντιδρώσα πρωτεΐνη"],  "unit": "mg/L",   "range": "<6",     "plausible_min": 0, "plausible_max": 300, "notes": "Some labs use <0,5 as normal. Doctor's notes use ΦΤ <6" },
+    { "name": "hs-CRP", "alt_names": [],                       "unit": "mg/L",   "range": "<1,0",   "plausible_min": 0, "plausible_max": 50,  "notes": "High-sensitivity CRP for cardiovascular risk. <1 low risk, 1-3 moderate, >3 high" }
+  ],
+  "ocr_traps": {
+    "TKE_vs_TKG": "ΤΚΕ can be misread as ΤΚΓ",
+    "CRP_scale": "Watch units — some labs report in mg/dL (range <0,6), others mg/L (range <6). A value of 0,36 is likely mg/dL with ΦΤ <6 meaning mg/L context"
+  }
+}

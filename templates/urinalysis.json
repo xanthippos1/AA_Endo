@@ -1,0 +1,29 @@
+{
+  "panel_id": "URINALYSIS",
+  "greek_title": "Γενική Ούρων",
+  "english_title": "Urinalysis",
+  "tests": [
+    { "name": "Ε.Β.",       "alt_names": ["Ειδ. Βάρος", "SG", "Specific Gravity"], "unit": "",       "range": "1.005-1.030", "plausible_min": 1.001, "plausible_max": 1.040 },
+    { "name": "pH",          "alt_names": [],                                         "unit": "",       "range": "4,5-8,0",     "plausible_min": 4,     "plausible_max": 9 },
+    { "name": "Γλυκόζη",     "alt_names": ["Glucose", "Glu"],                         "unit": "",       "range": "(-)",         "notes": "Positive = glycosuria (diabetes if persistent)" },
+    { "name": "Πρωτεΐνη",    "alt_names": ["Pro", "Protein", "πρ"],                   "unit": "",       "range": "(-) or trace", "notes": "Proteinuria if persistent" },
+    { "name": "Κετόνες",     "alt_names": ["Ketones", "Ket"],                         "unit": "",       "range": "(-)",         "notes": "Positive in DKA, starvation" },
+    { "name": "Ερυθρά",      "alt_names": ["RBC", "Ε", "Ερ."],                        "unit": "/hpf",   "range": "0-3",         "plausible_min": 0,    "plausible_max": 200 },
+    { "name": "Λευκά",       "alt_names": ["WBC", "Λ"],                                "unit": "/hpf",   "range": "0-5",         "plausible_min": 0,    "plausible_max": 200 },
+    { "name": "Νιτρίτα",     "alt_names": ["Nitrites"],                                "unit": "",       "range": "(-)" },
+    { "name": "Κύλινδροι",   "alt_names": ["Casts"],                                   "unit": "/lpf",   "range": "0-2 hyaline",  "notes": "Kidney disorder marker" }
+  ],
+  "specialized_urine": [
+    { "name": "Μικροαλβουμίνη 24h",  "alt_names": ["Microalbumin"],     "unit": "mg/24h",  "range": "<30",   "notes": "Early diabetic nephropathy" },
+    { "name": "Πρωτεΐνη 24h",        "alt_names": ["24h Protein"],      "unit": "mg/24h",  "range": "<150",  "notes": ">3500 = nephrotic" },
+    { "name": "Κορτιζόλη ούρων 24h", "alt_names": ["24h UFC"],          "unit": "μg/24h",  "range": "<50",   "notes": "Cushing's screening" },
+    { "name": "Μετανεφρίνες",        "alt_names": ["Metanephrines"],    "unit": "μg/24h",  "range": "<350",  "notes": "Pheochromocytoma screening" },
+    { "name": "5-HIAA",              "alt_names": [],                    "unit": "mg/24h",  "range": "2-9",   "notes": "Carcinoid tumor marker" },
+    { "name": "VMA",                 "alt_names": ["Βανιλλυλμανδελικό"],"unit": "mg/24h",  "range": "<6,5",  "notes": "Pheochromocytoma marker" }
+  ],
+  "ocr_traps": {
+    "SG_format": "Specific gravity 1015 means 1.015 — the decimal is often omitted in handwriting",
+    "pH_garbled": "Google reads pH as 'ρίιε' or 'ρΗ'. Value should be 4-9",
+    "Pro_negative": "Protein (-) or 0-1 = negative. Don't confuse with numerical value"
+  }
+}

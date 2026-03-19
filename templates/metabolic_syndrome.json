@@ -1,0 +1,21 @@
+{
+  "panel_id": "METABOLIC_SYNDROME",
+  "greek_title": "Μεταβολικό Σύνδρομο",
+  "english_title": "Metabolic Syndrome / Insulin Resistance Panel",
+  "notes": "Diagnosis requires ≥3 of 5 criteria (IDF/AHA). This panel combines tests from multiple panels for metabolic syndrome assessment",
+  "criteria": [
+    { "name": "Περίμετρος μέσης",  "english": "Waist circumference",  "abnormal_m": "≥94 cm",    "abnormal_f": "≥80 cm" },
+    { "name": "Τριγλυκερίδια",     "english": "Triglycerides",         "abnormal": "≥150 mg/dL" },
+    { "name": "HDL",                "english": "HDL cholesterol",       "abnormal_m": "<40 mg/dL", "abnormal_f": "<50 mg/dL" },
+    { "name": "Αρτηριακή πίεση",   "english": "Blood pressure",        "abnormal": "≥130/85 mmHg" },
+    { "name": "Γλυκόζη νηστείας",  "english": "Fasting glucose",       "abnormal": "≥100 mg/dL" }
+  ],
+  "additional_tests": [
+    { "name": "Ινσουλίνη νηστείας", "alt_names": ["Fasting Insulin"],   "unit": "mIU/L",  "range": "2-12",     "notes": ">20 = significant insulin resistance" },
+    { "name": "HOMA-IR",            "alt_names": [],                     "unit": "score",   "range": "<1,0",     "notes": "Calculated. >3,0 = significant IR" },
+    { "name": "HbA1c",              "alt_names": [],                     "unit": "%",       "range": "<5,7",     "notes": "5,7-6,4 prediabetes" },
+    { "name": "Ουρικό οξύ",         "alt_names": ["Uric Acid"],          "unit": "mg/dL",   "range_m": "3,5-7,2", "range_f": "2,6-6,0", "notes": "Often elevated in metabolic syndrome" },
+    { "name": "γGT",                "alt_names": [],                     "unit": "IU/L",    "range": "<55",      "notes": "Marker of fatty liver / NAFLD" },
+    { "name": "Lp(a)",              "alt_names": [],                     "unit": "mg/dL",   "range": "<30",      "notes": "Independent cardiovascular risk factor" }
+  ]
+}

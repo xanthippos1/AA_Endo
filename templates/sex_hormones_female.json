@@ -1,0 +1,25 @@
+{
+  "panel_id": "SEX_HORMONES_FEMALE",
+  "greek_title": "Γυναικείες Ορμόνες",
+  "english_title": "Female Sex Hormone Panel",
+  "notes": "Values vary dramatically by menstrual cycle phase and menopausal status",
+  "tests": [
+    { "name": "Εστραδιόλη (Ε₂)",       "alt_names": ["Estradiol", "E2"],                 "unit": "pg/mL",  "follicular": "30-100",  "ovulatory": "100-400",  "luteal": "50-200",  "postmenopausal": "<30",   "plausible_min": 0,   "plausible_max": 500 },
+    { "name": "Προγεστερόνη",           "alt_names": ["Progesterone"],                     "unit": "ng/mL",  "follicular": "0,1-0,7", "luteal": "5-22",        "postmenopausal": "<0,4", "plausible_min": 0,   "plausible_max": 50,   "notes": "Luteal mid-cycle peak confirms ovulation" },
+    { "name": "FSH",                    "alt_names": ["Ωοθυλακιοτρόπος"],                  "unit": "mIU/mL", "follicular": "3,5-12,5","ovulatory": "4,7-21,5", "luteal": "1,7-7,7",   "postmenopausal": ">30",   "plausible_min": 0.1, "plausible_max": 200 },
+    { "name": "LH",                     "alt_names": ["Λυτεϊνοποιητική"],                   "unit": "mIU/mL", "follicular": "2,4-12,6","ovulatory": "14-95",    "luteal": "1,0-11,4",  "postmenopausal": ">30",   "plausible_min": 0.1, "plausible_max": 200 },
+    { "name": "Τεστοστερόνη (ολική)",   "alt_names": ["Total Testosterone"],                "unit": "ng/dL",  "range": "15-70",        "plausible_min": 0,     "plausible_max": 200,  "notes": "PCOS often 70-150" },
+    { "name": "Τεστοστερόνη (ελεύθ.)",  "alt_names": ["Free Testosterone"],                 "unit": "pg/mL",  "range": "0,5-5,0",      "plausible_min": 0,     "plausible_max": 20 },
+    { "name": "SHBG",                   "alt_names": ["Σφαιρίνη δέσμευσης ορμονών"],        "unit": "nmol/L", "range": "30-100",       "plausible_min": 5,     "plausible_max": 300 },
+    { "name": "Προλακτίνη",             "alt_names": ["Prolactin", "PRL"],                   "unit": "ng/mL",  "range": "0-20",         "plausible_min": 0,     "plausible_max": 300 },
+    { "name": "AMH",                    "alt_names": ["Αντι-Μυλλέρειος ορμόνη"],             "unit": "ng/mL",  "range": "1,0-3,5",      "plausible_min": 0,     "plausible_max": 20,   "notes": "Ovarian reserve. Low <1,0, high >3,5 (PCOS)" },
+    { "name": "17-OH Progesterone",     "alt_names": ["17-OHP"],                              "unit": "ng/mL",  "range": "0,5-1,5",      "plausible_min": 0,     "plausible_max": 20,   "notes": "Follicular phase. >4 suggests CAH" },
+    { "name": "DHEA-S",                 "alt_names": ["DHEA-θειικό"],                         "unit": "μg/dL",  "range": "varies by age", "plausible_min": 10,   "plausible_max": 500 },
+    { "name": "Ανδροστενεδιόνη",        "alt_names": ["Androstenedione"],                     "unit": "ng/mL",  "range": "0,6-3,1",      "plausible_min": 0,     "plausible_max": 15 }
+  ],
+  "ocr_traps": {
+    "Testo_female_scale": "Female testosterone in ng/dL (15-70) or ng/mL (0,15-0,70). Doctor notes show ΦΤ: 0,08 suggesting ng/mL scale. Value 0,90 ng/mL ~= 90 ng/dL",
+    "E2_vs_Ε₂": "Ε₂ uses Greek epsilon + subscript 2. Can be garbled as 'E2', 'Ε2', 'E₂'",
+    "FSH_postmeno": "Postmenopausal FSH >30 is expected — don't flag it as abnormal"
+  }
+}

@@ -1,0 +1,197 @@
+{
+  "_meta": {
+    "description": "Standardized lab panel templates for endocrinology transcription",
+    "purpose": "Reference for v8 transcription — ensures consistent test ordering, naming, and reference ranges across patients",
+    "source": "Derived from Patient001, Patient004, Patient005 v8 transcriptions",
+    "last_updated": "2026-03-18",
+    "status": "DRAFT — awaiting doctor review",
+    "notes": [
+      "Reference ranges (ΦΤ) shown are what appeared in patient notes — doctor should confirm standard ranges",
+      "Test order within each panel follows the order most commonly seen in the handwritten notes",
+      "Greek names are primary; English/Latin equivalents in parentheses for clarity",
+      "Not every test appears in every patient — panels are the SUPERSET of what we've seen"
+    ]
+  },
+
+  "panels": {
+
+    "CBC": {
+      "greek_title": "Γενική Αίματος",
+      "english_title": "Complete Blood Count",
+      "seen_in": ["Patient001 V1,V2,V6", "Patient004 V2", "Patient005 V1"],
+      "tests": [
+        { "name": "WBC",                "unit": "",         "ref": "",              "notes": "White blood cells. Sometimes written as 'Λ' or 'Λευκά'" },
+        { "name": "ΤΥΠΟΣ (N/L/E/M/B)",  "unit": "",         "ref": "",              "notes": "Differential: Neutro/Lympho/Eosino/Mono/Baso. Order may vary. Sometimes only N/L given (P001 V2: 54/34)" },
+        { "name": "PLT",                "unit": "",         "ref": "",              "notes": "Platelets. Written with dots: 213.000" },
+        { "name": "RBC",                "unit": "x10⁶",    "ref": "",              "notes": "Red blood cells" },
+        { "name": "HGB",                "unit": "",         "ref": "ΦΤ: 12-16",    "notes": "Hemoglobin. Sometimes 'Hgb'" },
+        { "name": "HCT",                "unit": "%",        "ref": "ΦΤ: 36-44%",   "notes": "Hematocrit" },
+        { "name": "MCV",                "unit": "",         "ref": "",              "notes": "" },
+        { "name": "MCH",                "unit": "",         "ref": "",              "notes": "" },
+        { "name": "MCHC",               "unit": "",         "ref": "",              "notes": "" },
+        { "name": "RDW",                "unit": "%",        "ref": "",              "notes": "Not always present" }
+      ]
+    },
+
+    "INFLAMMATION": {
+      "greek_title": "Φλεγμονή / Καθίζηση",
+      "english_title": "Inflammation Markers",
+      "seen_in": ["Patient001 V1,V8", "Patient004 V2", "Patient005 V1"],
+      "notes": "Sometimes included within CBC panel, sometimes separate. TKE and CRP don't always appear together.",
+      "tests": [
+        { "name": "ΤΚΕ",    "unit": "",    "ref": "",         "notes": "Ταχύτητα Καθίζησης Ερυθρών (ESR). Abbreviation confirmed in KB" },
+        { "name": "CRP",    "unit": "",    "ref": "ΦΤ: <6",   "notes": "C-Reactive Protein. P005 uses ΦΤ <0,5 — ranges may differ between labs" }
+      ]
+    },
+
+    "BIOCHEMISTRY": {
+      "greek_title": "Βιοχημικές",
+      "english_title": "Biochemistry / Metabolic Panel",
+      "seen_in": ["Patient001 V1,V2", "Patient004 V2", "Patient005 V1"],
+      "notes": "Core metabolic panel. Liver enzymes and muscle enzymes included here when no separate hepatic panel is ordered.",
+      "tests": [
+        { "name": "GLU",              "unit": "",    "ref": "ΦΤ: 70-110",   "notes": "Glucose. Sometimes 'Glu' or 'Σάκχαρο'" },
+        { "name": "HbA1c",            "unit": "",    "ref": "",              "notes": "Glycated hemoglobin. Not always ordered" },
+        { "name": "Ουρία",            "unit": "",    "ref": "",              "notes": "Urea / BUN" },
+        { "name": "Κρεατινίνη",       "unit": "",    "ref": "",              "notes": "Creatinine" },
+        { "name": "Ουρικό οξύ",       "unit": "",    "ref": "",              "notes": "Uric acid" },
+        { "name": "SGOT",             "unit": "",    "ref": "ΦΤ: <40",      "notes": "AST. P001 ref <40" },
+        { "name": "SGPT",             "unit": "",    "ref": "",              "notes": "ALT" },
+        { "name": "γGT",              "unit": "",    "ref": "",              "notes": "Gamma-GT" },
+        { "name": "ALP",              "unit": "",    "ref": "ΦΤ: 10-280",   "notes": "Alkaline phosphatase. P004 ref 10-280" },
+        { "name": "LDH",              "unit": "",    "ref": "",              "notes": "Lactate dehydrogenase. Not always ordered" },
+        { "name": "CPK",              "unit": "",    "ref": "ΦΤ: <200",     "notes": "Creatine phosphokinase. P001 ref <200. ALERT if >500" }
+      ]
+    },
+
+    "LIPIDS": {
+      "greek_title": "Λιπιδαιμικό Προφίλ",
+      "english_title": "Lipid Panel",
+      "seen_in": ["Patient001 V1,V2,V4", "Patient004 V2", "Patient005 V1"],
+      "notes": "Core lipid panel. Extended version adds Lp(a), ApoA1, ApoB.",
+      "tests": [
+        { "name": "CHOL",             "unit": "",    "ref": "",              "notes": "Total cholesterol. Sometimes 'ΧΟΛΗ' or 'Χοληστερόλη'" },
+        { "name": "HDL",              "unit": "",    "ref": "",              "notes": "" },
+        { "name": "LDL",              "unit": "",    "ref": "",              "notes": "" },
+        { "name": "Τριγλυκερίδια",    "unit": "",    "ref": "",              "notes": "Triglycerides. Also written as TRG, Τριγλ., Tρ" }
+      ]
+    },
+
+    "LIPIDS_EXTENDED": {
+      "greek_title": "Λιπιδαιμικό Προφίλ — Εκτεταμένο",
+      "english_title": "Extended Lipid Panel",
+      "seen_in": ["Patient005 V2"],
+      "notes": "Ordered when standard lipid panel shows abnormalities. Includes apolipoprotein analysis.",
+      "tests": [
+        { "name": "Lp(a)",                "unit": "",    "ref": "ΦΤ: <30",        "notes": "Lipoprotein(a)" },
+        { "name": "ApoA1",                "unit": "",    "ref": "ΦΤ: 101-223",    "notes": "Apolipoprotein A1" },
+        { "name": "ApoB",                 "unit": "",    "ref": "ΦΤ: 53-182",     "notes": "Apolipoprotein B" },
+        { "name": "Λόγος ApoB/ApoA1",     "unit": "",    "ref": "ΦΤ: <0,6",       "notes": "ApoB/ApoA1 ratio" }
+      ]
+    },
+
+    "ELECTROLYTES": {
+      "greek_title": "Ηλεκτρολύτες",
+      "english_title": "Electrolytes",
+      "seen_in": ["Patient001 V1,V4", "Patient004 V2"],
+      "tests": [
+        { "name": "Ca",     "unit": "",    "ref": "ΦΤ: 8,8-10,8",   "notes": "Calcium. P001 ref 8.8-10.8" },
+        { "name": "P",      "unit": "",    "ref": "",                "notes": "Phosphorus" },
+        { "name": "Mg",     "unit": "",    "ref": "",                "notes": "Magnesium. Not always ordered" },
+        { "name": "K",      "unit": "",    "ref": "",                "notes": "Potassium" },
+        { "name": "Na",     "unit": "",    "ref": "",                "notes": "Sodium" }
+      ]
+    },
+
+    "THYROID": {
+      "greek_title": "Θυρεοειδικό Panel",
+      "english_title": "Thyroid Panel",
+      "seen_in": ["Patient001 V6,V8", "Patient004 V2", "Patient005 V1,V2"],
+      "notes": "TSH alone is a screening test. Full panel adds FT4, FT3, antibodies.",
+      "tests": [
+        { "name": "TSH",          "unit": "",    "ref": "ΦΤ: 0,27-4,5",   "notes": "P001 ref 0.27-4.7, P004 ref 0.2-4.5, P005 ref 0.27-4.2 / 0.51-4.2 — ranges vary by lab" },
+        { "name": "FT4",          "unit": "",    "ref": "ΦΤ: 0,78-1,63",  "notes": "Free T4. P001 ref 0.97-2, P005 ref 0.78-1.63" },
+        { "name": "FT3",          "unit": "",    "ref": "ΦΤ: 2-3,71",     "notes": "Free T3. Not always ordered" },
+        { "name": "Anti-TPO",     "unit": "",    "ref": "ΦΤ: <150",       "notes": "Anti-thyroid peroxidase antibodies" },
+        { "name": "Anti-Tg",      "unit": "",    "ref": "ΦΤ: <150",       "notes": "Anti-thyroglobulin antibodies. Sometimes written together as 'Ab (-)'" }
+      ]
+    },
+
+    "HORMONES_ADRENAL": {
+      "greek_title": "Ορμονικό — Επινεφρίδια",
+      "english_title": "Adrenal Hormones",
+      "seen_in": ["Patient001 V4"],
+      "notes": "Ordered when adrenal pathology suspected (e.g., adrenal adenoma, hyperaldosteronism).",
+      "tests": [
+        { "name": "PRA",                  "unit": "",    "ref": "ΦΤ: 0,5-6,4",    "notes": "Plasma Renin Activity" },
+        { "name": "ALDo (Αλδοστερόνη)",   "unit": "",    "ref": "ΦΤ: <20",         "notes": "Aldosterone" },
+        { "name": "ACTH",                 "unit": "",    "ref": "ΦΤ: 7-63",        "notes": "Adrenocorticotropic hormone" },
+        { "name": "F (Κορτιζόλη)",        "unit": "",    "ref": "ΦΤ: 4,3-22,4",    "notes": "Cortisol" }
+      ]
+    },
+
+    "HORMONES_SEX": {
+      "greek_title": "Ορμονικό — Γεννητικές Ορμόνες",
+      "english_title": "Sex Hormones",
+      "seen_in": ["Patient004 V2"],
+      "notes": "Testosterone + SHBG ordered for endocrine workup. May also include E2, DHEA-S, FSH, LH depending on clinical picture.",
+      "tests": [
+        { "name": "Τεστοστερόνη",     "unit": "",    "ref": "",               "notes": "Testosterone. Reference ranges differ by sex and lab" },
+        { "name": "SHBG",             "unit": "",    "ref": "ΦΤ: 10-70",     "notes": "Sex hormone-binding globulin" },
+        { "name": "Ε₂",               "unit": "",    "ref": "",               "notes": "Estradiol. Not always ordered" },
+        { "name": "Ινσουλίνη",        "unit": "",    "ref": "",               "notes": "Insulin. P005 had this under Metabolic panel" }
+      ]
+    },
+
+    "BONE_METABOLISM": {
+      "greek_title": "Οστικός Μεταβολισμός",
+      "english_title": "Bone Metabolism",
+      "seen_in": ["Patient001 V4,V8", "Patient004 V2", "Patient005 V2"],
+      "notes": "PTH + Vitamin D are the core pair. BGP (osteocalcin) added for bone turnover assessment.",
+      "tests": [
+        { "name": "PTH",              "unit": "",    "ref": "ΦΤ: 8-75",      "notes": "Parathyroid hormone. P001 V4 ref 12-65, P004 ref 8-75 — ranges vary" },
+        { "name": "25-OHD₃",          "unit": "",    "ref": "ΦΤ: 30-100",    "notes": "Vitamin D. Also written as 'Vit D 25OH', '25-OHD'. Values <30 = insufficient" },
+        { "name": "Ca",               "unit": "",    "ref": "ΦΤ: 8,8-10,8",  "notes": "Calcium — also in Electrolytes panel. Included here for bone context" },
+        { "name": "P",                "unit": "",    "ref": "",               "notes": "Phosphorus" },
+        { "name": "ALP",              "unit": "",    "ref": "",               "notes": "Alkaline phosphatase — also in Biochemistry. Bone-specific isoenzyme not differentiated" },
+        { "name": "BGP (Οστεοκαλσίνη)", "unit": "",  "ref": "",               "notes": "Osteocalcin. Bone formation marker" }
+      ]
+    },
+
+    "VITAMINS_SPECIAL": {
+      "greek_title": "Ειδικές Εξετάσεις / Βιταμίνες",
+      "english_title": "Special Tests / Vitamins",
+      "seen_in": ["Patient001 V8", "Patient004 V2", "Patient005 V2"],
+      "notes": "Grouping for vitamins, iron studies, and homocysteine — commonly ordered together in endocrine workup.",
+      "tests": [
+        { "name": "Φερριτίνη",        "unit": "",    "ref": "ΦΤ: 15-400",    "notes": "Ferritin. Ranges differ M/F. Elevated in premenopausal F is notable" },
+        { "name": "B12",              "unit": "",    "ref": "",               "notes": "Vitamin B12" },
+        { "name": "Φυλλικό οξύ",      "unit": "",    "ref": "",               "notes": "Folic acid / Folate" },
+        { "name": "Ομοκυστεΐνη",      "unit": "",    "ref": "",               "notes": "Homocysteine. >15 = mildly elevated" }
+      ]
+    },
+
+    "IMMUNOLOGY": {
+      "greek_title": "Ανοσολογικά",
+      "english_title": "Immunology",
+      "seen_in": ["Patient004 V2"],
+      "notes": "Screening tests. ANA ordered when autoimmune disease suspected.",
+      "tests": [
+        { "name": "ANA",      "unit": "",    "ref": "",    "notes": "Antinuclear antibodies. Result typically (-) αρν or (+) θετ" }
+      ]
+    },
+
+    "URINALYSIS": {
+      "greek_title": "Γενική Ούρων",
+      "english_title": "Urinalysis",
+      "seen_in": ["Patient004 V2"],
+      "notes": "Basic urinalysis. Doctor's notes typically abbreviated.",
+      "tests": [
+        { "name": "Ε.Β.",     "unit": "",    "ref": "",    "notes": "Ειδικό Βάρος (Specific gravity)" },
+        { "name": "pH",       "unit": "",    "ref": "",    "notes": "" },
+        { "name": "Pro",      "unit": "",    "ref": "",    "notes": "Protein. (-) = negative" },
+        { "name": "Ε",        "unit": "",    "ref": "",    "notes": "Erythrocytes per HPF. 0-1 = normal" }
+      ]
+    }
+  }
+}

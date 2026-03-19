@@ -1,0 +1,18 @@
+{
+  "panel_id": "VITAMINS",
+  "greek_title": "Βιταμίνες / Διατροφική Κατάσταση",
+  "english_title": "Vitamins & Nutritional Status",
+  "tests": [
+    { "name": "B12",             "alt_names": ["Βιταμίνη B12", "Κοβαλαμίνη"],     "unit": "pg/mL",  "range": "200-900",    "plausible_min": 50,   "plausible_max": 5000, "notes": "<200 deficient. Some labs use ng/L (same numbers)" },
+    { "name": "Φυλλικό οξύ",    "alt_names": ["Folic Acid", "Folate"],             "unit": "ng/mL",  "range": "2,7-17,0",   "plausible_min": 0.5,  "plausible_max": 50,   "notes": ">20 common with supplements" },
+    { "name": "Ομοκυστεΐνη",    "alt_names": ["Homocysteine"],                     "unit": "μmol/L", "range": "5-15",       "plausible_min": 2,    "plausible_max": 100,  "notes": "Elevated in B12/folate deficiency. >15 mildly elevated, >30 significantly" },
+    { "name": "25-OHD₃",        "alt_names": ["Vitamin D", "Βιτ. D"],              "unit": "ng/mL",  "range": "30-100",     "plausible_min": 3,    "plausible_max": 150,  "notes": "<20 deficient, 20-29 insufficient, ≥30 sufficient" },
+    { "name": "Σελήνιο",        "alt_names": ["Selenium"],                          "unit": "ng/mL",  "range": "95-165",     "plausible_min": 20,   "plausible_max": 300,  "notes": "Thyroid cofactor" },
+    { "name": "Ψευδάργυρος",    "alt_names": ["Zinc"],                              "unit": "μg/dL",  "range": "70-110",     "plausible_min": 20,   "plausible_max": 200 }
+  ],
+  "ocr_traps": {
+    "B12_garbled": "Google garbles B12 values — '812146.420' could be 'B12: 446,20'. Separate test name from value carefully",
+    "Folate_decimal": "Folate 30 (ng/mL) is high but possible with supplements. 3,0 is low-normal. Check for decimal comma",
+    "Homocysteine_garbled": "Google reads 'ομοκυστεΐνη' as 'ομοκυστεΐνης'. Value 18,0 is mildly elevated. 80 would be extreme (possible but rare)"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "panel_id": "BONE_METABOLISM",
+  "greek_title": "Οστικός Μεταβολισμός",
+  "english_title": "Bone Metabolism / Calcium-Parathyroid Panel",
+  "tests": [
+    { "name": "PTH",             "alt_names": ["Παραθορμόνη"],                   "unit": "pg/mL",  "range": "15-65",    "plausible_min": 1,   "plausible_max": 2000, "notes": "Some labs 8-75 or 12-65. Values >100 suggest hyperparathyroidism. >200 is markedly elevated" },
+    { "name": "25-OHD₃",        "alt_names": ["Vit D 25OH", "25-OHD", "Βιτ.D"], "unit": "ng/mL",  "range": "30-100",   "plausible_min": 3,   "plausible_max": 150,  "notes": "<20 deficient, 20-29 insufficient, ≥30 sufficient" },
+    { "name": "1,25-(OH)₂D",    "alt_names": ["Calcitriol"],                     "unit": "pg/mL",  "range": "20-100",   "plausible_min": 5,   "plausible_max": 200,  "notes": "Active form. Less commonly ordered" },
+    { "name": "Ca",              "alt_names": ["Ασβέστιο"],                       "unit": "mg/dL",  "range": "8,5-10,2", "plausible_min": 5,   "plausible_max": 15 },
+    { "name": "P",               "alt_names": ["Φώσφορος"],                       "unit": "mg/dL",  "range": "2,5-4,5",  "plausible_min": 1,   "plausible_max": 10 },
+    { "name": "ALP",             "alt_names": ["Αλκ. Φωσφατάση"],                "unit": "IU/L",   "range": "30-120",   "plausible_min": 10,  "plausible_max": 1000 },
+    { "name": "BGP",             "alt_names": ["Οστεοκαλσίνη", "Osteocalcin"],   "unit": "ng/mL",  "range": "11-43",    "plausible_min": 1,   "plausible_max": 200,  "notes": "Bone formation marker. Age/sex dependent" },
+    { "name": "P1NP",            "alt_names": [],                                 "unit": "ng/mL",  "range": "varies",   "plausible_min": 5,   "plausible_max": 200,  "notes": "Bone formation marker. Age/sex/menopausal dependent" },
+    { "name": "CTX",             "alt_names": ["β-CrossLaps"],                    "unit": "ng/mL",  "range": "varies",   "plausible_min": 0,   "plausible_max": 2,    "notes": "Bone resorption marker. Fasting morning sample" }
+  ],
+  "ocr_traps": {
+    "PTH_scale": "PTH 16 is normal. PTH 209 is markedly elevated. Don't confuse with other values in the 16-20 range",
+    "25OHD_prefix": "Google garbles '25-OHD' as '25-04D' or '25-OHD31'. The value should be 10-80 typically",
+    "BGP_vs_BCP": "Handwriting B, G, C easily confused. BGP = Bone Gla Protein = Osteocalcin"
+  }
+}

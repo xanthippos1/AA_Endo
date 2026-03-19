@@ -1,0 +1,19 @@
+┌─────────────────────────────────────────────┐
+│ TRANSCRIPTION SUMMARY                       │
+├─────────────────────────────────────────────┤
+│ Patient:        Patient002                  │
+│ Pages:          2                           │
+│ Visits:         3                           │
+│ Rows:           108                         │
+│ File size:      1374 KB                     │
+│ Elapsed time:   ~23 min                     │
+│ Est. input:     ~14,200 tokens              │
+│ Est. output:    ~14,000 tokens              │
+│ Est. cost (Opus 4.6):   ~$0.63             │
+│ Est. cost (Sonnet 4.6): ~$0.13             │
+└─────────────────────────────────────────────┘
+
+Visit dates:
+  1. 30/11/2021 — Initial consultation
+  2. 03/12/2021 — Results review
+  3. 26/01/2022 — Post-thyroidectomy follow-up

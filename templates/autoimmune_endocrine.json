@@ -1,0 +1,20 @@
+{
+  "panel_id": "AUTOIMMUNE_ENDOCRINE",
+  "greek_title": "Αυτοάνοσα — Ενδοκρινολογικά",
+  "english_title": "Endocrine Autoimmune Panel",
+  "notes": "Tests for autoimmune destruction of endocrine organs. Thyroid antibodies in thyroid.json",
+  "tests": [
+    { "name": "ANA",                     "alt_names": ["Αντιπυρηνικά αντισώματα"],            "unit": "",       "range": "(-) αρν",    "notes": "Reported as titer (1:40, 1:80, etc.) or positive/negative. Low titers common in healthy people" },
+    { "name": "Anti-GAD",                "alt_names": ["Αντισώματα GAD65"],                    "unit": "IU/mL",  "range": "<5",         "plausible_min": 0,  "plausible_max": 5000, "notes": "Type 1 diabetes / LADA marker" },
+    { "name": "Anti-IA2",                "alt_names": ["Αντισώματα IA-2"],                     "unit": "IU/mL",  "range": "<7,5",       "plausible_min": 0,  "plausible_max": 1000, "notes": "Type 1 diabetes marker" },
+    { "name": "ICA",                     "alt_names": ["Islet Cell Antibodies"],                "unit": "",       "range": "(-)",        "notes": "Type 1 diabetes marker" },
+    { "name": "Anti-21-Hydroxylase",     "alt_names": ["Αντισώματα 21-υδροξυλάσης"],           "unit": "U/mL",   "range": "<1",         "notes": "Addison's disease / autoimmune adrenalitis" },
+    { "name": "tTG-IgA",                 "alt_names": ["Ιστ. τρανσγλουταμινάση"],              "unit": "AU/mL",  "range": "<1,0",       "notes": "Celiac disease screening — relevant in T1DM and thyroid autoimmunity" },
+    { "name": "Anti-Parietal Cell",      "alt_names": ["Αντισώματα παριετικών κυττάρων"],      "unit": "",       "range": "(-)",        "notes": "Pernicious anemia / autoimmune gastritis" },
+    { "name": "Anti-Intrinsic Factor",   "alt_names": ["Αντισώματα ενδογενούς παράγοντα"],     "unit": "",       "range": "(-)",        "notes": "More specific for pernicious anemia" }
+  ],
+  "ocr_traps": {
+    "ANA_negative": "ANA (-) αρν = negative. Google reads as 'ANA (-7 apv'",
+    "GAD_vs_other": "Anti-GAD can appear near other diabetes-related tests — don't confuse with glucose values"
+  }
+}
