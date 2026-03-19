@@ -230,7 +230,7 @@ The template is bundled with this plugin at:
 ${CLAUDE_PLUGIN_ROOT}/skills/endo-transcribe-v10/references/v10_template_generator.js
 ```
 
-Also available at `./v10_template_generator.js`.
+Also available at `./scripts/v10_template_generator.js`.
 
 1. **Read `./id.json` FIRST** and extract the entry for this patient (e.g., `Patient004`). You MUST have the actual values before writing any code.
 2. Copy template to `./scratch/create_patientXXX_v10.js`
@@ -344,7 +344,7 @@ Update `./transcription_knowledge.json` with **general, patient-agnostic** knowl
 - Row numbers: GRAY (#999999) in Courier New
 
 ### Technical
-- **Do NOT write docx code from scratch.** Copy `v10_template_generator.js`.
+- **Do NOT write docx code from scratch.** Copy `./scripts/v10_template_generator.js`.
 - Image section MUST be separate docx section (0.5cm vs 2cm margins)
 - `fitToPage(imgW, imgH)` — 750×1070 max
 - **CRITICAL: Appended scan images must NEVER be cropped.**
