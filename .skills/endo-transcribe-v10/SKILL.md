@@ -1,14 +1,14 @@
 ---
 name: endo-transcribe-v10
 description: |
-  Digitize handwritten Greek endocrinologist notes into structured Word documents (.docx) using the v10 lab-panel-aware format (3-phase: transcribe with lab awareness, panel-guided review, assemble). Use this skill when the user asks for "v10" transcription or says "transcribe Patient001 v10". V10 improves on v8 by loading lab panel templates (test names, alt names, units, nominal ranges, OCR traps) during transcription and review, enabling smarter character recognition and structured grouping of lab results. For v7 (basic) or v8 (review only), use the other endo-transcribe skills.
+  Digitize handwritten Greek endocrinologist notes into structured Word documents (.docx) using the v10 lab-panel-aware format (3-phase: transcribe with lab awareness, panel-guided review, assemble). Use this skill when the user asks for "v10" transcription or says "transcribe Patient001 v10". V10 loads lab panel templates (test names, alt names, units, nominal ranges, OCR traps) during transcription and review, enabling smarter character recognition and structured grouping of lab results.
 ---
 
 # Endocrinologist Note Transcription — v10 Format (Lab-Panel-Aware)
 
 Digitize handwritten medical notes from a Greek endocrinologist (Dr. Dimitrios G. Bougiouklis, Thessaloniki) into structured Word documents, using **lab panel templates** to improve OCR accuracy and result organization.
 
-**V10 vs V8**: Same 3-phase workflow, same docx output format. V10 adds lab panel intelligence — it loads structured test definitions (names, alt names, units, nominal ranges, plausible bounds, OCR traps) from `./templates/*.json` and uses them to:
+V10 uses **lab panel intelligence** — structured test definitions (names, alt names, units, nominal ranges, plausible bounds, OCR traps) loaded from `./templates/*.json` — to:
 1. **Correct likely misreads** during transcription (HDO → HDL, Anti-Tj → Anti-Tg)
 2. **Catch order-of-magnitude errors** using plausible ranges (K: 41 → 4,1 because normal is 3,5-5,0)
 3. **Separate garbled run-on text** (HGB1164 → HGB: 16,4)
@@ -31,27 +31,23 @@ npm install docx  # if not already installed
 
 Read these BEFORE starting:
 - `./id.json` — synthetic patient identity data (name, AMKA, DOB, phone, address) indexed by PatientXXX. These fields are redacted in the source JPGs and must be populated from this file.
-- `./transcription_knowledge.json` — but **ONLY use these sections**:
+- `./transcription_knowledge.json` — use these sections:
   - `abbreviations.confirmed` — doctor-confirmed abbreviation meanings
   - `handwriting_patterns.confirmed` — known handwriting quirks (e.g. 2↔9 year confusion)
   - `hallucination_warnings` — patterns where AI has previously hallucinated content
   - `omission_warnings` — patterns where AI has previously missed content
-  - `corrections_log` — ONLY entries marked `"reviewed_by_doctor": true`
   - `common_medical_terms` — Greek↔English medical dictionary
   - `medication_names` — list of known drug names
   - `formatting_rules` — color coding and formatting standards
   - `note_structure.sections_visit` — expected section order
-  - **IGNORE COMPLETELY**: `v9_fusion_lessons`, `transcription_stats` (all entries), any AI-generated corrections from previous runs (v8/v9/v10 stats, fusion data, etc.), `document_format_v7` (use the values in THIS skill file instead)
 - ALL files in `./templates/*.json` — lab panel definitions with OCR traps
 
 ### CRITICAL: Turnkey Isolation
 
-V10 must produce a **fresh, uncontaminated transcription** every time it runs. This means:
-- **Do NOT inherit corrections** from previous v8/v9/v10 runs on the same patient
-- **Do NOT use** AI-generated value corrections from `transcription_stats` entries (e.g. "TRG 80→180", "CPK 250→2598" from v9)
-- **Do NOT use** the `v9_fusion_lessons` section at all — v10 has nothing to do with Google Vision
-- The ONLY corrections that may influence transcription are: (a) lab panel template plausibility checks, and (b) doctor-confirmed corrections in `corrections_log`
-- Each run should read the image fresh and apply only template-based intelligence — as if no previous version has ever processed this patient
+V10 must produce a **fresh transcription** every time it runs:
+- The ONLY corrections that may influence transcription are: (a) lab panel template plausibility checks, and (b) general handwriting patterns confirmed by the doctor
+- Each run reads the image fresh and applies only template-based intelligence — as if this patient has never been processed before
+- The knowledge base contains ONLY general, patient-agnostic knowledge (abbreviations, handwriting patterns, medical terms, medication names). No patient-specific data.
 
 ---
 
@@ -104,7 +100,7 @@ For EACH page, one at a time:
 - `LDH` vs `LDL` — disambiguate by context (enzyme panel vs lipid panel)
 - `SGOT` vs `SGPT` — O and P confused; SGOT usually listed first
 
-**Run-on text separation**: Google Vision and handwriting often run test names into values:
+**Run-on text separation**: Handwriting often runs test names into values:
 - `HGB1164` → `HGB: 16,4` (HGB normal range 13-18)
 - `PLT213000` → `PLT: 213.000`
 - `TSH218` → `TSH: 2,18` (normal 0,4-4,0, so 2,18 makes sense; 218 would be extreme)
@@ -188,12 +184,11 @@ For each lab value, check:
 
 ### 2d. Known Error Pattern Check
 
-Check against the **allowed** knowledge base sections only:
+Check against the knowledge base:
 - Year confusion (2↔9) — from `handwriting_patterns.confirmed`
 - Known abbreviation misreads — from `abbreviations.confirmed`
-- Doctor-confirmed corrections — from `corrections_log` (only `"reviewed_by_doctor": true`)
 - Hallucination patterns — from `hallucination_warnings`
-- **Do NOT apply** any corrections from `transcription_stats` or `v9_fusion_lessons`
+- Omission patterns — from `omission_warnings`
 
 ### 2e. Write Reviewed Output
 
@@ -237,16 +232,29 @@ ${CLAUDE_PLUGIN_ROOT}/skills/endo-transcribe-v10/references/v10_template_generat
 
 Also available at `./v10_template_generator.js`.
 
-1. Read `./id.json` and extract the entry for this patient (e.g., `Patient004`)
+1. **Read `./id.json` FIRST** and extract the entry for this patient (e.g., `Patient004`). You MUST have the actual values before writing any code.
 2. Copy template to `./scratch/create_patientXXX_v10.js`
 3. Update CONFIGURATION: `IMAGE_FILES`, `OUTPUT_PATH` (→ `./transcribed/v10/`), `PATIENT_AMKA` (from `id.json`)
 4. Replace `transcriptionChildren` from REVIEWED notes
-5. **Insert identity fields from `id.json`** into the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ section:
-   - Name → from `id.json` → `name`
-   - Birth date → from `id.json` → `birth_date`
-   - AMKA → from `id.json` → `amka`
-   - Phone → from `id.json` → `phone`
-   - Address → from `id.json` → `address`
+5. **CRITICAL — Insert ACTUAL identity values from `id.json`** into the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ section. Do NOT leave placeholders like `[REDACTED]`, `[whited out]`, `Patient 004`, or `Ασθενής 004`. The docx must contain the real synthetic values:
+
+```javascript
+// Example for Patient004 — use ACTUAL values from id.json:
+twoBoxRow(
+  "ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ",
+  [
+    nLabelVal("Όνομα", "Αικατερίνη Σ. Δημητρίου"),    // ← from id.json .name
+    nLabelVal("Ημερ. Γέννησης", "10/06/1998"),          // ← from id.json .birth_date
+    nLabelVal("Κατοικία", "Λ. Νίκης 55, Θεσσαλονίκη 54623"), // ← from id.json .address
+    nLabelVal("Τηλέφωνο", "6981 597 086"),              // ← from id.json .phone
+    nLabelVal("ΑΜΚΑ", "*******0891"),                    // ← from id.json .amka
+  ],
+  ...
+)
+```
+
+**Every `[REDACTED — from id.json]` placeholder in the .txt files MUST be replaced with the actual value from id.json in the final code. No placeholders, no patient IDs as names — real-looking synthetic data.**
+
 6. Leave engine unchanged.
 
 ### 3b. Lab Results in the Document
@@ -286,7 +294,7 @@ fullWidthBox("ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ (10/4/23)", [
 ]),
 ```
 
-### 3c. Helper Functions (same as v7/v8)
+### 3c. Helper Functions
 
 | Function | When to Use |
 |----------|-------------|
@@ -297,7 +305,7 @@ fullWidthBox("ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ (10/4/23)", [
 | `uncertain("text")` | Uncertain after review (RED) |
 | `uncertainNum("text")` | Uncertain numbers (RED) |
 
-Section layout order (same as v7/v8): ΣΤΟΙΧΕΙΑ | ΚΟΙΝΩΝΙΚΟ → ΑΓΩΓΗ | ΝΟΣΟΣ → ΠΑΡΑΠΟΜΠΗ | ΑΝΑΜΝΗΣΤΙΚΟ → ΟΙΚΟΓ. ΙΣΤΟΡ. → ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ → ΕΡΓΑΣΤΗΡΙΑΚΑ → ΟΔΗΓΙΕΣ.
+Section layout order: ΣΤΟΙΧΕΙΑ | ΚΟΙΝΩΝΙΚΟ → ΑΓΩΓΗ | ΝΟΣΟΣ → ΠΑΡΑΠΟΜΠΗ | ΑΝΑΜΝΗΣΤΙΚΟ → ΟΙΚΟΓ. ΙΣΤΟΡ. → ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ → ΕΡΓΑΣΤΗΡΙΑΚΑ → ΟΔΗΓΙΕΣ.
 
 ### 3d. Generate
 
@@ -307,12 +315,11 @@ node ./scratch/create_patientXXX_v10.js
 
 ### 3e. Update Knowledge Base
 
-Update `./transcription_knowledge.json` with:
-- New terms → `common_medical_terms`
+Update `./transcription_knowledge.json` with **general, patient-agnostic** knowledge only:
+- New medical terms → `common_medical_terms`
 - New medications → `medication_names`
-- New confirmed abbreviations → `abbreviations.confirmed` (only if meaning is certain)
-- New `transcription_stats` entry for this run (timing, row count, panel count, template corrections) — this is for record-keeping only and must NOT influence future runs
-- **Do NOT** write AI-generated value corrections into any section that future runs would treat as authoritative. Lab value corrections from template matching are logged in the stats entry but are NOT promoted to `corrections_log` — only doctor-confirmed corrections go there.
+- New confirmed abbreviations → `abbreviations.confirmed` (only if meaning is certain from context)
+- Do NOT add any patient-specific data, per-run stats, or value corrections. The knowledge base must remain general and applicable to any patient.
 
 ---
 
@@ -344,7 +351,20 @@ Update `./transcription_knowledge.json` with:
 
 ## Timing and Cost Estimation
 
-Record per-phase and total time. V10 costs roughly the same as v8 (the template files are small).
+Record per-phase and total time. Estimate tokens and compute cost.
+
+**Token estimation guidelines:**
+- Each JPG image ≈ 1,600 tokens input
+- SKILL.md instructions ≈ 3,000 tokens input
+- Knowledge base ≈ 1,500 tokens input
+- Lab templates (all) ≈ 2,000 tokens input
+- Template script ≈ 2,000 tokens input
+- Phase 2 review input: raw transcription texts ≈ 3,000-8,000 tokens
+- Output: transcription .txt + reviewed .txt + generator script ≈ 15,000-30,000 tokens total
+- **Opus 4.6 pricing**: $15 / 1M input tokens, $75 / 1M output tokens
+- **Sonnet 4.6 pricing**: $3 / 1M input tokens, $15 / 1M output tokens
+
+**MANDATORY — Print this EXACT table at the end. No clinical flags, no extra rows. This exact format:**
 
 ```
 ┌──────────────────────────────────────────────────┐
@@ -368,3 +388,5 @@ Record per-phase and total time. V10 costs roughly the same as v8 (the template 
 │ Est. cost (Sonnet 4.6): $X.XX                   │
 └──────────────────────────────────────────────────┘
 ```
+
+**Do NOT add clinical findings, key flags, inherited fixes, or any other rows. The table above is the COMPLETE output.**

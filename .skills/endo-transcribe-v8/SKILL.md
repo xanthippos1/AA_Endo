@@ -25,7 +25,9 @@ The user gives a patient ID like `Patient001` and specifies v8. The job:
 npm install docx  # if not already installed
 ```
 
-Read `./transcription_knowledge.json` BEFORE starting. It contains confirmed abbreviations, known misread patterns, corrections from doctor reviews, medical term dictionary, and medication names. **Use this knowledge actively in all three phases.**
+Read these BEFORE starting:
+- `./id.json` — synthetic patient identity data (name, AMKA, DOB, phone, address) indexed by PatientXXX. Identity fields are redacted in the source JPGs — always use this file instead.
+- `./transcription_knowledge.json` — confirmed abbreviations, known misread patterns, corrections from doctor reviews, medical term dictionary, and medication names. **Use this knowledge actively in all three phases.**
 
 ---
 
@@ -36,25 +38,25 @@ Read `./transcription_knowledge.json` BEFORE starting. It contains confirmed abb
 1. Find all `./original_jpg/PatientXXX_N.jpg` files for the given patient ID.
 2. For EACH page, one at a time:
    a. Read the single JPG image. Note its pixel dimensions (width × height).
-   b. Transcribe everything into a structured plain-text file: `_raw_PatientXXX_pageN.txt`
+   b. Transcribe everything into a structured plain-text file: `./scratch/_raw_PatientXXX_pageN.txt`
    c. Include ALL content: visit dates, patient details, medications, diagnoses, exam findings, lab values, instructions.
    d. Mark uncertain readings with `[?]`. Mark very uncertain readings with `[??]`.
    e. Note the image dimensions at top of file (e.g., `IMAGE: 1700x2366`)
    f. **Move on to the next page — do NOT keep the previous image in context.**
 
-The images are pre-cropped JPGs (varying dimensions, typically around 1700x2366 pixels). The patient's name has been whited out in the scans, so for the "Όνομα" field always use the patient ID (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name.
+The images are pre-cropped JPGs (varying dimensions, typically around 1700x2366 pixels). Identity fields (name, AMKA, DOB, phone, address) are **redacted with magenta (#FF00FF) rectangles**. Do NOT attempt to read them — use `./id.json` for these values.
 
 Use the same plain-text format as v7 (see example below), but prefix files with `_raw_` to distinguish from reviewed versions.
 
-Example `_raw_PatientXXX_page1.txt`:
+Example `./scratch/_raw_PatientXXX_page1.txt`:
 ```
 IMAGE: 1700x2366
 VISIT DATE: 15/03/2019
-PATIENT: Ασθενής 002
-DOB: 12/05/1965 (54 ετών)
-ADDRESS: [address from scan]
-PHONE: 6973 XXX XXX
-AMKA: *******1234
+PATIENT: [REDACTED — from id.json]
+DOB: [REDACTED — from id.json]
+ADDRESS: [REDACTED — from id.json]
+PHONE: [REDACTED — from id.json]
+AMKA: [REDACTED — from id.json]
 PROFESSION: [profession]
 SMOKING: 20 τσιγ/ημ
 ALCOHOL: Φ
@@ -96,7 +98,7 @@ INSTRUCTIONS:
 
 ## PHASE 2: Medical Review Pass
 
-**No images needed.** Read ALL `_raw_PatientXXX_pageN.txt` files and `transcription_knowledge.json`, then perform a systematic review.
+**No images needed.** Read ALL `./scratch/_raw_PatientXXX_pageN.txt` files and `transcription_knowledge.json`, then perform a systematic review.
 
 ### 2a. Known Error Pattern Check
 
@@ -129,7 +131,7 @@ Look for internal contradictions or implausible content:
 
 ### 2d. Write Reviewed Output
 
-For each page, write a reviewed version: `_reviewed_PatientXXX_pageN.txt`
+For each page, write a reviewed version: `./scratch/_reviewed_PatientXXX_pageN.txt`
 
 At the TOP of each reviewed file, include a review summary:
 ```
@@ -158,7 +160,7 @@ Then include the corrected transcription below (same format as Phase 1, with cor
 
 ## PHASE 3: Assemble and Generate
 
-**No images needed.** Read all `_reviewed_PatientXXX_pageN.txt` files.
+**No images needed.** Read all `./scratch/_reviewed_PatientXXX_pageN.txt` files.
 
 ### 3a. Copy the Template Script
 
@@ -169,13 +171,15 @@ ${CLAUDE_PLUGIN_ROOT}/skills/endo-transcribe-v8/references/v8_template_generator
 
 It is also available in the project repo at `./v8_template_generator.js`.
 
-1. Copy it to a new file named `create_patientXXX_v8.js`
-2. Update the CONFIGURATION section:
+1. Read `./id.json` and extract the entry for this patient.
+2. Copy template to `./scratch/create_patientXXX_v8.js`
+3. Update the CONFIGURATION section:
    - `IMAGE_FILES`: paths and pixel dimensions for each page's JPG (from IMAGE: lines)
    - `OUTPUT_PATH`: set to `./transcribed/v8/PatientXXX_N_digitized_v8.docx`
-   - `PATIENT_AMKA`: set the masked AMKA or `"[Δεν καταγράφηκε]"`
-3. Replace `transcriptionChildren` with content built from the REVIEWED notes (not the raw ones)
-4. Leave the engine code unchanged.
+   - `PATIENT_AMKA`: from `id.json`
+4. Replace `transcriptionChildren` with content built from the REVIEWED notes (not the raw ones)
+5. Insert identity fields from `id.json` (name, DOB, AMKA, phone, address) into the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ section.
+6. Leave the engine code unchanged.
 
 ### 3b. Build the Transcription Content
 
@@ -198,7 +202,7 @@ Convert the reviewed notes into the template's code format using the same helper
 
 ```javascript
 nLine([bold("Label: "), normal("some value"), medical("CONDITION")])
-nLabelVal("Όνομα", "Ασθενής 004")
+nLabelVal("Όνομα", "from id.json → name")
 ```
 
 #### Section Layout — Same as v7
@@ -222,7 +226,7 @@ For female patients, add ΓΥΝΑΙΚΟΛΟΓΙΚΟ ΙΣΤΟΡΙΚΟ after refer
 ### 3c. Generate the Document
 
 ```bash
-node create_patientXXX_v8.js
+node ./scratch/create_patientXXX_v8.js
 ```
 
 ### 3d. Update Knowledge Base
@@ -236,10 +240,11 @@ Update `./transcription_knowledge.json` with:
 
 ## Rules
 
-### Privacy
-- **Patient names are already whited out in the scans.** Use the patient ID as the name (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name.
-- **Mask AMKA numbers**: show only last 4 digits (e.g., `*******0891`)
-- Phone numbers: format as `XXXX XXX XXX`
+### Privacy & Redacted Fields
+- **Identity fields (name, AMKA, DOB, phone, address) are redacted** in the source JPGs with **magenta (#FF00FF)** rectangles.
+- **Do NOT attempt to read** any redacted field from the image. Always use `./id.json` for these values.
+- `id.json` is stored locally only and never committed to version control.
+- AMKA values in `id.json` are already masked (last 4 digits only).
 
 ### Transcription Accuracy
 - **Cross-reference EVERY line against the image during Phase 1.** AI tends to hallucinate plausible exam items.

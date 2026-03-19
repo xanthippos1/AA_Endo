@@ -6,17 +6,17 @@ description: |
 
 # Endocrinologist Note Transcription — v7 Format
 
-You are digitizing handwritten medical notes from a Greek endocrinologist (Dr. Dimitrios G. Bougiouklis, Thessaloniki) into structured Word documents.
+Digitize handwritten medical notes from a Greek endocrinologist (Dr. Dimitrios G. Bougiouklis, Thessaloniki) into structured Word documents.
 
 ## Invocation
 
-The user gives you a patient ID like `Patient001` or `Patient002`. Your job:
+The user gives a patient ID like `Patient001` or `Patient002`. The job:
 
 1. Find all matching JPGs in `./original_jpg/` (e.g., `Patient001_1.jpg`, `Patient001_2.jpg`, etc.)
 2. Read each JPG image and transcribe the Greek handwriting
 3. Generate a single `.docx` file at `./transcribed/v7/PatientXXX_N_digitized_v7.docx`
 
-That's the whole task. Everything below tells you exactly how.
+Everything below tells you exactly how.
 
 ## Step 1: Setup and Preparation
 
@@ -24,14 +24,9 @@ That's the whole task. Everything below tells you exactly how.
 npm install docx  # if not already installed
 ```
 
-Read `./transcription_knowledge.json` BEFORE starting. It contains:
-- Confirmed abbreviations (e.g., κφ = κανονικά φυσιολογικά)
-- Known misread patterns (e.g., 2↔9 year confusion)
-- Corrections from doctor reviews of previous patients
-- Medical term dictionary (60+ Greek→English terms)
-- Medication names seen so far
-
-**Use this knowledge.** It exists to prevent you from repeating mistakes that were already caught and corrected.
+Read these BEFORE starting:
+- `./id.json` — synthetic patient identity data (name, AMKA, DOB, phone, address) indexed by PatientXXX. Identity fields are redacted in the source JPGs — always use this file instead.
+- `./transcription_knowledge.json` — confirmed abbreviations, known misread patterns, corrections from doctor reviews, a medical term dictionary (60+ Greek terms), and medication names seen so far. **Use this knowledge to avoid repeating mistakes that were already caught.**
 
 ## Step 2: Transcribe Each Page (One at a Time)
 
@@ -40,22 +35,22 @@ Read `./transcription_knowledge.json` BEFORE starting. It contains:
 1. Find all `./original_jpg/PatientXXX_N.jpg` files for the given patient ID.
 2. For EACH page, one at a time:
    a. Read the single JPG image. Note its pixel dimensions (width × height).
-   b. Transcribe everything you see into a structured plain-text file: `_notes_PatientXXX_pageN.txt`
+   b. Transcribe everything you see into a structured plain-text file: `./scratch/_notes_PatientXXX_pageN.txt`
    c. Include ALL content: visit dates, patient details, medications, diagnoses, exam findings, lab values, instructions. Mark uncertain readings with `[?]`.
    d. Note the image dimensions at the top of the file (e.g., `IMAGE: 1700x2366`)
    e. Move on to the next page — do NOT keep the previous image in context.
 
-The images are pre-cropped JPGs (varying dimensions, typically around 1700×2366 pixels). The patient's name has been whited out in the scans, so for the "Όνομα" field always use the patient ID (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name.
+The images are pre-cropped JPGs (varying dimensions, typically around 1700x2366 pixels). Identity fields (name, AMKA, DOB, phone, address) are **redacted with magenta (#FF00FF) rectangles**. Do NOT attempt to read them — use `./id.json` for these values.
 
-Example `_notes_PatientXXX_page1.txt`:
+Example `./scratch/_notes_PatientXXX_page1.txt`:
 ```
 IMAGE: 1700x2366
 VISIT DATE: 15/03/2019
-PATIENT: Ασθενής 002
-DOB: 12/05/1965 (54 ετών)
-ADDRESS: [address from scan]
-PHONE: 6973 XXX XXX
-AMKA: *******1234
+PATIENT: [REDACTED — from id.json]
+DOB: [REDACTED — from id.json]
+ADDRESS: [REDACTED — from id.json]
+PHONE: [REDACTED — from id.json]
+AMKA: [REDACTED — from id.json]
 PROFESSION: [profession]
 SMOKING: 20 τσιγ/ημ
 ALCOHOL: Φ
@@ -97,20 +92,29 @@ INSTRUCTIONS:
 
 After ALL pages are transcribed to .txt files, proceed with code generation — NO images needed from this point on.
 
-**CRITICAL: Do NOT write docx generation code from scratch. Copy the template.**
+**CRITICAL: Do NOT write docx generation code from scratch. Copy the bundled template.**
 
-1. Read all the `_notes_PatientXXX_pageN.txt` files you created in Step 2.
-2. Copy `./v7_template_generator.js` to a new file named `create_patientXXX_v7.js` in the working directory.
-3. Update the CONFIGURATION section at the top:
+The template is bundled with this plugin at:
+```
+${CLAUDE_PLUGIN_ROOT}/skills/endo-transcribe/references/v7_template_generator.js
+```
+
+It is also available in the project repo at `./v7_template_generator.js`.
+
+1. Read all the `./scratch/_notes_PatientXXX_pageN.txt` files you created in Step 2.
+2. Read `./id.json` and extract the entry for this patient.
+3. Copy the template to `./scratch/create_patientXXX_v7.js`.
+4. Update the CONFIGURATION section at the top:
    - `IMAGE_FILES`: set the paths and pixel dimensions for each page's JPG (from the IMAGE: lines in each .txt)
    - `OUTPUT_PATH`: set to `./transcribed/v7/PatientXXX_N_digitized_v7.docx`
-   - `PATIENT_AMKA`: set the masked AMKA number or `"[Δεν καταγράφηκε]"` if not recorded
-4. Replace the `transcriptionChildren` array with actual transcribed content (Step 4), converting the plain-text notes into the template's helper function calls.
-5. Leave everything else in the template unchanged — the engine code, helper functions, layout builders, and document assembly are all correct and tested.
+   - `PATIENT_AMKA`: from `id.json`
+5. Replace the `transcriptionChildren` array with actual transcribed content (Step 4), converting the plain-text notes into the template's helper function calls.
+6. Insert identity fields from `id.json` (name, DOB, AMKA, phone, address) into the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ section.
+7. Leave everything else in the template unchanged — the engine code, helper functions, layout builders, and document assembly are all correct and tested.
 
 ## Step 4: Build the Transcription Content
 
-Convert the plain-text notes from Step 2 into the template's code format. Use the helper functions from the template — here's what's available:
+Convert the plain-text notes from Step 2 into the template's code format. Use the helper functions from the template:
 
 ### Text Formatting Functions
 
@@ -132,12 +136,12 @@ Convert the plain-text notes from Step 2 into the template's code format. Use th
 nLine([bold("Label: "), normal("some value"), medical("CONDITION")])
 
 // Shortcut for "Label: Value" pattern:
-nLabelVal("Όνομα", "Ασθενής 004")
+nLabelVal("Όνομα", "from id.json → name")
 ```
 
-### Section Layout Functions
+### Section Layout — Build in This Order
 
-The doctor uses a consistent note structure. Build the document in this order:
+The doctor uses a consistent note structure. Build the document as follows:
 
 ```javascript
 const transcriptionChildren = [
@@ -152,10 +156,10 @@ const transcriptionChildren = [
   twoBoxRow(
     "ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ",
     [
-      nLabelVal("Όνομα", "Ασθενής XXX"),
-      nLabelVal("Ημερ. Γέννησης", "DD/MM/YYYY (XX ετών)"),
-      nLabelVal("Κατοικία", "[address]"),
-      nLabelVal("Τηλέφωνο", "XXXX XXX XXX"),
+      nLabelVal("Όνομα", "from id.json → name"),
+      nLabelVal("Ημερ. Γέννησης", "from id.json → birth_date"),
+      nLabelVal("Κατοικία", "from id.json → address"),
+      nLabelVal("Τηλέφωνο", "from id.json → phone"),
     ],
     "ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ",
     [
@@ -189,10 +193,8 @@ const transcriptionChildren = [
   spacer(60),
 
   // Row 4: Family history — use threeBoxRow or fourBoxRow
-  // threeBoxRow for: Self | Father | Mother
-  // fourBoxRow for: Self | Father | Mother | Siblings
   threeBoxRow(
-    ["ΟΙΚΟΓ. ΙΣΤΟΡ. — Πατέρας", "ΟΙΚΟΓ. ΙΣΤΟΡ. — Μητέρα", "ΟΙΚΟΓ. ΙΣΤΟΡ. — Ασθενής"],
+    ["ΟΙΚΟΓ. ΙΣΤΟΡ. — Πατέρας", "ΟΙΚΟΓ. ΙΣΤΟΡ. — Μητέρα", "ΟΙΚΟΓ. ΙΣΤΟΡ. — Ασθ/ής"],
     [
       [ nLine([normal("• "), medical("CONDITION")]) ],
       [ nLine([normal("• "), medical("CONDITION")]) ],
@@ -211,25 +213,17 @@ const transcriptionChildren = [
       ["Καρδιά", "[findings]"],
       ["Πνεύμονες", "κφ"],
       ["Κοιλία", "κφ"],
-      // ... more exam items as present in the scan
     ]),
-    new Paragraph({ spacing: { before: 80, after: 40 },
-      children: [italic("[Διάγραμμα εξέτασης: βλ. πρωτότυπη σάρωση]")] }),
   ]),
   spacer(60),
 
-  // Row 6: Lab results — use labTable inside fullWidthBox
-  // If no labs for this visit, use placeholder:
+  // Row 6: Lab results — use labTable or placeholder
   fullWidthBox("ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ", [
-    new Paragraph({ children: [italic("[Δεν υπάρχουν εργαστηριακά αποτελέσματα]")] }),
+    labTable([
+      ["WBC", "6800", ""],
+      ["HGB", "16,4", "ΦΤ: 13-17"],
+    ]),
   ]),
-  // OR with actual data:
-  // fullWidthBox("ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ (DD/MM/YYYY)", [
-  //   labTable([
-  //     ["WBC", "6800", ""],
-  //     ["HGB", "16,4", "ΦΤ: 13-17"],
-  //   ]),
-  // ]),
   spacer(60),
 
   // Row 7: Instructions/orders
@@ -238,7 +232,7 @@ const transcriptionChildren = [
     nLine([normal("② [instruction 2]")]),
   ]),
 
-  // Transcription footer (auto-generated)
+  // Transcription footer
   ...transcriptionNotes("PatientXXX_1.jpg", new Date().toLocaleDateString('el-GR')),
 ];
 ```
@@ -248,7 +242,6 @@ const transcriptionChildren = [
 If the note contains more than one visit date, add a page break and new visit heading:
 
 ```javascript
-// Visit 2+
 new Paragraph({ pageBreakBefore: true, heading: HeadingLevel.HEADING_1,
   children: [new TextRun({ text: "ΕΠΙΣΚΕΨΗ 2 — DD/MM/YYYY", font: "Arial" })] }),
 spacer(60),
@@ -261,7 +254,7 @@ fullWidthBox("ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ", [
 
 ### Gynecological History (Female Patients)
 
-If the patient is female, add after the referral/history section:
+Add after the referral/history section:
 
 ```javascript
 fullWidthBox("ΓΥΝΑΙΚΟΛΟΓΙΚΟ ΙΣΤΟΡΙΚΟ", [
@@ -274,7 +267,7 @@ fullWidthBox("ΓΥΝΑΙΚΟΛΟΓΙΚΟ ΙΣΤΟΡΙΚΟ", [
 ## Step 5: Generate the Document
 
 ```bash
-node create_patientXXX_v7.js
+node ./scratch/create_patientXXX_v7.js
 ```
 
 Expected output:
@@ -284,11 +277,7 @@ Total rows numbered: XX
 File size: XXX KB
 ```
 
-The script automatically:
-- Numbers all content rows sequentially (01, 02, ...)
-- Appends original scan image(s) as full-page images in a separate docx section
-- Scales images using fit-to-page (checks both width and height constraints)
-- Adds page numbers in footer
+The script automatically numbers all content rows sequentially, appends original scan images as full-page images in a separate docx section, scales images using fit-to-page, and adds page numbers in the footer.
 
 ## Step 6: Update Knowledge Base
 
@@ -298,17 +287,18 @@ After transcription, update `./transcription_knowledge.json`:
 - Add new confirmed abbreviations
 - Log uncertain readings in `transcription_stats`
 
-## Rules That Must Be Followed
+## Rules
 
-### Privacy
-- **Patient names are already whited out in the scans.** Use the patient ID as the name (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name from the scan.
-- **Mask AMKA numbers**: show only last 4 digits (e.g., `*******0891`)
-- Phone numbers: format as `XXXX XXX XXX`
+### Privacy & Redacted Fields
+- **Identity fields (name, AMKA, DOB, phone, address) are redacted** in the source JPGs with **magenta (#FF00FF)** rectangles.
+- **Do NOT attempt to read** any redacted field from the image. Always use `./id.json` for these values.
+- `id.json` is stored locally only and never committed to version control.
+- AMKA values in `id.json` are already masked (last 4 digits only).
 
 ### Transcription Accuracy
-- **Cross-reference EVERY line against the image.** The AI tends to hallucinate plausible-looking exam items that are NOT in the original scan. This has happened before — see `hallucination_warnings` in the knowledge base.
+- **Cross-reference EVERY line against the image.** AI tends to hallucinate plausible exam items NOT in the original scan. This has happened before.
 - Mark ALL uncertain readings in RED using `uncertain("text")` or `uncertainNum("text")`
-- Year confusion: 2 and 9 look similar in this handwriting. When in doubt, flag in red.
+- Year confusion: 2 and 9 look similar in this handwriting. Flag uncertain years in red.
 - Use confirmed abbreviations from the knowledge base (e.g., κφ = κανονικά φυσιολογικά)
 - Keep all text in Greek. English appears only for medication names and some medical terms.
 - Dates are European format: DD/MM/YYYY
@@ -321,13 +311,13 @@ After transcription, update `./transcription_knowledge.json`:
 - Row numbers are GRAY (#999999) in Courier New
 
 ### Technical
-- **Do NOT write docx code from scratch.** Copy `v7_template_generator.js` and adapt it.
+- **Do NOT write docx code from scratch.** Copy the bundled `v7_template_generator.js` and adapt it.
 - Image section MUST be a separate docx section (different margins: 0.5cm vs 2cm)
 - Always use `fitToPage(imgW, imgH)` for image sizing — this scales down to fit within 750×1070 pixels (A4 with 0.5cm margins at 96 DPI, with safety buffer)
 - **CRITICAL: The appended original scan images must NEVER be cropped.** The entire handwritten page must be visible. The `fitToPage()` function ensures this by scaling down proportionally. If any part of an image is cut off, the MAX_IMG_W/MAX_IMG_H values need to be reduced further.
-- Use JPG for scans (not PNG — 7x smaller, no visible quality loss)
+- Use JPG for scans (not PNG)
 
-## Known Abbreviations (Quick Reference)
+## Known Abbreviations
 
 | Abbreviation | Meaning |
 |-------------|---------|
@@ -340,7 +330,7 @@ After transcription, update `./transcription_knowledge.json`:
 | ΤΚΕ | Ταχύτητα Καθίζησης Ερυθρών (ESR) |
 | Χρ. | Χρόνια (Chronic) |
 
-See `transcription_knowledge.json` for the complete list including unconfirmed abbreviations that need doctor review.
+See `transcription_knowledge.json` for the complete list.
 
 ## Timing and Cost Estimation
 
@@ -374,6 +364,6 @@ Print a summary table at the end:
 
 ## Reference Outputs
 
-Look at the existing v7 outputs for reference on what good output looks like:
+Examine these existing v7 outputs for reference:
 - `./transcribed/v7/Patient004_1_digitized_v7.docx` — 88 rows, 2 visits, 1 page scan
 - `./transcribed/v7/Patient005_1_digitized_v7.docx` — 112 rows, 2 visits, 2 page scan

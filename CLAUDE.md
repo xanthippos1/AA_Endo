@@ -8,10 +8,10 @@
 
 - **Only check into git repository when explicitly asked**
 - **Do not use pip or uv pip to install ANYTHING — always ask the user to install manually**
-- **Patient names are whited out in the scans.** Use the patient ID as the name (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name.
+- **Patient identity fields (name, AMKA, DOB, phone, address) are redacted** in the source JPGs with **magenta (#FF00FF)** rectangles. Do NOT attempt to read them from the image. Instead, use `./id.json` which contains synthetic replacement values indexed by PatientXXX.
 - The notes are in Greek. Keep all transcriptions in Greek. English words appear mostly for medications or medical terms.
 - Dates are in European format (DD/MM/YYYY)
-- AMKA numbers: mask all but last 4 digits (e.g. *******0891)
+- All intermediate/scratch files go in `./scratch/` (gitignored)
 
 ## How to Transcribe a New Patient — Step by Step
 
@@ -29,25 +29,27 @@
 1. Find all `./original_jpg/PatientXXX_N.jpg` files for the patient.
 2. For EACH page, one at a time:
    a. Read the single JPG image. Note its pixel dimensions (width × height).
-   b. Transcribe everything into a structured plain-text file: `_notes_PatientXXX_pageN.txt`
+   b. Transcribe everything into a structured plain-text file: `./scratch/_notes_PatientXXX_pageN.txt`
    c. Include ALL content: visit dates, patient details, medications, diagnoses, exam findings, lab values, instructions. Mark uncertain readings with `[?]`.
    d. Note the image dimensions at top of file (e.g., `IMAGE: 1700x2366`)
    e. Move on to the next page — do NOT keep the previous image in context.
 
 - Source JPGs are pre-cropped in `original_jpg/` (varying dimensions, typically around 1700x2366 pixels).
-- Patient names are whited out in the scans. Use the patient ID as the name (e.g., "Ασθενής 002" for Patient002). Do NOT attempt to read or reconstruct any name.
+- Identity fields are redacted with magenta rectangles. Use `./id.json` for name, AMKA, DOB, phone, address.
 
 ### Step 3: Assemble the Generator Script
 
 After ALL pages are transcribed to .txt files, proceed — NO images needed from this point on.
 
-1. Read all `_notes_PatientXXX_pageN.txt` files from Step 2.
-2. **Copy `v7_template_generator.js`** to a new file named `create_patientXXX_v7.js`
-3. Update the CONFIGURATION section at top:
+1. Read all `./scratch/_notes_PatientXXX_pageN.txt` files from Step 2.
+2. Read `./id.json` and extract the entry for this patient.
+3. **Copy `v7_template_generator.js`** to `./scratch/create_patientXXX_v7.js`
+4. Update the CONFIGURATION section at top:
    - `IMAGE_FILES`: set paths and pixel dimensions for each page's JPG (from IMAGE: lines in each .txt)
    - `OUTPUT_PATH`: set to `./transcribed/v7/PatientXXX_N_digitized_v7.docx`
-   - `PATIENT_AMKA`: set masked AMKA or `"[Δεν καταγράφηκε]"`
-4. Replace the `transcriptionChildren` array with actual transcribed content (see Step 4)
+   - `PATIENT_AMKA`: from `id.json`
+5. Replace the `transcriptionChildren` array with actual transcribed content (see Step 4)
+6. Insert identity fields from `id.json` (name, DOB, AMKA, phone, address) into ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ
 
 ### Step 4: Build the Transcription Content
 
@@ -80,7 +82,7 @@ Convert the plain-text notes from Step 2 into the template's code format. **Use 
 ### Step 5: Generate the Document
 
 ```bash
-node create_patientXXX_v7.js
+node ./scratch/create_patientXXX_v7.js
 ```
 
 This produces the .docx in `transcribed/v7/`. The script automatically:
@@ -91,34 +93,39 @@ This produces the .docx in `transcribed/v7/`. The script automatically:
 
 ### Step 6: Update Knowledge Base
 
-After transcription, update `transcription_knowledge.json`:
+After transcription, update `transcription_knowledge.json` with **general, patient-agnostic** knowledge only:
 - Add any new medical terms to `common_medical_terms`
 - Add any new medications to `medication_names.seen`
 - Add any new confirmed abbreviations
-- Log uncertain readings in `transcription_stats`
-- Note any new handwriting patterns
+- Note any new general handwriting patterns
+- Do NOT add patient-specific data, per-run stats, or value corrections
 
 ## Folder Structure
 
 ```
 AA_Endo/
 ├── CLAUDE.md                              # This file — project instructions
-├── v7_template_generator.js               # TEMPLATE SCRIPT — copy this for each new patient
+├── INSTALL.md                             # Setup guide for new team members
+├── id.json                                # Synthetic patient identities (local only, gitignored)
+├── v7_template_generator.js               # TEMPLATE SCRIPTS — copy to scratch/ for each patient
+├── v8_template_generator.js
+├── v10_template_generator.js
 ├── transcription_knowledge.json           # Knowledge base — READ BEFORE EVERY TRANSCRIPTION
+├── templates/                             # Lab panel definitions (CBC, Lipids, Thyroid, etc.)
 ├── original/                              # Original scanned PDFs
-├── original_jpg/                          # Full-resolution JPGs (1700x2366, quality 95)
+├── original_jpg/                          # Pre-cropped JPGs, identity fields magenta-redacted
 │   ├── Patient001_1.jpg ... Patient001_5.jpg
 │   ├── Patient002_1.jpg, Patient002_2.jpg
 │   ├── Patient003_3.jpg
 │   ├── Patient004_1.jpg
 │   └── Patient005_1.jpg, Patient005_2.jpg
 ├── transcribed/
-│   ├── v0/ through v6/                    # Superseded — ignore
-│   └── v7/                                # Current production format
-│       ├── Patient004_1_digitized_v7.docx # 88 rows, 2 visits — reference output
-│       └── Patient005_1_digitized_v7.docx # 112 rows, 2 visits — reference output
-├── Patient004_1_digitized_v3.pdf          # Legacy
-└── xPatient004_digitized_gpt54_v1.docx    # ChatGPT comparison (poor quality)
+│   ├── v7/                                # v7 output
+│   ├── v8/                                # v8 output
+│   └── v10/                               # v10 output (recommended)
+├── scratch/                               # Intermediate files (gitignored)
+├── endo-transcribe.plugin                 # Cowork plugin (install into Cowork)
+└── .skills/                               # Repo-local skill copies
 ```
 
 ## PDF to JPG Conversion
@@ -129,21 +136,23 @@ AA_Endo/
 
 ## Knowledge Base
 
-`transcription_knowledge.json` contains everything learned from previous transcriptions:
+`transcription_knowledge.json` contains **general, patient-agnostic** knowledge only:
 
 - **abbreviations.confirmed**: e.g. κφ = κανονικά φυσιολογικά, ΦΤ = φυσιολογικές τιμές
 - **handwriting_patterns.confirmed**: e.g. year 2↔9 confusion, ΕΜΜΗΝΟΠΑΥΣΗ misread patterns
-- **hallucination_warnings**: Cases where AI generated exam items NOT in the original scan — cross-reference every line against the image
-- **corrections_log**: Row-by-row corrections from doctor review of Patient004
+- **hallucination_warnings**: Cases where AI generated exam items NOT in the original scan
+- **omission_warnings**: Patterns where AI tends to skip content (e.g. dense lab blocks at page bottom)
 - **common_medical_terms**: Greek→English medical dictionary (60+ terms)
 - **medication_names**: Running list of drugs seen in notes
+
+No patient-specific data, per-run stats, or value corrections belong in the knowledge base.
 
 ## Correction Workflow
 
 1. Doctor reviews .docx output
 2. Doctor provides corrections as "Row XX: X should be Y"
-3. Corrections added to `transcription_knowledge.json` under `corrections_log`
-4. Knowledge improves accuracy of future transcriptions
+3. General patterns from corrections (e.g. handwriting quirks, new abbreviations) are added to the relevant KB section
+4. Patient-specific corrections are NOT stored — only the general lesson is extracted
 5. Uncertain readings (red `[text?]`) are priority items for doctor review
 
 ## Patients Status
@@ -164,6 +173,6 @@ AA_Endo/
 4. **Image embedding requires separate docx section**: Transcription uses 2cm margins, appended scans use 0.5cm margins. These MUST be in different docx sections.
 5. **Fit-to-page**: Always use `fitToPage(imgW, imgH)` for image sizing — checks both width and height constraints.
 6. **JPG for scans**: JPG at quality 75-95 is 7x smaller than PNG with no visible loss.
-7. **Patient names**: Always redact. Use "Ασθενής XXX" format.
+7. **Patient identity**: Redacted with magenta in JPGs. Always use `./id.json` for name, AMKA, DOB, phone, address.
 8. **NEVER nest Paragraphs**: `nLine()`, `nLabelVal()` return `Paragraph` objects. NEVER wrap them in `new Paragraph({children: [nLine(...)]})` — this creates paragraph-inside-paragraph which produces a corrupt .docx that Word refuses to open. Use `nLine(...)` directly as a content item in `fullWidthBox()` arrays.
 9. **Structural validation**: The template includes a `validateDocStructure()` function that runs automatically before generating. If it finds nesting errors, it will print the exact location and exit with FATAL. Fix all errors before retrying.

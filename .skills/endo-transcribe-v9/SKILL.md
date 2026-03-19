@@ -25,7 +25,9 @@ If the Google Vision file doesn't exist, tell the user they need to run the Visi
 npm install docx  # if not already installed
 ```
 
-Read `./transcription_knowledge.json` BEFORE starting.
+Read these BEFORE starting:
+- `./id.json` — synthetic patient identity data (name, AMKA, DOB, phone, address) indexed by PatientXXX. Identity fields are redacted in the source JPGs — always use this file instead.
+- `./transcription_knowledge.json`
 
 ---
 
@@ -44,7 +46,7 @@ Read the pre-generated file `./visionai/PatientXXX_googleai.txt`. This is raw te
 - Understanding what belongs together semantically
 - Greek handwriting context (it doesn't know κφ means κανονικά φυσιολογικά)
 
-Save a structured summary: `_google_PatientXXX.txt` — reorganize the raw Google text into the standard section format (demographics, medications, history, exam, labs, instructions) as best you can. Mark sections where Google's output is garbled or unclear with `[GOOGLE UNCLEAR]`.
+Save a structured summary: `./scratch/_google_PatientXXX.txt` — reorganize the raw Google text into the standard section format (demographics, medications, history, exam, labs, instructions) as best you can. Mark sections where Google's output is garbled or unclear with `[GOOGLE UNCLEAR]`.
 
 ---
 
@@ -55,12 +57,12 @@ Save a structured summary: `_google_PatientXXX.txt` — reorganize the raw Googl
 1. Find all `./original_jpg/PatientXXX_N.jpg` files for the given patient ID.
 2. For EACH page, one at a time:
    a. Read the single JPG image. Note its pixel dimensions (width × height).
-   b. Transcribe everything into: `_claude_PatientXXX_pageN.txt`
+   b. Transcribe everything into: `./scratch/_claude_PatientXXX_pageN.txt`
    c. Include ALL content. Mark uncertain readings with `[?]`.
    d. Note image dimensions at top (e.g., `IMAGE: 1700x2366`)
    e. **Move to next page — do NOT keep previous image in context.**
 
-The images are pre-cropped JPGs. Patient names are whited out — use the patient ID (e.g., "Ασθενής 004").
+The images are pre-cropped JPGs. Identity fields (name, AMKA, DOB, phone, address) are **redacted with magenta (#FF00FF) rectangles**. Do NOT attempt to read them — use `./id.json` for these values.
 
 Use the same structured plain-text format as v8.
 
@@ -69,8 +71,8 @@ Use the same structured plain-text format as v8.
 ## PHASE 2: Fusion + Medical Review
 
 **No images needed.** Read ALL of these files:
-- `_google_PatientXXX.txt` (reorganized Google Vision output)
-- `_claude_PatientXXX_pageN.txt` (all Claude transcription pages)
+- `./scratch/_google_PatientXXX.txt` (reorganized Google Vision output)
+- `./scratch/_claude_PatientXXX_pageN.txt` (all Claude transcription pages)
 - `./transcription_knowledge.json`
 
 ### 2a. Side-by-Side Comparison
@@ -109,7 +111,7 @@ Same as v8 — check for:
 
 ### 2d. Write Fused Output
 
-Write: `_fused_PatientXXX.txt`
+Write: `./scratch/_fused_PatientXXX.txt`
 
 At the TOP, include a fusion report:
 ```
@@ -140,7 +142,7 @@ Then include the fused transcription in standard structured format.
 
 ## PHASE 3: Assemble and Generate
 
-**No images needed.** Read `_fused_PatientXXX.txt`.
+**No images needed.** Read `./scratch/_fused_PatientXXX.txt`.
 
 ### 3a. Copy the Template Script
 
@@ -151,10 +153,12 @@ ${CLAUDE_PLUGIN_ROOT}/skills/endo-transcribe-v9/references/v9_template_generator
 
 It is also available in the project repo at `./v9_template_generator.js`.
 
-1. Copy to `create_patientXXX_v9.js`
-2. Update CONFIGURATION: `IMAGE_FILES`, `OUTPUT_PATH` (→ `./transcribed/v9/`), `PATIENT_AMKA`
-3. Replace `transcriptionChildren` with content from the FUSED notes
-4. Leave engine code unchanged.
+1. Read `./id.json` and extract the entry for this patient.
+2. Copy to `./scratch/create_patientXXX_v9.js`
+3. Update CONFIGURATION: `IMAGE_FILES`, `OUTPUT_PATH` (→ `./transcribed/v9/`), `PATIENT_AMKA` (from `id.json`)
+4. Replace `transcriptionChildren` with content from the FUSED notes
+5. Insert identity fields from `id.json` (name, DOB, AMKA, phone, address) into the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ section.
+6. Leave engine code unchanged.
 
 ### 3b. Build the Transcription Content
 
@@ -187,7 +191,7 @@ For female patients: add ΓΥΝΑΙΚΟΛΟΓΙΚΟ ΙΣΤΟΡΙΚΟ.
 ### 3c. Generate
 
 ```bash
-node create_patientXXX_v9.js
+node ./scratch/create_patientXXX_v9.js
 ```
 
 ### 3d. Update Knowledge Base
@@ -202,10 +206,11 @@ Update `./transcription_knowledge.json` with:
 
 ## Rules
 
-### Privacy
-- **Patient names are whited out.** Use patient ID (e.g., "Ασθενής 004"). Do NOT reconstruct names.
-- **Mask AMKA**: last 4 digits only (e.g., `*******0811`)
-- Phone numbers: `XXXX XXX XXX`
+### Privacy & Redacted Fields
+- **Identity fields (name, AMKA, DOB, phone, address) are redacted** in the source JPGs with **magenta (#FF00FF)** rectangles.
+- **Do NOT attempt to read** any redacted field from the image. Always use `./id.json` for these values.
+- `id.json` is stored locally only and never committed to version control.
+- AMKA values in `id.json` are already masked (last 4 digits only).
 
 ### Transcription Accuracy
 - The fusion of two independent sources is the primary accuracy mechanism.

@@ -1,0 +1,175 @@
+=== V10 LAB-PANEL-AWARE REVIEW ===
+Patient: Patient004
+Sex: Female, 26yr
+Date of labs: 10/4/2023
+Lab panels identified: CBC, Inflammation, Biochemistry, Lipids, Electrolytes, Autoimmune, Iron Studies, Vitamins, Bone Metabolism, Sex Hormones (Female), Thyroid, Urinalysis
+Total lab values: 38
+  Within normal: 23 (61%)
+  Abnormal: 11 (29%)
+  Corrected by template: 5
+  Still uncertain: 4 (10%)
+
+TEMPLATE-BASED CORRECTIONS:
+1. "MCHC: 334" → "MCHC: 33,4" (plausible range 25-42; 334 exceeds max; normal is 32-36)
+2. "Κρεατινίνη: 10" → "Κρεατινίνη: 1,0" (plausible range 0,2-15; 10 exceeds typical; 1,0 is normal female)
+3. "SHBG: 78" → "SHBG: 27,8" (v9 fusion correction; 2 and comma dropped → 78; 27,8 = slightly low female)
+4. "Τεστοστερόνη: 19" → "Τεστοστερόνη: 0,90" (v9 fusion correction; doctor's ΦΤ scale in ng/mL → 0,90 fits)
+5. "CPK: 250" → "CPK: 2598" (v9 fusion: Google Vision confirmed; Αλδολάση ordered = clinical confirmation)
+
+V9-INHERITED CORRECTIONS (applied in Phase 1):
+1. "TRG: 80" → "TRG: 180" (Google Vision; consistent with CHOL 206 / LDL 135 dyslipidemia)
+2. "γGT: 15" → "γGT: 46" (Google Vision; digit confusion resolved)
+3. SGOT: 15 ADDED (was missing in v8; Google Vision found it)
+4. HbA1c REMOVED (was hallucinated in v8; confirmed absent by Google Vision)
+5. "SHBG: 78" → "SHBG: 27,8" (also a template correction)
+6. "Testo: 19" → "Testo: 0,90" (also a template correction)
+
+FLAGS FOR DOCTOR:
+1. SGPT: appears as "115" — is this 115 IU/L or 15 IU/L? (SGOT=15, so 15 seems more consistent)
+2. B12: run-on text "146420" — is the value 446,20 or 1464,20 pg/mL?
+3. Unclear test after B12: "Φυλλικό Οξύ: 0,30" or "30"? Or different test entirely?
+4. Τεστοστερόνη: 0,90 — what units? ng/mL? If so, ~90 ng/dL is elevated for female
+5. SHBG: 27,8 or 78? v9 says 27,8
+6. Ύψος: 1,82 or 1,62? Digit uncertain
+7. ECHO 1 Κοιμ/142 — what does this instruction mean?
+8. Rabest — is this RABEPRAZOLE?
+
+=== END REVIEW HEADER ===
+
+=== LAB RESULTS GROUPED BY PANEL ===
+
+--- CBC (Γενική Αίματος) ---
+WBC: 6800 [×10³/μL, ΦΤ: 4.500-11.000] ✓
+RBC: 5,3×10⁶ [×10⁶/μL, ΦΤ(F): 4,1-5,1] ⚠ SLIGHTLY HIGH
+HGB: 16,4 [g/dL, ΦΤ(F): 12-16] ⚠ SLIGHTLY HIGH
+HCT: 49,2 [%, ΦΤ(F): 35,9-44,6] ⚠ HIGH
+MCV: 92,8 [fL, ΦΤ: 80-100] ✓
+MCH: 31 [pg, ΦΤ: 27-33] ✓
+MCHC: 33,4 [g/dL, ΦΤ: 32-36] ✓ [TEMPLATE CORRECTED from 334]
+RDW: 12,7 [%, ΦΤ: 11,5-14,5] ✓
+PLT: 213.000 [×10³/μL, ΦΤ: 150-400] ✓
+ΤΥΠΟΣ: 50/39/8/3/1 [%, N/L/E/M/B] ✓
+
+CBC NOTE: RBC/HGB/HCT all slightly above female reference range — polycythemia pattern. Could be related to smoking (since age 16, 2-3/day) or dehydration. Clinical correlation recommended.
+
+--- Inflammation (Δείκτες Φλεγμονής) ---
+CRP: 0,36 [mg/L, ΦΤ <6] ✓
+
+--- Biochemistry (Βιοχημικές) ---
+GLU: 92 [mg/dL, ΦΤ: 70-99] ✓
+Ουρία: 36 [mg/dL, ΦΤ: 7-20] ⚠ ELEVATED
+Κρεατινίνη: 1,0 [mg/dL, ΦΤ(F): 0,5-1,1] ✓ [TEMPLATE CORRECTED from 10]
+Ουρικό οξύ: 4,2 [mg/dL, ΦΤ(F): 2,6-6,0] ✓
+SGOT: 15 [IU/L, ΦΤ <40] ✓ [v9: was missing, now added]
+SGPT: [115?] [IU/L, ΦΤ <40] ⚠ ELEVATED if 115, NORMAL if 15 — UNCERTAIN
+γGT: 46 [IU/L, ΦΤ <55] ✓ [v9 CORRECTED from 15]
+ALP: 119 [IU/L, ΦΤ: 10-280 per doctor] ✓
+CPK: 2598 [IU/L, ΦΤ(F) <170] ⚠⚠ MARKEDLY ELEVATED (>15× ULN)
+  [v9 CORRECTED from 250. Clinical significance: severe muscle involvement. Doctor ordered Αλδολάση in V2]
+
+BIOCHEMISTRY NOTE: CPK 2598 is the dominant finding. Possible causes in 26F on ZOLOFT: statin myopathy (no statin here), rhabdomyolysis, intense exercise, hypothyroid myopathy (TSH normal), inflammatory myopathy. Ουρία 36 elevated — could be related to muscle breakdown (urea from protein catabolism) or dehydration.
+
+--- Lipids (Λιπιδαιμικό Προφίλ) ---
+CHOL: 206 [mg/dL, ΦΤ <200] ⚠ BORDERLINE HIGH
+HDL: 55,2 [mg/dL, ΦΤ(F) >50] ✓
+TRG: 180 [mg/dL, ΦΤ <150] ⚠ HIGH [v9 CORRECTED from 80]
+LDL: 135 [mg/dL, ΦΤ <100] ⚠ HIGH
+
+LIPIDS NOTE: Dyslipidemia pattern (elevated CHOL, TRG, LDL with adequate HDL). Father has ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ — familial component likely.
+
+--- Electrolytes (Ηλεκτρολύτες) ---
+Ca: 10,1 [mg/dL, ΦΤ: 8,5-10,2] ✓ (with corrected value 9,63)
+P: 4,5 [mg/dL, ΦΤ: 2,5-4,5] ✓ (upper limit)
+[K?]: 4,1 [mEq/L, ΦΤ: 3,5-5,0] ✓ [test name uncertain]
+Na: 143 [mEq/L, ΦΤ: 135-145] ✓
+
+CROSS-PANEL CHECK: Ca appears in both Electrolytes and Bone Metabolism — value 10,1 is consistent.
+
+--- Autoimmune ---
+ANA: (-) αρνητικό ✓
+
+--- Iron Studies (Μελέτη Σιδήρου) ---
+Φερριτίνη: 303 [ng/mL, ΦΤ: 15-400 per doctor. Female premenopausal typical: 15-150] ⚠ ELEVATED
+  [303 is above typical premenopausal range but within doctor's lab range. Can be elevated in inflammation, liver disease, iron overload, or as acute phase reactant with markedly elevated CPK]
+
+--- Vitamins (Βιταμίνες) ---
+Ομοκυστεΐνη: 18,0 [μmol/L, ΦΤ: 5-15] ⚠ MILDLY ELEVATED
+B12: [446,20?] [pg/mL, ΦΤ: 200-900] ✓ if 446 — UNCERTAIN
+  [Could be 1464,20 — would be elevated but plausible. Run-on text problem]
+[Φυλλικό Οξύ?]: [0,30? or 30?] — VERY UNCERTAIN test identity and value
+
+VITAMINS NOTE: Elevated homocysteine (18) with possibly normal B12 (if 446) — may suggest folate deficiency or B6 deficiency. If the uncertain test IS folic acid at 0,30 ng/mL, that would explain the elevated homocysteine.
+
+--- Bone Metabolism ---
+25-OHD₃: 24 [ng/mL, ΦΤ: 30-100] ⚠ INSUFFICIENT (<30)
+PTH: 16 [pg/mL, ΦΤ: 8-75] ✓ (low-normal)
+
+BONE NOTE: Vitamin D insufficient with appropriately low-normal PTH (not compensating yet). CROSS-PANEL: 25-OHD₃ also in Vitamins panel — same value ✓
+
+--- Sex Hormones — Female ---
+Τεστοστερόνη: [0,90?] [ng/mL(?)] — UNCERTAIN value and units
+  [If 0,90 ng/mL ≈ 90 ng/dL → elevated for female (ΦΤ: 15-70 ng/dL)]
+  [v9 corrected from 19. Doctor's ΦΤ appears to use small scale suggesting ng/mL]
+SHBG: [27,8?] [nmol/L, ΦΤ(F): 30-100] ⚠ SLIGHTLY LOW if 27,8
+  [v9 corrected from 78. If 78 → normal. If 27,8 → slightly low]
+  [Low SHBG + elevated testosterone could suggest androgen excess / PCOS features]
+
+--- Thyroid (Θυρεοειδικό) ---
+TSH: 2,18 [mIU/L, ΦΤ: 0,2-4,5] ✓
+Anti-TPO: 20 [IU/mL, ΦΤ <150] ✓
+Anti-Tg: 15 [IU/mL, ΦΤ <150] ✓
+
+THYROID NOTE: Thyroid function normal. No autoimmune thyroid markers. TSH 2,18 is solidly mid-range.
+
+--- Urinalysis (Γενική Ούρων) ---
+ΕΒ (Ειδικό Βάρος): 1015 [ΦΤ: 1003-1030] ✓
+pH: 6 [ΦΤ: 5-8] ✓
+Πρωτεΐνες: 0-1 ✓
+Ερυθρά: 0-1 ✓
+
+--- UNGROUPED ---
+[None — all results matched to panels]
+
+=== KNOWN ERROR PATTERN CHECK ===
+
+✓ Year confusion (2↔9): ΟΛΛ year verified as 2012 (not 2019) per KB correction
+✓ ΕΜΜΗΝΟΠΑΥΣΗ: correctly identified under Μητέρα (not misread as ΕΝΗΜΕΡΩΤΗΣ)
+✓ ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ: correctly placed for Father (not Υπεραλδοστερονισμία as in v2)
+✓ ΠΡΟΔΙΑΒΗΤΗΣ: correctly placed for Father (not Προαλβουμινημία as in v2)
+✓ Θυρεοειδής ΤΑΚ: NOT included — was hallucinated in previous versions
+✓ Μασχάλες κφ: NOT included — was hallucinated in previous versions
+✓ ΑΓΓΕΙΑΚΑ: included (replaces hallucinated Θυρεοειδής)
+✓ ΟΙΔΗΜΑΤΑ ΠΔΚ: included (was missing in some versions)
+✓ HbA1c: NOT included — was hallucinated in v8
+✓ Eosinophils: 8 (not 6) per KB correction
+
+=== CLINICAL SUMMARY ===
+26-year-old female psychology student on ZOLOFT for ΔΙΑΤΑΡΑΧΗ ΥΠΝΟΥ (sleep disorder) + ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ (weight loss). Family history: father with hyperlipidemia + prediabetes + acoustic neuroma; mother with hyperlipidemia + chronic prostatitis + nephrolithiasis.
+
+Key findings:
+1. CPK 2598 (>15× ULN) — CRITICAL. Most significant lab finding. Doctor ordered Αλδολάση (aldolase) follow-up
+2. Dyslipidemia: CHOL 206, TRG 180, LDL 135 (familial component likely)
+3. Elevated ferritin 303 for premenopausal female — may be related to muscle breakdown (CPK)
+4. Vitamin D insufficient (24 ng/mL)
+5. Mildly elevated homocysteine (18,0) — check B12/folate adequacy
+6. Polycythemia pattern (RBC/HGB/HCT above female range) — smoking-related?
+7. Elevated urea (36) — possibly from muscle catabolism with CPK elevation
+
+=== END V10 LAB-PANEL-AWARE REVIEW ===
+
+=== FULL REVIEWED TRANSCRIPTION ===
+
+[Non-lab sections confirmed unchanged from Phase 1 transcription — see _notes_Patient004_page1.txt]
+
+Visit 1: 3/4/2023
+- Demographics, social history, medication (ZOLOFT 50mg), referral from friend
+- Presenting: Sleep disorder + Weight loss
+- History: Bone marrow donation for sister with ALL (2012)
+- Family history: Father (56) — hyperlipidemia, prediabetes, acoustic neuroma. Mother — hyperlipidemia, chronic prostatitis, nephrolithiasis
+- Clinical exam: Essentially normal. BP 110/70. HR 60. Systems κφ except Οιδήματα ΠΔΚ
+- Instructions: Hormonal + Metabolic workup ordered
+
+Visit 2: e-mail 12/4/2023 (labs from 10/4/2023)
+- 38 lab values across 12 panels — see grouped results above
+- Urinalysis: normal
+- Instructions: ECHO, ΤΚΕ, repeat liver/muscle enzymes, apolipoproteins, hepatitis screening, ACTH/β-hCG/AFP, Αλδολάση, [Rabest?]
