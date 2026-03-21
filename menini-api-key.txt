@@ -1,13 +1,10 @@
+AIzaSyAOasd0vBxapqe8rf7PcopLcrUOxxoJqiE
 
+https://script.google.com/home/projects/1DDfo9VF1JTPaAU5semLvttHzdfNFyim7ylwJUf34b0E2WJxjywjh9sVh/edit
 
 https://console.cloud.google.com/billing/013741-5AD08C-6E7558/reports
 
 https://ai.google.dev/gemini-api/docs/models
 
 
-- type: drive
-- scope: drive.readonly
-- token: {"access_token":"ya29.a0ATkoCc590ZCN3kVKrECO0KbB7ScX1OYFVwh09qhoZL9kn88684_L2MNpNBXJHA-DWAxzA65U-cJcRi9CsmNNjGCQfIWx-H-BOZV7YT8mSkbY9oBQQRmsqFGTO9O9LFCGxRACk5QbMA4rLSxZvymAU4RA6WpfLlF4ERVtXFCxlY8hJRTJ0E3fxMPAoaI9SZycyGGct78aCgYKAWgSARYSFQHGX2Mi-pUSQxmK0x_MHBB8LuNjvQ0206","token_type":"Bearer","refresh_token":"1//012dBpfeTZ5PgCgYIARAAGAESNwF-L9Irwh-53vj7QVkeFFSn4pRkrQiyL7k1J0-zteiD3rs13kPpQmy3HWNmf9ZDUWKUWibQ814","expiry":"2026-03-21T17:18:36.875299-04:00","expires_in":3599}
-
-
-Read .skills/endo-transcribe-v9/SKILL.md and render Patient002 v9
+Read .skills/endo-transcribe-v9/SKILL.md and render Patient001 v9
