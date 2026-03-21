@@ -150,13 +150,17 @@
       "ΠΟΛΥΠΟΔΑΣ ΧΟΛΗΔΟΧΟΥ ΚΥΣΤΕΩΣ": "Gallbladder polyp",
       "ΔΙΑΣΤΟΛΙΚΗ ΔΥΣΛΕΙΤΟΥΡΓΙΑ": "Diastolic dysfunction",
       "ΧΟΛΟΛΙΘΙΑΣΗ": "Cholelithiasis (gallstones)",
-      "Ca ΠΡΟΣΤΑΤΟΥ": "Prostate cancer"
+      "Ca ΠΡΟΣΤΑΤΟΥ": "Prostate cancer",
+      "ΝΕΦΡΟΛΙΘΙΑΣΗ": "Nephrolithiasis (kidney stones)",
+      "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ": "Acoustic neuroma / vestibular schwannoma",
+      "ΥΠΟΚΛΙΝΙΚΟΣ ΥΠΟΘΥΡΕΟΕΙΔΙΣΜΟΣ": "Subclinical hypothyroidism",
+      "ΤΥΠΙΚΟ ΕΛΚΟΣ": "Peptic ulcer"
     }
   },
 
   "medication_names": {
     "description": "Medications/pharmaceuticals seen in notes. Display in PURPLE + UPPERCASE. Maintain as running database.",
-    "seen": ["ZOLOFT", "SERETIDE", "TRIATEC", "MINITRAN", "EFECOL", "MARNOVER", "ZIRUS", "LECALCIF", "MEDROL", "ΒΙΤΑΜΙΝΗ C", "ZOCOR", "XANAX", "SALOSPIR", "VIBRAMYCIN", "BIA.FIX", "FILICINE", "ROSUBEN", "RABEST"]
+    "seen": ["ZOLOFT", "SERETIDE", "TRIATEC", "MINITRAN", "EFECOL", "MARNOVER", "ZIRUS", "LECALCIF", "MEDROL", "ΒΙΤΑΜΙΝΗ C", "ZOCOR", "XANAX", "SALOSPIR", "VIBRAMYCIN", "BIA.FIX", "FILICINE", "ROSUBEN", "RABEST", "MEDITHYROX"]
   }
 
 }
