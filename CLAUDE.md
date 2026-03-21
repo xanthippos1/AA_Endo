@@ -1,8 +1,8 @@
-## Project Overview
+## Project Overview (V11)
 
 - **Purpose**: Digitize and archive handwritten notes of a Greek Endocrinologist (Dr. Dimitrios G. Bougiouklis, Thessaloniki)
 - **Long-term goal**: Build a complete system/application this endocrinologist can use to both lookup old notes, as well as enter new notes from either a desktop app or an iPad/iPhone
-- **Current phase**: Digitizing individual patient notes into structured Word documents. The recommended transcription method is **v10** (lab-panel-aware, 3-phase pipeline). Use the `endo-transcribe-v10` skill.
+- **Current phase**: Transcribing individual patient notes into structured Word documents.
 
 ## General Instructions
 
@@ -13,15 +13,37 @@
 - Dates are in European format (DD/MM/YYYY)
 - All intermediate/scratch files go in `./scratch/` (gitignored)
 
-## How to Transcribe a New Patient
+## How to Transcribe a New Patient - Phases
 
-**Use the `endo-transcribe-v10` skill.** It handles the entire workflow end-to-end. The user only needs to provide a patient ID (e.g., "transcribe Patient004 v10").
-
-The skill's 3-phase pipeline:
-
-1. **Phase 1 — Transcribe**: Read source JPGs one page at a time, applying lab panel templates for OCR correction. Output: `./scratch/_notes_PatientXXX_pageN.txt`
-2. **Phase 2 — Review**: Panel-guided medical review of the transcription. Group lab results by panel, validate against plausible ranges, flag uncertainties. Output: `./scratch/_reviewed_PatientXXX.txt`
-3. **Phase 3 — Assemble**: Copy `./scripts/v10_template_generator.js` to `./scratch/`, populate with reviewed transcription + identity data from `id.json`, generate .docx. Output: `./transcribed/v10/PatientXXX_N_digitized_v10.docx`
+Used a phased approach as dfined by the skills
+- Phase 1: transcribe from jpegs to text as best you can, using a separate agent for each page. The skill needed for the first page may be different than those for pages 2-.
+- Phase 2: Go through the transcribed text and try to allign/correct/filter the words you think you detected into proper words utilizng the templates that are provided. This should be done in sequence, not in parallel. Any word/phrase/value that cannot be reconciled based on the templates and your own knowledge should be marked in [red]. Anything where you are less than 90% certain of the correctness.
+- Phase 3: Take one more pass through the transcribed text and try to identify things that do not make sense and mark them in [red] or things that you think you know understand if you have better context.
+- Phase 4: Anything you believe you have learned should be added to the transcription_knowledge.json file if it is not already there.
+- Phase 5: Formatting - create a formatted docx document as per the example in ./Patient000_example.docx with distinct section and numberd lines.
+- Phase 6: Append the original jpg documents to the end of the docx file, one jpg at a time. Do not crop. leave only a little margin on the sides (ie make as large as possible but make sure it fits vertically and horizontally).
+- Phase 7: display and save summary information as follows:
+┌──────────────────────────────────────────────────┐
+│ V8 TRANSCRIPTION SUMMARY                         │
+├──────────────────────────────────────────────────┤
+│ Patient:           Patient004                    │
+│ Pages:             1                             │
+│ Rows:              89                            │
+│ Visits:            2 (3/4/23 + 12/4/23 email)   │
+│ Phase 2 corrections: 7                           │
+│ Phase 2 flags:       12                          │
+│ Phase 2 confidence:  MEDIUM                      │
+├──────────────────────────────────────────────────┤
+│ Phase 1 (transcribe): ~8.7 min                   │
+│ Phase 2 (review):     ~1.3 min                   │
+│ Phase 3 (assemble):   ~2.5 min                   │
+│ Total elapsed:        ~12.5 min                  │
+├──────────────────────────────────────────────────┤
+│ Est. input tokens:    ~15,000                    │
+│ Est. output tokens:   ~20,000                    │
+│ Est. cost (Opus 4.6):   ~$0.52                   │
+│ Est. cost (Sonnet 4.6): ~$0.11                   │
+└──────────────────────────────────────────────────┘
 
 ### Key inputs the skill reads (and ONLY these):
 
@@ -31,7 +53,7 @@ The skill's 3-phase pipeline:
 | `./id.json` | Synthetic patient identity (name, AMKA, DOB, phone, address) |
 | `./transcription_knowledge.json` | General knowledge base (abbreviations, handwriting patterns, medical terms, medication names) |
 | `./templates/*.json` | Lab panel definitions (test names, units, ranges, OCR traps) |
-| `./scripts/v10_template_generator.js` | Template script — copied to scratch and adapted per patient |
+| `./scripts/v{X}_template_generator.js` | Template script per version — copied to scratch/ and populated with patient data during assembly |
 
 **No other inputs.** The skill does NOT read output from any previous transcription run, any previous version's output, or any patient-specific stats. Each run is fully independent.
 
@@ -47,15 +69,17 @@ The skill's 3-phase pipeline:
 
 ### Section order (matches doctor's consistent note structure):
 
-| Row | Sections (side by side) | Function |
-|-----|------------------------|----------|
-| 1 | ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ \| ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ | `twoBoxRow(...)` |
-| 2 | ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ \| ΠΑΡΟΥΣΑ ΝΟΣΟΣ | `twoBoxRow(...)` |
-| 3 | ΠΑΡΑΠΟΜΠΗ \| ΑΝΑΜΝΗΣΤΙΚΟ | `twoBoxRow(...)` |
-| 4 | ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ (3 or 4 columns) | `threeBoxRow(...)` or `fourBoxRow(...)` |
-| 5 | ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ | `fullWidthBox(...)` with `examTable(...)` |
-| 6 | ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ | `fullWidthBox(...)` with `labTable(...)` |
-| 7 | ΟΔΗΓΙΕΣ | `fullWidthBox(...)` |
+- Peronal information (ID, Name, Address, Phone, Occupation, Smoking, Alcohol, Alergies, Treatment, Refferal, Current Ailment/Disease)
+- Family History
+- Exam 1 (date on right)
+    - Clinical Exam (ΚΛΙΝ. ΕΞΕΤΑΣΗ) (date on left)
+    - Lab results (ΕΡΓΑΣΤΗΡΙΟ) (date on left)
+    - Intructions (ΟΔΗΓΙΕΣ) (date on left)
+    - (one or more of the above might be missing)
+- Exam 2
+    - Clinical Exam (ΚΛΙΝ. ΕΞΕΤΑΣΗ)
+    - Lab results (ΕΡΓΑΣΤΗΡΙΟ)
+    - Intructions (ΟΔΗΓΙΕΣ)
 
 **Multiple visits**: If the note contains more than one visit date, add each as a separate `ΕΠΙΣΚΕΨΗ N — DD/MM/YYYY` heading.
 
@@ -84,18 +108,11 @@ AA_Endo/
 └── .skills/                               # Repo-local skill copies
 ```
 
-## PDF to JPG Conversion
-
-- Native resolution: 1700x2366 pixels, 72 DPI
-- **Do NOT use `pdfimages`** — it ignores the PDF's rotation transform and produces upside-down images
-- Correct command: `pdftoppm -jpeg -jpegopt quality=95 -r 72 -singlefile input.pdf output_prefix`
-
 ## Knowledge Base
 
 `transcription_knowledge.json` contains **general, patient-agnostic** knowledge only:
 
 - **abbreviations.confirmed**: e.g. κφ = κανονικά φυσιολογικά, ΦΤ = φυσιολογικές τιμές
-- **handwriting_patterns.confirmed**: e.g. year 2↔9 confusion, ΕΜΜΗΝΟΠΑΥΣΗ misread patterns
 - **hallucination_warnings**: Cases where AI generated exam items NOT in the original scan
 - **omission_warnings**: Patterns where AI tends to skip content (e.g. dense lab blocks at page bottom)
 - **common_medical_terms**: Greek→English medical dictionary (60+ terms)
@@ -103,19 +120,10 @@ AA_Endo/
 
 No patient-specific data, per-run stats, or value corrections belong in the knowledge base.
 
-## Correction Workflow
-
-1. Doctor reviews .docx output
-2. Doctor provides corrections as "Row XX: X should be Y"
-3. General patterns from corrections (e.g. handwriting quirks, new abbreviations) are added to the relevant KB section
-4. Patient-specific corrections are NOT stored — only the general lesson is extracted
-5. Uncertain readings (red `[text?]`) are priority items for doctor review
-
 ## Critical Lessons (Do Not Ignore)
 
 1. **Hallucination risk**: AI sometimes generates plausible exam items NOT in the scan. Cross-reference EVERY line against the image.
-2. **Year confusion**: 2 and 9 look similar in this handwriting. Flag uncertain years in red.
-3. **Use the template script**: Do NOT write docx generation code from scratch. Copy `./scripts/v10_template_generator.js` and adapt it. The template contains all the exact formatting, sizing, and structure that took many iterations to get right.
+3. **Use the template script**: Do NOT write docx generation code from scratch. Copy `./scripts/v{N}_template_generator.js` and adapt it. The template contains all the exact formatting, sizing, and structure that took many iterations to get right.
 4. **Image embedding requires separate docx section**: Transcription uses 2cm margins, appended scans use 0.5cm margins. These MUST be in different docx sections.
 5. **Fit-to-page**: Always use `fitToPage(imgW, imgH)` for image sizing — checks both width and height constraints.
 6. **JPG for scans**: JPG at quality 75-95 is 7x smaller than PNG with no visible loss.
