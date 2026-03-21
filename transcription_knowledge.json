@@ -67,7 +67,10 @@
       "ΕΜΜΗΝΟΠΑΥΣΗ_looks_like_ΕΝΗΜΕΡΩΤΗΣ": "In handwriting, ΕΜΜΗΝΟΠΑΥΣΗ can be misread as ΕΝΗΜΕΡΩΤΗΣ — look for it in family history context followed by age",
       "Υπεραλδοστερονισμία_was_ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ": "Misread ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ as Υπεραλδοστερονισμία — similar letter patterns",
       "Προαλβουμινημία_was_ΠΡΟΔΙΑΒΗΤΗΣ": "Misread ΠΡΟΔΙΑΒΗΤΗΣ as Προαλβουμινημία — ΠΡΟ prefix correct but rest differs",
-      "2019_was_2012": "Year misread — 2 can look like 9 in this handwriting. Flag uncertain years in red."
+      "2019_was_2012": "Year misread — 2 can look like 9 in this handwriting. Flag uncertain years in red.",
+      "comma_misread_as_1_in_lab_values": "In dense numeric lab blocks, the Greek decimal comma (,) can be misread as digit 1. Example: HGB '16,4' was initially read as '1164'. Cross-check with CBC consistency formulas to detect.",
+      "ΕΜΜΗΝΟΠΑΥΣΗ_Η_looks_like_14": "In handwriting, the Greek letter Η (eta) in ΕΜΜΗΝΟΠΑΥΣΗ can look like '14'. Context: always followed by age in χρ.",
+      "A1c_c_looks_like_3": "HbA1c: the lowercase 'c' can be misread as '3' in handwriting, yielding 'Α13' instead of 'A1c'"
     },
     "suspected": {
       "description": "Patterns we think we see but need doctor confirmation",
@@ -154,8 +157,29 @@
       "ΝΕΦΡΟΛΙΘΙΑΣΗ": "Nephrolithiasis (kidney stones)",
       "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ": "Acoustic neuroma / vestibular schwannoma",
       "ΥΠΟΚΛΙΝΙΚΟΣ ΥΠΟΘΥΡΕΟΕΙΔΙΣΜΟΣ": "Subclinical hypothyroidism",
-      "ΤΥΠΙΚΟ ΕΛΚΟΣ": "Peptic ulcer"
+      "ΤΥΠΙΚΟ ΕΛΚΟΣ": "Peptic ulcer",
+      "ΛΗΨΗ ΜΥΕΛΟΥ ΟΣΤΩΝ": "Bone marrow harvesting/donation",
+      "ΑΠΝΟΙΑ ΥΠΝΟΥ": "Sleep apnea",
+      "ΜΕΛΙΣΣΟΤΣΙΜΠΗΜΑΤΑ": "Bee stings (as allergy trigger)",
+      "ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ": "Weight loss",
+      "ΕΜΜΗΝΟΡΡΥΣΙΑ": "Menstruation"
     }
+  },
+
+  "clinical_patterns": {
+    "smoking_polycythemia": "Smoking causes secondary polycythemia (elevated RBC, HGB, HCT). If patient is a smoker and CBC values are elevated, this is the likely cause — not a transcription error.",
+    "low_b12_high_homocysteine": "Low B12 + elevated homocysteine are causally linked. If both appear, both readings are likely correct.",
+    "elevated_cpk_sgpt_combo": "Elevated CPK + SGPT together may indicate muscle damage, statin myopathy, or hepatitis. Doctor typically orders repeat enzymes + hepatitis screening."
+  },
+
+  "validation_rules": {
+    "description": "Cross-checks to catch misread lab values",
+    "cbc_consistency": [
+      "MCV = HCT × 10 / RBC (should match within ±2 fL)",
+      "MCH = HGB × 10 / RBC (should match within ±1 pg)",
+      "MCHC = HGB / HCT × 100 (should match within ±1 g/dL)",
+      "If calculated values disagree with transcribed values, at least one value is misread"
+    ]
   },
 
   "medication_names": {

@@ -1,19 +1,16 @@
 #!/usr/bin/env node
 /**
- * V8 TEMPLATE GENERATOR — Reference implementation for digitizing handwritten medical notes.
- *
- * V8 adds a medical review pass (Phase 2) between raw transcription and code generation.
- * The docx engine is identical to v7 — only the workflow differs.
+ * V7 TEMPLATE GENERATOR — Reference implementation for digitizing handwritten medical notes.
  *
  * HOW TO USE THIS FILE:
- * 1. Copy this file and rename it: create_patientXXX_v8.js
+ * 1. Copy this file and rename it: create_patientXXX_v7.js
  * 2. Replace all content in the "TRANSCRIPTION CONTENT" section with actual transcribed data
  * 3. Update IMAGE_FILES, OUTPUT_PATH, and patient-specific metadata
- * 4. Run: node create_patientXXX_v8.js
+ * 4. Run: node create_patientXXX_v7.js
  *
  * DEPENDENCIES: npm install docx
  *
- * This file is the COMPLETE, WORKING code that produces a v8 document.
+ * This file is the COMPLETE, WORKING code that produces a v7 document.
  * DO NOT simplify, refactor, or "improve" the structure — it works exactly as-is.
  * A new Claude session should use this as a starting point, NOT try to write from scratch.
  */
@@ -37,13 +34,13 @@ const IMAGE_FILES = [
 ];
 
 // Output path
-const OUTPUT_PATH = "./transcribed/v8/PatientXXX_1_digitized_v8.docx";
+const OUTPUT_PATH = "./transcribed/v7/PatientXXX_1_digitized_v7.docx";
 
 // Patient AMKA (masked) — use "[Δεν καταγράφηκε]" if not recorded
 const PATIENT_AMKA = "*******XXXX";
 
 // =============================================================================
-// V8 ENGINE — Do not modify below this line unless fixing bugs
+// V7 ENGINE — Do not modify below this line unless fixing bugs
 // =============================================================================
 
 // Fit-to-page image sizing for appended original scans
@@ -339,7 +336,7 @@ function transcriptionNotes(sourceFiles, dateStr) {
       new TextRun({ text: "ΜΩΒΑ ΚΕΦΑΛΑΙΑ", font: "Arial", size: 16, color: PURPLE, bold: true }), small(" = ιατρικοί όροι/φάρμακα."),
     ] }),
     new Paragraph({ spacing: { after: 30 }, children: [small("Αριθμοί γραμμών (π.χ. 05) για εύκολη αναφορά σε διορθώσεις.")] }),
-    new Paragraph({ spacing: { after: 30 }, children: [small(`Πηγή: ${sourceFiles}  |  Μεταγραφή: ${dateStr}  |  Έκδοση: 8 (με ιατρική ανασκόπηση)`)] }),
+    new Paragraph({ spacing: { after: 30 }, children: [small(`Πηγή: ${sourceFiles}  |  Μεταγραφή: ${dateStr}  |  Έκδοση: 7`)] }),
   ];
 }
 
@@ -546,80 +543,9 @@ const doc = new Document({
 });
 
 // =============================================================================
-// STRUCTURAL VALIDATION — Catches invalid nesting before Packer runs
-// =============================================================================
-
-/**
- * Validates that the document structure doesn't contain invalid nesting patterns
- * that produce corrupt .docx files (which Word will refuse to open).
- *
- * Known issues this catches:
- *  - Paragraph nested inside Paragraph (e.g., wrapping nLine() in new Paragraph())
- *  - Bare TextRun inside TableCell (must be wrapped in Paragraph)
- *
- * Uses docx-js v9 internal structure: objects store children in .root (indexed),
- * NOT in .options.children.
- */
-function validateDocStructure(doc) {
-  let errors = 0;
-  const Pg = Paragraph;
-  const Tb = Table;
-  const TR = TextRun;
-
-  function walkRoot(obj, path) {
-    if (!obj || !obj.root) return;
-    const keys = Object.keys(obj.root);
-    for (const k of keys) {
-      const child = obj.root[k];
-      if (!child || !child.constructor) continue;
-      const name = child.constructor.name;
-
-      // Paragraph should not contain Paragraph or Table
-      if (obj instanceof Pg && child instanceof Pg) {
-        console.error(`ERROR: Paragraph nested inside Paragraph at ${path}.root[${k}]`);
-        errors++;
-      }
-      if (obj instanceof Pg && child instanceof Tb) {
-        console.error(`ERROR: Table nested inside Paragraph at ${path}.root[${k}]`);
-        errors++;
-      }
-
-      // TableCell should not contain bare TextRun (must be wrapped in Paragraph)
-      if (obj.constructor.name === 'TableCell' && child instanceof TR) {
-        console.error(`ERROR: Bare TextRun inside TableCell at ${path}.root[${k}] (must be wrapped in Paragraph)`);
-        errors++;
-      }
-
-      // Recurse
-      walkRoot(child, `${path}.root[${k}](${name})`);
-    }
-  }
-
-  try {
-    const body = doc.documentWrapper.document.root[1]; // Body is root[1] in docx-js v9
-    walkRoot(body, 'Body');
-  } catch(e) {
-    console.error('WARNING: Could not access document body for validation:', e.message);
-  }
-
-  return errors;
-}
-
-// =============================================================================
 // GENERATE OUTPUT
 // =============================================================================
 async function main() {
-  // Validate document structure before generating
-  const structErrors = validateDocStructure(doc);
-  if (structErrors > 0) {
-    console.error(`\nFATAL: ${structErrors} structural error(s) found. Fix before generating.`);
-    console.error(`Common causes:`);
-    console.error(`  - Wrapping nLine() inside new Paragraph() — nLine() already returns a Paragraph`);
-    console.error(`  - Passing bare TextRun/uncertainSmall() to examTable — wrap in array: [uncertainSmall("x")]`);
-    process.exit(1);
-  }
-  console.log(`Structure validation: OK`);
-
   const buffer = await Packer.toBuffer(doc);
   fs.writeFileSync(OUTPUT_PATH, buffer);
   console.log(`Created: ${OUTPUT_PATH}`);

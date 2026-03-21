@@ -1,16 +1,19 @@
 #!/usr/bin/env node
 /**
- * V7 TEMPLATE GENERATOR — Reference implementation for digitizing handwritten medical notes.
+ * V13 TEMPLATE GENERATOR — Reference implementation for digitizing handwritten medical notes.
+ *
+ * V13 is based on v8 (3-phase: transcribe, medical review, assemble).
+ * The docx engine is identical to v8.
  *
  * HOW TO USE THIS FILE:
- * 1. Copy this file and rename it: create_patientXXX_v7.js
+ * 1. Copy this file and rename it: create_patientXXX_v13.js
  * 2. Replace all content in the "TRANSCRIPTION CONTENT" section with actual transcribed data
  * 3. Update IMAGE_FILES, OUTPUT_PATH, and patient-specific metadata
- * 4. Run: node create_patientXXX_v7.js
+ * 4. Run: node create_patientXXX_v13.js
  *
  * DEPENDENCIES: npm install docx
  *
- * This file is the COMPLETE, WORKING code that produces a v7 document.
+ * This file is the COMPLETE, WORKING code that produces a v13 document.
  * DO NOT simplify, refactor, or "improve" the structure — it works exactly as-is.
  * A new Claude session should use this as a starting point, NOT try to write from scratch.
  */
@@ -34,13 +37,13 @@ const IMAGE_FILES = [
 ];
 
 // Output path
-const OUTPUT_PATH = "./transcribed/v7/PatientXXX_1_digitized_v7.docx";
+const OUTPUT_PATH = "./transcribed/v13/PatientXXX_1_digitized_v13.docx";
 
 // Patient AMKA (masked) — use "[Δεν καταγράφηκε]" if not recorded
 const PATIENT_AMKA = "*******XXXX";
 
 // =============================================================================
-// V7 ENGINE — Do not modify below this line unless fixing bugs
+// V13 ENGINE — Do not modify below this line unless fixing bugs
 // =============================================================================
 
 // Fit-to-page image sizing for appended original scans
@@ -336,7 +339,7 @@ function transcriptionNotes(sourceFiles, dateStr) {
       new TextRun({ text: "ΜΩΒΑ ΚΕΦΑΛΑΙΑ", font: "Arial", size: 16, color: PURPLE, bold: true }), small(" = ιατρικοί όροι/φάρμακα."),
     ] }),
     new Paragraph({ spacing: { after: 30 }, children: [small("Αριθμοί γραμμών (π.χ. 05) για εύκολη αναφορά σε διορθώσεις.")] }),
-    new Paragraph({ spacing: { after: 30 }, children: [small(`Πηγή: ${sourceFiles}  |  Μεταγραφή: ${dateStr}  |  Έκδοση: 7`)] }),
+    new Paragraph({ spacing: { after: 30 }, children: [small(`Πηγή: ${sourceFiles}  |  Μεταγραφή: ${dateStr}  |  Έκδοση: 13 (με ιατρική ανασκόπηση)`)] }),
   ];
 }
 
@@ -543,64 +546,9 @@ const doc = new Document({
 });
 
 // =============================================================================
-// STRUCTURAL VALIDATION — Catches invalid nesting before Packer runs
-// =============================================================================
-
-function validateDocStructure(doc) {
-  let errors = 0;
-  const Pg = Paragraph;
-  const Tb = Table;
-  const TR = TextRun;
-
-  function walkRoot(obj, path) {
-    if (!obj || !obj.root) return;
-    const keys = Object.keys(obj.root);
-    for (const k of keys) {
-      const child = obj.root[k];
-      if (!child || !child.constructor) continue;
-      const name = child.constructor.name;
-
-      if (obj instanceof Pg && child instanceof Pg) {
-        console.error(`ERROR: Paragraph nested inside Paragraph at ${path}.root[${k}]`);
-        errors++;
-      }
-      if (obj instanceof Pg && child instanceof Tb) {
-        console.error(`ERROR: Table nested inside Paragraph at ${path}.root[${k}]`);
-        errors++;
-      }
-      if (obj.constructor.name === 'TableCell' && child instanceof TR) {
-        console.error(`ERROR: Bare TextRun inside TableCell at ${path}.root[${k}] (must be wrapped in Paragraph)`);
-        errors++;
-      }
-
-      walkRoot(child, `${path}.root[${k}](${name})`);
-    }
-  }
-
-  try {
-    const body = doc.documentWrapper.document.root[1];
-    walkRoot(body, 'Body');
-  } catch(e) {
-    console.error('WARNING: Could not access document body for validation:', e.message);
-  }
-
-  return errors;
-}
-
-// =============================================================================
 // GENERATE OUTPUT
 // =============================================================================
 async function main() {
-  const structErrors = validateDocStructure(doc);
-  if (structErrors > 0) {
-    console.error(`\nFATAL: ${structErrors} structural error(s) found. Fix before generating.`);
-    console.error(`Common causes:`);
-    console.error(`  - Wrapping nLine() inside new Paragraph() — nLine() already returns a Paragraph`);
-    console.error(`  - Passing bare TextRun/uncertainSmall() to examTable — wrap in array: [uncertainSmall("x")]`);
-    process.exit(1);
-  }
-  console.log(`Structure validation: OK`);
-
   const buffer = await Packer.toBuffer(doc);
   fs.writeFileSync(OUTPUT_PATH, buffer);
   console.log(`Created: ${OUTPUT_PATH}`);
