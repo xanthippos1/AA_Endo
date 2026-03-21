@@ -1,7 +1,7 @@
 ---
 name: endo-transcribe-v9
 description: |
-  Render pre-transcribed Greek endocrinologist notes into structured Word documents (.docx). Use this skill when the user says "v9" or "render Patient001 v9". V9 takes already-transcribed text (from Gemini or other source) in `./gemini_response/PatientXXX_gemini.txt` and renders it into the standard formatted docx. No image reading or OCR — just text-to-document rendering. 2-phase: parse input text, then assemble docx.
+  Render pre-transcribed Greek endocrinologist notes into structured Word documents (.docx). Use this skill when the user says "v9" or "render Patient001 v9". V9 takes already-transcribed text (from Gemini or other source) in `./gemini_response/PatientXXX_N_gemini31.txt` and renders it into the standard formatted docx. No image reading or OCR — just text-to-document rendering. 2-phase: parse input text, then assemble docx.
 ---
 
 # Endocrinologist Note Rendering — v9 Format (2-Phase)
@@ -29,7 +29,7 @@ Read BEFORE starting:
 
 ## Input Format
 
-The input file is at: `./gemini_response/PatientXXX_gemini.txt`
+The input file is at: `./gemini_response/PatientXXX_1_gemini31.txt`
 
 It is a markdown-formatted transcription with sections like:
 - `### ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ` — patient demographics (identity fields are redacted)
@@ -49,7 +49,7 @@ The text may also contain visit dates (`ΕΠΙΣΚΕΨΗ 1 — DD/MM/YYYY`), AMK
 
 ## PHASE 1: Parse Input Text
 
-1. Read `./gemini_response/PatientXXX_gemini.txt`
+1. Read `./gemini_response/PatientXXX_1_gemini31.txt`
 2. Read `./id.json` and extract the entry for this patient
 3. Identify all sections and map them to the standard 7-section layout:
 
