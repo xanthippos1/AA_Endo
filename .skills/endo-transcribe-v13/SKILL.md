@@ -35,7 +35,7 @@ Read these BEFORE starting:
 
 **TOKEN MANAGEMENT**: Process ONE page at a time. Never load multiple images simultaneously.
 
-1. Find all `./original_jpg/PatientXXX_N.jpg` files for the given patient ID.
+1. List pages with: `ls ./original_jpg/PatientXXX_*.jpg` — files are named `PatientXXX_1.jpg`, `PatientXXX_2.jpg`, etc. Do NOT explore or search the directory in any other way.
 2. For EACH page, one at a time:
    a. Read the single JPG image. Note its pixel dimensions (width x height).
    b. Transcribe everything into a structured plain-text file: `./scratch/_raw_PatientXXX_pageN.txt`

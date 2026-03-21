@@ -23,7 +23,6 @@ Source JPGs have identity fields (name, AMKA, DOB, phone, address) covered with 
 AA_Endo/
 ├── CLAUDE.md                          # This file
 ├── id.json                            # Synthetic patient identities (gitignored)
-├── transcription_knowledge.json       # Shared knowledge base (abbreviations, terms, error patterns)
 ├── templates/                         # Lab panel definitions (CBC, Lipids, Thyroid, etc.)
 ├── original/                          # Original scanned PDFs
 ├── original_jpg/                      # Pre-cropped JPGs, identity fields magenta-redacted
@@ -102,6 +101,25 @@ Use `fitToPage(imgW, imgH)` for image sizing. Original scans must never be cropp
 
 - `nLine()` and `nLabelVal()` return Paragraph objects. NEVER wrap them in `new Paragraph(...)` — this nests paragraphs and corrupts the docx.
 - The template generator includes `validateDocStructure()` which catches nesting errors before generation.
+
+### General fules
+
+  "formatting_rules": {
+    "medical_terms": "PURPLE (#7B2D8E) + UPPERCASE — all disease names, conditions, medical terms",
+    "drug_names": "PURPLE (#7B2D8E) + UPPERCASE — all pharmaceutical/medication names",
+    "uncertain_text": "RED (#CC0000) + [text?] — words not recognized or not in dictionary",
+    "uncertain_numbers": "RED (#CC0000) — any number not 99% certain",
+    "phone_format": "XXXX XXX XXX (e.g. 6981 597 086)",
+    "amka_format": "Mask all but last 4 digits (e.g. *******0891)"
+  },
+
+   "doctor_profile": {
+    "name": "Dr. Dimitrios G. Bougiouklis",
+    "specialty": "Endocrinologist / Diabetologist",
+    "location": "Thessaloniki",
+    "note_language": "Greek with English medical terms",
+    "date_format": "DD/MM/YYYY"
+  },
 
 ## Summary Report
 

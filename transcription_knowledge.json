@@ -1,190 +1,117 @@
 {
-  "version": "1.1",
-  "description": "Knowledge base for improving handwritten Greek medical note transcription. Updated with corrections from doctor review.",
-  "last_updated": "2026-03-18",
-
-  "doctor_profile": {
-    "name": "Dr. Dimitrios G. Bougiouklis",
-    "specialty": "Endocrinologist / Diabetologist",
-    "location": "Thessaloniki",
-    "note_language": "Greek with English medical terms",
-    "date_format": "DD/MM/YYYY"
-  },
-
-  "formatting_rules": {
-    "medical_terms": "PURPLE (#7B2D8E) + UPPERCASE — all disease names, conditions, medical terms",
-    "drug_names": "PURPLE (#7B2D8E) + UPPERCASE — all pharmaceutical/medication names",
-    "uncertain_text": "RED (#CC0000) + [text?] — words not recognized or not in dictionary",
-    "uncertain_numbers": "RED (#CC0000) — any number not 99% certain",
-    "phone_format": "XXXX XXX XXX (e.g. 6981 597 086)",
-    "amka_format": "Mask all but last 4 digits (e.g. *******0891)"
-  },
+  "_description": "Knowledge base for endo-transcribe transcription. Updated after each patient run.",
 
   "abbreviations": {
     "confirmed": {
       "κφ": "κανονικά φυσιολογικά (normal)",
       "ΦΤ": "φυσιολογικές τιμές (normal range)",
-      "ΟΛΛ": "Οξεία Λεμφοβλαστική Λευχαιμία (ALL - Acute Lymphoblastic Leukemia)",
+      "φτ": "φυσιολογικές τιμές (normal range) — lowercase variant",
       "ΤΑΚ": "τακτικός (regular/normal)",
-      "ΑΝ": "αναπνευστικό (respiratory) - used before κφ",
-      "Φ": "Φυσιολογικό or negative (when used for allergies = No)",
-      "ΤΚΕ": "Ταχύτητα Καθίζησης Ερυθρών (ESR - Erythrocyte Sedimentation Rate)",
-      "Χρ.": "Χρόνια (Chronic) — prefix for chronic conditions",
-      "ΠΔΚ": "needs confirmation — seen in clinical exam after Οιδήματα",
-      "ΣΥΝΤΞ.": "Συνταξιούχος (Retired) — prefix before profession"
-    },
-    "unconfirmed_ask_doctor": {
-      "Χ/Γ": "Seen after surgical procedures — possibly Χειρουργείο/Γενικό? ASK DOCTOR",
-      "ΑΙ": "Seen after Ακουστικό νευρίνωμα — possibly αριστερό (left)? ASK DOCTOR",
-      "SE": "Seen in cardiac exam — possibly systolic ejection? ASK DOCTOR",
-      "6λφ": "Unknown — seen next to Μητέρα in family history. ASK DOCTOR",
-      "Κ.Ο.": "Seen in instructions — possibly Κλινικός Ομιλιτικός? ASK DOCTOR",
-      "ΠΔΚ": "Seen after Οιδήματα in clinical exam. ASK DOCTOR",
-      "ΤΡΜ": "Seen in Patient005 lab results — likely PTH (Παραθορμόνη). Value 137,3 consistent with secondary hyperparathyroidism. Non-standard abbreviation. ASK DOCTOR",
-      "ΑΦΙΚ": "Seen in Patient005 respiratory exam — unknown abbreviation before κφ. ASK DOCTOR",
-      "ΣΑΠ": "Seen in Patient005 family history (sibling condition) — unresolved. ASK DOCTOR"
+      "ΑΝ": "αναπνευστικό (respiratory)",
+      "Φ": "Φυσιολογικό / negative / No",
+      "ΤΚΕ": "Ταχύτητα Καθίζησης Ερυθρών (ESR)",
+      "Χρ.": "Χρόνια (Chronic)",
+      "ΩΡΛ": "Ωτορινολαρυγγολόγος (ENT)",
+      "ΣΔ": "Σακχαρώδης Διαβήτης (Diabetes Mellitus)",
+      "ΣΔ2": "Σακχαρώδης Διαβήτης Τύπου 2 (DM Type 2)",
+      "ΔΕ": "Δεξιός/Δεξιά (Right)",
+      "ΑΡ": "Αριστερός/Αριστερά (Left)",
+      "ΑΠ": "Αρτηριακή Πίεση (Blood Pressure)",
+      "Χ/Γ": "Χειρουργείο (Surgery)",
+      "ΗΚΓ": "Ηλεκτροκαρδιογράφημα (ECG)",
+      "SR": "Sinus Rhythm",
+      "RBBB": "Right Bundle Branch Block",
+      "Αντι-ΤΡΟ": "Αντι-Θυρεοειδική Υπεροξειδάση (Anti-TPO)",
+      "Αντι-Τγ": "Αντι-Θυρεοσφαιρίνη (Anti-Thyroglobulin)",
+      "CT": "Calcitonin (in lab context) / CT scan (in imaging context)",
+      "CEA": "Carcinoembryonic Antigen",
+      "CRP": "C-Reactive Protein",
+      "PTH": "Parathyroid Hormone",
+      "TNM": "Tumor-Node-Metastasis staging",
+      "Ιδ. Υπάλληλος": "Ιδιωτικός Υπάλληλος (Private sector employee)"
     }
-  },
-
-  "note_structure": {
-    "description": "The doctor follows a consistent template for each patient visit",
-    "sections_visit": [
-      "Patient demographics (name, DOB, address, phone, AMKA)",
-      "Social/lifestyle (profession, smoking, alcohol, allergies)",
-      "Current medication",
-      "Presenting illness",
-      "Referral source",
-      "Medical history (numbered items)",
-      "Family history: Self | Father | Mother (3-column). Mother section includes ΕΜΜΗΝΟΠΑΥΣΗ age.",
-      "Clinical examination (vitals + systems review + diagram)",
-      "Lab results (empty placeholder if none for this visit)",
-      "Instructions/orders (numbered)"
-    ]
-  },
-
-  "handwriting_patterns": {
-    "confirmed": {
-      "ΕΜΜΗΝΟΠΑΥΣΗ_looks_like_ΕΝΗΜΕΡΩΤΗΣ": "In handwriting, ΕΜΜΗΝΟΠΑΥΣΗ can be misread as ΕΝΗΜΕΡΩΤΗΣ — look for it in family history context followed by age",
-      "Υπεραλδοστερονισμία_was_ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ": "Misread ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ as Υπεραλδοστερονισμία — similar letter patterns",
-      "Προαλβουμινημία_was_ΠΡΟΔΙΑΒΗΤΗΣ": "Misread ΠΡΟΔΙΑΒΗΤΗΣ as Προαλβουμινημία — ΠΡΟ prefix correct but rest differs",
-      "2019_was_2012": "Year misread — 2 can look like 9 in this handwriting. Flag uncertain years in red.",
-      "comma_misread_as_1_in_lab_values": "In dense numeric lab blocks, the Greek decimal comma (,) can be misread as digit 1. Example: HGB '16,4' was initially read as '1164'. Cross-check with CBC consistency formulas to detect.",
-      "ΕΜΜΗΝΟΠΑΥΣΗ_Η_looks_like_14": "In handwriting, the Greek letter Η (eta) in ΕΜΜΗΝΟΠΑΥΣΗ can look like '14'. Context: always followed by age in χρ.",
-      "A1c_c_looks_like_3": "HbA1c: the lowercase 'c' can be misread as '3' in handwriting, yielding 'Α13' instead of 'A1c'"
-    },
-    "suspected": {
-      "description": "Patterns we think we see but need doctor confirmation",
-      "items": [
-        "Doctor writes circled numbers ①②③ for enumerated items",
-        "κφ is used as shorthand across all exam systems to mean normal",
-        "Lab reference ranges written as (ΦΤ: X-Y) or (ΦΤ < X)",
-        "Arrow → used to indicate 'leads to' or 'result is'",
-        "Elevated values may be underlined"
-      ]
-    },
-    "hallucination_warnings": [
-      "Always cross-reference every exam line against the scan. Do not assume standard exam items are present."
-    ],
-    "omission_warnings": [
-      "PATTERN: Dense horizontal lab blocks at page bottom get missed. When handwritten lab values are written in a compact run-on format (e.g., 'RBC 4,72x10⁶ HGB 13,1 HCT 41,0 MCV 88,1 MCH 27,8...' all on 2-3 lines), the model tends to stop transcribing at the visual landmark above them (e.g., a family tree diagram). After transcribing each page, ALWAYS verify: is there ANY content below the last section I transcribed? Look specifically for dense numeric blocks at the very bottom edge of the page."
-    ]
-  },
-
-
-  "common_medical_terms": {
-    "description": "Greek medical terms frequently seen in this doctor's notes. Display in PURPLE + UPPERCASE.",
-    "terms": {
-      "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ": "Hyperlipidemia",
-      "ΠΡΟΔΙΑΒΗΤΗΣ": "Prediabetes",
-      "ΝΕΦΡΟΛΙΘΙΑΣΗ": "Nephrolithiasis (kidney stones)",
-      "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ": "Acoustic neuroma",
-      "ΟΜΟΚΥΣΤΕΪΝΗ": "Homocysteine",
-      "ΦΕΡΡΙΤΙΝΗ": "Ferritin",
-      "ΤΕΣΤΟΣΤΕΡΟΝΗ": "Testosterone",
-      "ΚΡΕΑΤΙΝΙΝΗ": "Creatinine",
-      "ΧΟΛΗΣΤΕΡΟΛΗ": "Cholesterol",
-      "ΤΡΙΓΛΥΚΕΡΙΔΙΑ": "Triglycerides",
-      "ΟΥΡΙΚΟ ΟΞΥ": "Uric acid",
-      "ΦΥΛΛΙΚΟ ΟΞΥ": "Folic acid",
-      "ΔΙΑΤΑΡΑΧΗ ΥΠΝΟΥ": "Sleep disorder",
-      "ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ": "Weight loss",
-      "ΕΜΜΗΝΟΠΑΥΣΗ": "Menopause",
-      "ΠΡΟΣΤΑΤΙΤΙΔΑ": "Prostatitis",
-      "ΟΙΔΗΜΑΤΑ": "Edema",
-      "ΟΛΛ": "Acute Lymphoblastic Leukemia (ALL)",
-      "ΕΝΔΟΓΕΝΕΣ ΒΡΟΓΧΙΚΟ ΑΣΘΜΑ": "Endogenous Bronchial Asthma",
-      "ΑΓΓΕΙΟΠΛΑΣΤΙΚΗ": "Angioplasty",
-      "ΣΤΕΦΑΝΙΑΙΑ ΑΝΤΙΜΕΤΩΠΙΣΗ": "Coronary intervention",
-      "ΕΝΔΟΜΗΤΡΙΩΣΗ": "Endometriosis",
-      "ΙΝΟΘΥΛΩΜΑ ΜΗΤΡΑΣ": "Uterine fibroid",
-      "ΔΥΣΚΟΙΛΙΟΤΗΤΑ": "Constipation",
-      "ΚΡΥΟΘΕΣΙΑ ΤΡΑΧΗΛΟΥ": "Cryotherapy of cervix",
-      "ΤΡΑΧΗΛΙΤΙΣ": "Cervicitis",
-      "ΑΘΕΡΟΣΚΛΗΡΥΝΣΗ": "Atherosclerosis",
-      "ΟΣΤΕΟΠΕΝΙΑ": "Osteopenia",
-      "ΟΣΤΕΟΠΟΡΩΣΗ": "Osteoporosis",
-      "ΣΠΟΝΔΥΛΩΣΗ": "Spondylosis",
-      "ΧΟΛΟΚΥΣΤΕΚΤΟΜΗ": "Cholecystectomy",
-      "ΡΕΥΜΑΤΟΕΙΔΗΣ ΑΡΘΡΙΤΙΔΑ": "Rheumatoid arthritis",
-      "ΑΥΤΟΑΝΟΣΗ ΘΥΡΕΟΠΑΘΕΙΑ": "Autoimmune thyroid disease",
-      "ΧΟΛΟΛΙΘΟΙ": "Gallstones",
-      "ΣΤΕΦ. ΝΟΣΟΣ": "Coronary disease",
-      "ΟΖΩΔΗΣ ΒΡΟΓΧΟΚΗΛΗ": "Nodular goiter",
-      "ΒΟΥΒΩΝΟΚΗΛΗ": "Inguinal hernia",
-      "ΑΜΥΓΔΑΛΕΚΤΟΜΗ": "Tonsillectomy",
-      "ΥΣΤΕΡΕΚΤΟΜΗ": "Hysterectomy",
-      "ΘΥΡΕΟΕΙΔΕΚΤΟΜΗ": "Thyroidectomy",
-      "ΑΔΕΝΩΜΑ ΘΥΡΕΟΕΙΔΟΥΣ": "Thyroid adenoma",
-      "ΣΔ ΙΙ": "Diabetes Mellitus Type 2",
-      "ΛΟΙΜΩΞΗ ΑΠΟ ΚΟΡΩΝΟΪΟ": "COVID-19 infection",
-      "ΔΙΟΓΚΩΣΗ ΘΥΡΕΟΕΙΔΟΥΣ": "Thyroid enlargement",
-      "ΒΡΟΓΧΟΚΗΛΗ": "Goiter",
-      "ΑΔΕΝΩΜΑ ΕΠΙΝΕΦΡΙΔΙΟΥ": "Adrenal adenoma",
-      "ΙΣΧΑΙΜΙΚΑ ΕΜΦΡΑΚΤΑ ΕΓΚΕΦΑΛΟΥ": "Ischemic cerebral infarcts / strokes",
-      "ΦΛΕΒΙΚΗ ΑΝΕΠΑΡΚΕΙΑ": "Venous insufficiency",
-      "ΠΡΟΠΤΩΣΗ MV": "Mitral Valve Prolapse",
-      "ΔΙΣΚΟΚΗΛΗ": "Disc herniation",
-      "ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ ΗΠΑΤΟΣ": "Fatty liver infiltration / NAFLD",
-      "ΛΕΥΧΑΙΜΙΑ": "Leukemia",
-      "ΠΡΩΤΟΠΑΘΗΣ ΥΠΕΡΑΛΔΟΣΤΕΡΟΝΙΣΜΟΣ": "Primary hyperaldosteronism (Conn's syndrome)",
-      "Ca ΠΝΕΥΜΟΝΑ": "Lung cancer",
-      "ΑΓΚΥΛΟΠΟΙΗΤΙΚΗ ΣΠΟΝΔΥΛΙΤΙΔΑ": "Ankylosing spondylitis",
-      "ΣΠΟΝΔΥΛΙΚΑ ΚΑΤΑΓΜΑΤΑ": "Vertebral fractures",
-      "ΠΟΛΥΠΟΔΑΣ ΧΟΛΗΔΟΧΟΥ ΚΥΣΤΕΩΣ": "Gallbladder polyp",
-      "ΔΙΑΣΤΟΛΙΚΗ ΔΥΣΛΕΙΤΟΥΡΓΙΑ": "Diastolic dysfunction",
-      "ΧΟΛΟΛΙΘΙΑΣΗ": "Cholelithiasis (gallstones)",
-      "Ca ΠΡΟΣΤΑΤΟΥ": "Prostate cancer",
-      "ΝΕΦΡΟΛΙΘΙΑΣΗ": "Nephrolithiasis (kidney stones)",
-      "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ": "Acoustic neuroma / vestibular schwannoma",
-      "ΥΠΟΚΛΙΝΙΚΟΣ ΥΠΟΘΥΡΕΟΕΙΔΙΣΜΟΣ": "Subclinical hypothyroidism",
-      "ΤΥΠΙΚΟ ΕΛΚΟΣ": "Peptic ulcer",
-      "ΛΗΨΗ ΜΥΕΛΟΥ ΟΣΤΩΝ": "Bone marrow harvesting/donation",
-      "ΑΠΝΟΙΑ ΥΠΝΟΥ": "Sleep apnea",
-      "ΜΕΛΙΣΣΟΤΣΙΜΠΗΜΑΤΑ": "Bee stings (as allergy trigger)",
-      "ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ": "Weight loss",
-      "ΕΜΜΗΝΟΡΡΥΣΙΑ": "Menstruation"
-    }
-  },
-
-  "clinical_patterns": {
-    "smoking_polycythemia": "Smoking causes secondary polycythemia (elevated RBC, HGB, HCT). If patient is a smoker and CBC values are elevated, this is the likely cause — not a transcription error.",
-    "low_b12_high_homocysteine": "Low B12 + elevated homocysteine are causally linked. If both appear, both readings are likely correct.",
-    "elevated_cpk_sgpt_combo": "Elevated CPK + SGPT together may indicate muscle damage, statin myopathy, or hepatitis. Doctor typically orders repeat enzymes + hepatitis screening."
-  },
-
-  "validation_rules": {
-    "description": "Cross-checks to catch misread lab values",
-    "cbc_consistency": [
-      "MCV = HCT × 10 / RBC (should match within ±2 fL)",
-      "MCH = HGB × 10 / RBC (should match within ±1 pg)",
-      "MCHC = HGB / HCT × 100 (should match within ±1 g/dL)",
-      "If calculated values disagree with transcribed values, at least one value is misread"
-    ]
   },
 
   "medication_names": {
-    "description": "Medications/pharmaceuticals seen in notes. Display in PURPLE + UPPERCASE. Maintain as running database.",
-    "seen": ["ZOLOFT", "SERETIDE", "TRIATEC", "MINITRAN", "EFECOL", "MARNOVER", "ZIRUS", "LECALCIF", "MEDROL", "ΒΙΤΑΜΙΝΗ C", "ZOCOR", "XANAX", "SALOSPIR", "VIBRAMYCIN", "BIA.FIX", "FILICINE", "ROSUBEN", "RABEST", "MEDITHYROX"]
-  }
+    "seen": [
+      "MEDROL (μεθυλπρεδνιζολόνη / methylprednisolone)",
+      "ΜΕΔΙΘΥΡΟΝ / Medithyron (λεβοθυροξίνη / levothyroxine)"
+    ],
+    "notes": {
+      "ΜΕΔΙΘΥΡΟΝ": "Greek brand of levothyroxine. Post-thyroidectomy replacement. Typical doses: 25-200 μg. Written as Μεδιθυρον in handwriting."
+    }
+  },
 
+  "medical_terms": {
+    "seen": [
+      "ΟΖΩΔΗΣ ΒΡΟΓΧΟΚΗΛΗ (nodular goiter)",
+      "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ (hyperlipidemia)",
+      "ΒΟΥΒΩΝΟΚΗΛΗ (inguinal hernia)",
+      "ΑΜΥΓΔΑΛΕΚΤΟΜΗ (tonsillectomy)",
+      "ΟΛΙΚΗ ΘΥΡΕΟΕΙΔΕΚΤΟΜΗ (total thyroidectomy)",
+      "ΘΗΛΩΔΕΣ ΜΙΚΡΟΚΑΡΚΙΝΩΜΑ ΘΥΡΕΟΕΙΔΟΥΣ (papillary thyroid microcarcinoma)",
+      "ΟΛΙΚΗ ΥΣΤΕΡΕΚΤΟΜΗ ΜΕΤ ΩΟΘΗΚΩΝ (total hysterectomy with oophorectomy)",
+      "ΕΝΔΟΘΩΡΑΚΙΚΗ ΕΠΕΚΤΑΣΗ (intrathoracic/substernal extension)"
+    ]
+  },
+
+  "corrections_log": [
+    {
+      "patient": "Patient002",
+      "version": "v8",
+      "corrections": [
+        {
+          "type": "year_confusion",
+          "original": "30/11/2022 (age 42)",
+          "corrected": "30/11/2021 (age 41)",
+          "reason": "Timeline inconsistency: CT 24/11/21, Echo 26/11/21, surgery 17/01/22 all precede the visit if dated 2022. Handwriting 1↔2 confusion confirmed."
+        },
+        {
+          "type": "lab_value_resolution",
+          "field": "Calcitonin",
+          "original": "9.0 or 90 (uncertain)",
+          "resolved": "9.0 pg/mL (favored)",
+          "reason": "Pathology confirmed papillary (not medullary) microcarcinoma. CT 9.0 is consistent; CT 90 would suggest medullary type."
+        },
+        {
+          "type": "lab_value_resolution",
+          "field": "Post-op Calcium",
+          "original": "19.6 or 1.96 or 9.6 (uncertain)",
+          "resolved": "9.6 mg/dL (favored)",
+          "reason": "Normal PTH (28.16) suggests parathyroid preservation. Ca 9.6 mg/dL is normal and consistent."
+        }
+      ]
+    }
+  ],
+
+  "hallucination_warnings": [
+    "Clinical exam items: AI tends to fill in plausible-sounding exam findings. Verify every line against the image.",
+    "Lab normal ranges: AI may insert textbook ranges that differ from the lab's actual ranges. Always read from image.",
+    "Medication dosages: Standard dosages may be hallucinated. Read exact values from handwriting."
+  ],
+
+  "handwriting_patterns": {
+    "Patient002": {
+      "difficulty": "MEDIUM-HIGH",
+      "notes": [
+        "Dense, small handwriting especially in imaging findings sections",
+        "Numbers generally clearer than text",
+        "Greek letters well-formed but closely spaced",
+        "Year digits 1 and 2 can be confused",
+        "Pathology report section has dense medical terminology"
+      ]
+    }
+  },
+
+  "transcription_stats": {
+    "Patient002_v8": {
+      "pages": 3,
+      "total_rows": 97,
+      "visits": 3,
+      "uncertain_readings_phase1": "~40",
+      "corrections_phase2": 3,
+      "flags_phase2": 5,
+      "confidence": "MEDIUM"
+    }
+  }
 }

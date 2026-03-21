@@ -27,7 +27,6 @@ npm install docx  # if not already installed
 
 Read these BEFORE starting:
 - `./id.json` — synthetic patient identity data (name, AMKA, DOB, phone, address) indexed by PatientXXX. Identity fields are redacted in the source JPGs — always use this file instead.
-- `./transcription_knowledge.json` — confirmed abbreviations, known misread patterns, corrections from doctor reviews, medical term dictionary, and medication names. **Use this knowledge actively in all three phases.**
 
 ---
 
@@ -43,6 +42,7 @@ Read these BEFORE starting:
    d. Mark uncertain readings with `[?]`. Mark very uncertain readings with `[??]`.
    e. Note the image dimensions at top of file (e.g., `IMAGE: 1700x2366`)
    f. **Move on to the next page — do NOT keep the previous image in context.**
+   g. do not use any external information from anyther converswation or any saved knowledge about a specific page or document.
 
 The images are pre-cropped JPGs (varying dimensions, typically around 1700x2366 pixels). Identity fields (name, AMKA, DOB, phone, address) are **redacted with magenta (#FF00FF) rectangles**. Do NOT attempt to read them — use `./id.json` for these values.
 
@@ -98,7 +98,7 @@ INSTRUCTIONS:
 
 ## PHASE 2: Medical Review Pass
 
-**No images needed.** Read ALL `./scratch/_raw_PatientXXX_pageN.txt` files and `transcription_knowledge.json`, then perform a systematic review.
+**No images needed.** Read ALL `./scratch/_raw_PatientXXX_pageN.txt`, then perform a systematic review.
 
 ### 2a. Known Error Pattern Check
 
@@ -229,15 +229,6 @@ For female patients, add ΓΥΝΑΙΚΟΛΟΓΙΚΟ ΙΣΤΟΡΙΚΟ after refer
 node ./scratch/create_patientXXX_v8.js
 ```
 
-### 3d. Update Knowledge Base
-
-Update `./transcription_knowledge.json` with:
-- New medical terms, medications, abbreviations
-- Any new error patterns discovered in Phase 2
-- Uncertain readings in `transcription_stats`
-
----
-
 ## Rules
 
 ### Privacy & Redacted Fields
@@ -281,8 +272,6 @@ Update `./transcription_knowledge.json` with:
 | Φ | Φυσιολογικό / negative / No |
 | ΤΚΕ | Ταχύτητα Καθίζησης Ερυθρών (ESR) |
 | Χρ. | Χρόνια (Chronic) |
-
-See `transcription_knowledge.json` for the complete list.
 
 ## Timing and Cost Estimation
 

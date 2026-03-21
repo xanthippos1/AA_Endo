@@ -1,23 +1,22 @@
 ---
 name: endo-transcribe-v9
 description: |
-  Digitize handwritten Greek endocrinologist notes into structured Word documents (.docx) using the v9 fusion format (4-phase: Google Vision OCR + Claude image reading, fusion + medical review, assemble). Use this skill when the user explicitly asks for "v9" transcription or says "transcribe Patient001 v9", "fuse Patient002", "v9 for Patient003". V9 combines Google Vision API OCR text with Claude's own image reading, then cross-references the two sources to produce a higher-accuracy transcription than either alone. Requires a pre-generated Google Vision API text file in `./visionai/`. For v7 (basic) or v8 (review only), use the other endo-transcribe skills.
+  Render pre-transcribed Greek endocrinologist notes into structured Word documents (.docx). Use this skill when the user says "v9" or "render Patient001 v9". V9 takes already-transcribed text (from Gemini or other source) in `./gemini_response/PatientXXX_gemini.txt` and renders it into the standard formatted docx. No image reading or OCR — just text-to-document rendering. 2-phase: parse input text, then assemble docx.
 ---
 
-# Endocrinologist Note Transcription — v9 Format (Dual-OCR Fusion)
+# Endocrinologist Note Rendering — v9 Format (2-Phase)
 
-Digitize handwritten medical notes from a Greek endocrinologist (Dr. Dimitrios G. Bougiouklis, Thessaloniki) into structured Word documents, using **two independent OCR sources** fused together for maximum accuracy.
+Render pre-transcribed medical notes into structured Word documents. The input is already-transcribed Greek text — **no image reading, no OCR, no vision work**.
 
-**V9 vs V8 vs V7**: The docx output format is identical across all three. V9 adds a second OCR source (Google Vision API) and a fusion step that cross-references the two independent readings. Where both sources agree, confidence is high. Where they disagree, the discrepancy is the most informative signal — it tells you exactly where to look.
+**V9 vs V8**: V8 reads handwritten JPG scans and transcribes them. V9 skips all of that — it receives pre-transcribed text and only does the rendering/formatting into a structured docx.
 
 ## Invocation
 
-The user gives a patient ID (e.g., `Patient004`) and specifies v9. Prerequisites:
+The user gives a patient ID like `Patient004` and specifies v9. The job:
 
-- JPG scan(s) in `./original_jpg/PatientXXX_N.jpg`
-- Google Vision API output in `./visionai/PatientXXX_googleai.txt`
-
-If the Google Vision file doesn't exist, tell the user they need to run the Vision API first (or fall back to v8).
+1. Read the pre-transcribed text from `./gemini_response/`
+2. Parse and map the content to the standard section structure (Phase 1)
+3. Assemble the formatted docx using the template generator (Phase 2)
 
 ## Setup
 
@@ -25,267 +24,131 @@ If the Google Vision file doesn't exist, tell the user they need to run the Visi
 npm install docx  # if not already installed
 ```
 
-Read these BEFORE starting:
-- `./id.json` — synthetic patient identity data (name, AMKA, DOB, phone, address) indexed by PatientXXX. Identity fields are redacted in the source JPGs — always use this file instead.
-- `./transcription_knowledge.json`
+Read BEFORE starting:
+- `./id.json` — synthetic patient identity data (name, AMKA, DOB, phone, address) indexed by PatientXXX. The transcribed text has redacted identity fields (marked as `[Διαγραμμένο]` or similar). Replace them with values from this file.
+
+## Input Format
+
+The input file is at: `./gemini_response/PatientXXX_gemini.txt`
+
+It is a markdown-formatted transcription with sections like:
+- `### ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ` — patient demographics (identity fields are redacted)
+- `### ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ ΙΣΤΟΡΙΚΟ` — social/lifestyle
+- `### ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ` — current medication
+- `### ΠΑΡΟΥΣΑ ΝΟΣΟΣ` — presenting illness
+- `### ΠΑΡΑΠΟΜΠΗ` — referral
+- `### ΑΤΟΜΙΚΟ ΑΝΑΜΝΗΣΤΙΚΟ` — medical history
+- `### ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ` — family history
+- `### ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ` — clinical exam
+- `### ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ` — lab results (markdown table)
+- `### ΟΔΗΓΙΕΣ` — instructions
+
+The text may also contain visit dates (`ΕΠΙΣΚΕΨΗ 1 — DD/MM/YYYY`), AMKA values, and doctor letterhead info. Multiple visits may be present.
 
 ---
 
-## PHASE 1a: Read Google Vision OCR
+## PHASE 1: Parse Input Text
 
-Read the pre-generated file `./visionai/PatientXXX_googleai.txt`. This is raw text output from Google Cloud Vision API's document text detection.
+1. Read `./gemini_response/PatientXXX_gemini.txt`
+2. Read `./id.json` and extract the entry for this patient
+3. Identify all sections and map them to the standard 7-section layout:
 
-**What Google Vision is good at:**
-- Individual character recognition, especially printed text and numbers
-- Lab values, medication dosages, phone numbers
-- Characters that are ambiguous in context (2 vs 9, ε vs ο)
+| Row | Target Section | Source in Gemini text |
+|-----|---------------|----------------------|
+| 1 | ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ \| ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ | Demographics table + Social history |
+| 2 | ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ \| ΠΑΡΟΥΣΑ ΝΟΣΟΣ | Current medication + Presenting illness |
+| 3 | ΠΑΡΑΠΟΜΠΗ \| ΑΝΑΜΝΗΣΤΙΚΟ | Referral + Medical history |
+| 4 | ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ | Family history (split into Father/Mother/Patient columns) |
+| 5 | ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ | Clinical exam findings |
+| 6 | ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ | Lab results table |
+| 7 | ΟΔΗΓΙΕΣ | Instructions/orders |
 
-**What Google Vision is bad at:**
-- Document structure (sections, columns, tables)
-- Medical abbreviations and shorthand
-- Understanding what belongs together semantically
-- Greek handwriting context (it doesn't know κφ means κανονικά φυσιολογικά)
-
-Save a structured summary: `./scratch/_google_PatientXXX.txt` — reorganize the raw Google text into the standard section format (demographics, medications, history, exam, labs, instructions) as best you can. Mark sections where Google's output is garbled or unclear with `[GOOGLE UNCLEAR]`.
-
----
-
-## PHASE 1b: Claude Image Reading (One Page at a Time)
-
-**TOKEN MANAGEMENT**: Process ONE page at a time. Never load multiple images simultaneously.
-
-1. Find all `./original_jpg/PatientXXX_N.jpg` files for the given patient ID.
-2. For EACH page, one at a time:
-   a. Read the single JPG image. Note its pixel dimensions (width × height).
-   b. Transcribe everything into: `./scratch/_claude_PatientXXX_pageN.txt`
-   c. Include ALL content. Mark uncertain readings with `[?]`.
-   d. Note image dimensions at top (e.g., `IMAGE: 1700x2366`)
-   e. **Move to next page — do NOT keep previous image in context.**
-
-The images are pre-cropped JPGs. Identity fields (name, AMKA, DOB, phone, address) are **redacted with magenta (#FF00FF) rectangles**. Do NOT attempt to read them — use `./id.json` for these values.
-
-Use the same structured plain-text format as v8.
+4. Replace redacted identity fields (`[Διαγραμμένο]`, `[Διαγραμμένο στο πρωτότυπο]`) with values from `id.json`
+5. Identify which terms are medical conditions (→ `medical()`) and which are drug names (→ `drug()`)
+6. Note any items marked uncertain or unclear in the source text (→ `uncertain()`)
+7. Determine the original JPG files for this patient: `ls ./original_jpg/PatientXXX_*.jpg` — these get appended to the docx as reference scans. Note their pixel dimensions.
 
 ---
 
-## PHASE 2: Fusion + Medical Review
+## PHASE 2: Assemble and Generate
 
-**No images needed.** Read ALL of these files:
-- `./scratch/_google_PatientXXX.txt` (reorganized Google Vision output)
-- `./scratch/_claude_PatientXXX_pageN.txt` (all Claude transcription pages)
-- `./transcription_knowledge.json`
+### 2a. Copy the Template Script
 
-### 2a. Side-by-Side Comparison
-
-Go through each section and compare the two sources. For each piece of information, determine:
-
-| Situation | Action | Confidence |
-|-----------|--------|------------|
-| **Both agree** | Use the agreed value | HIGH |
-| **Both agree on structure, differ on a character** | Use medical/contextual knowledge to pick the correct one. E.g., Google says "6800" and Claude says "6800" → HIGH. Google says "METFORMIN" and Claude says "ΜΕΤΦΟΡΜΙΝ" → use METFORMIN (standard English spelling for drugs) |  MEDIUM-HIGH |
-| **Google has a clear value, Claude is uncertain `[?]`** | Prefer Google's character reading, validate medically | MEDIUM |
-| **Claude has clear value, Google is garbled** | Prefer Claude's structural reading | MEDIUM |
-| **Both are uncertain or garbled** | Mark as `[?]` in red, flag for doctor | LOW |
-| **One has content the other doesn't** | Likely a hallucination by the one that has it, OR a miss by the one that doesn't. Check if it's medically plausible. | LOW — flag for doctor |
-
-### 2b. Specific Fusion Rules
-
-**Lab values**: Google Vision is typically better at reading numbers and decimal points. Prefer Google's numbers when both sources have a value but differ on digits. Example: Claude reads "HGB: 16.4", Google reads "HGB1164" → fuse to "HGB: 16,4" (Greek decimal comma).
-
-**Medication names**: Both sources may have the drug name but spelled differently. Use standard pharmaceutical spelling. Check `medication_names.seen` in the knowledge base.
-
-**Medical abbreviations**: Claude understands these better. Google often splits or garbles them. Prefer Claude for abbreviations like κφ, ΦΤ, ΟΛΛ.
-
-**Dates**: Cross-check dates between both sources. Apply the 2↔9 year confusion check. Validate against patient age.
-
-**Structural content (section assignments)**: Always prefer Claude. Google Vision outputs flat text with no section awareness.
-
-### 2c. Medical Consistency Check
-
-Same as v8 — check for:
-- Diagnosis ↔ medication mismatches
-- Lab value plausibility
-- Age ↔ date consistency
-- Cross-page consistency
-- Dosage plausibility
-
-### 2d. Write Fused Output
-
-Write: `./scratch/_fused_PatientXXX.txt`
-
-At the TOP, include a fusion report:
-```
-=== V9 FUSION REPORT ===
-Sources: Google Vision API + Claude image reading
-Agreement rate: XX% (N of M items matched)
-Corrections from fusion: N
-Items resolved by Google: N (Google was clearer)
-Items resolved by Claude: N (Claude was clearer)
-Items still uncertain: N (flagged for doctor)
-
-FUSION LOG:
-- "HGB: 16.4" — Google: "HGB1164", Claude: "HGB: 16,4" → FUSED: "HGB: 16,4" (Google confirmed digits, Claude had structure) [HIGH]
-- "AMKA: *******0811" — Google: "ΑΜΚΑΣ -00811", Claude: "ΑΜΚΑ: *******0811" → FUSED: use Claude (Google garbled) [MEDIUM]
-- "CPK: 2598" — Google: "CPK: 2598", Claude: "CPK: 2598" → BOTH AGREE [HIGH]
-- "[unclear medication]" — Google: "Rabest", Claude: "[?Rabe...]" → FUSED: "RABEPRAZOLE [?]" (likely Rabeprazole based on both partial reads) [MEDIUM — flag for doctor]
-
-FLAGS FOR DOCTOR:
-- [list items that remain uncertain after fusion]
-
-CONFIDENCE: HIGH / MEDIUM / LOW (overall)
-=== END REPORT ===
-```
-
-Then include the fused transcription in standard structured format.
-
----
-
-## PHASE 3: Assemble and Generate
-
-**No images needed.** Read `./scratch/_fused_PatientXXX.txt`.
-
-### 3a. Copy the Template Script
-
-The template is bundled with this plugin at:
+The template generator is at:
 ```
 ${CLAUDE_PLUGIN_ROOT}/skills/endo-transcribe-v9/references/v9_template_generator.js
 ```
 
-It is also available in the project repo at `./v9_template_generator.js`.
+Also available at: `./.skills/endo-transcribe-v9/references/v9_template_generator.js`
 
-1. Read `./id.json` and extract the entry for this patient.
-2. Copy to `./scratch/create_patientXXX_v9.js`
-3. Update CONFIGURATION: `IMAGE_FILES`, `OUTPUT_PATH` (→ `./transcribed/v9/`), `PATIENT_AMKA` (from `id.json`)
-4. Replace `transcriptionChildren` with content from the FUSED notes
-5. Insert identity fields from `id.json` (name, DOB, AMKA, phone, address) into the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ section.
-6. Leave engine code unchanged.
+1. Copy template to `./scratch/create_patientXXX_v9.js`
+2. Update the CONFIGURATION section:
+   - `IMAGE_FILES`: paths and pixel dimensions for each JPG (for appending scans)
+   - `OUTPUT_PATH`: set to `./transcribed/v9/PatientXXX_N_digitized_v9.docx`
+   - `PATIENT_AMKA`: from `id.json`
+3. Replace `transcriptionChildren` with content built from the parsed input
+4. Insert identity fields from `id.json` into the ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ section
+5. Leave the engine code unchanged
 
-### 3b. Build the Transcription Content
+### 2b. Build the Transcription Content
 
-Use the same helper functions as v7/v8:
+Use the template's helper functions — see CLAUDE.md for the full reference of text formatting functions (`normal()`, `bold()`, `medical()`, `drug()`, `uncertain()`, etc.), line builders (`nLine()`, `nLabelVal()`), and layout functions (`twoBoxRow()`, `threeBoxRow()`, `fullWidthBox()`, `examTable()`, `labTable()`).
 
-| Function | Appearance | When to Use |
-|----------|-----------|-------------|
-| `normal("text")` | Black regular text | Default |
-| `bold("text")` | **Black bold** | Labels |
-| `medical("text")` | **PURPLE UPPERCASE** | Disease names, conditions |
-| `drug("text")` | **PURPLE UPPERCASE** | Medications |
-| `uncertain("text")` | RED [text?] | Still uncertain after fusion |
-| `uncertainNum("text")` | RED text | Uncertain numbers |
+Key formatting rules:
+- ALL disease/condition names → `medical("text")` — renders as PURPLE UPPERCASE BOLD
+- ALL drug/medication names → `drug("text")` — renders as PURPLE UPPERCASE BOLD
+- Any uncertain readings from the source → `uncertain("text")` — renders as RED with [text?]
+- Section titles: BLUE
+- Row numbers: GRAY, Courier New
 
-Section layout order (same as v7/v8):
-
-| Row | Sections | Function |
-|-----|----------|----------|
-| 1 | ΣΤΟΙΧΕΙΑ ΑΣΘΕΝΟΥΣ \| ΚΟΙΝΩΝΙΚΟ / ΑΤΟΜΙΚΟ | `twoBoxRow(...)` |
-| 2 | ΤΡΕΧΟΥΣΑ ΑΓΩΓΗ \| ΠΑΡΟΥΣΑ ΝΟΣΟΣ | `twoBoxRow(...)` |
-| 3 | ΠΑΡΑΠΟΜΠΗ \| ΑΝΑΜΝΗΣΤΙΚΟ | `twoBoxRow(...)` |
-| 4 | ΟΙΚΟΓΕΝΕΙΑΚΟ ΙΣΤΟΡΙΚΟ | `threeBoxRow(...)` or `fourBoxRow(...)` |
-| 5 | ΚΛΙΝΙΚΗ ΕΞΕΤΑΣΗ | `fullWidthBox(...)` with `examTable(...)` |
-| 6 | ΕΡΓΑΣΤΗΡΙΑΚΑ ΑΠΟΤΕΛΕΣΜΑΤΑ | `fullWidthBox(...)` with `labTable(...)` |
-| 7 | ΟΔΗΓΙΕΣ | `fullWidthBox(...)` |
-
-For multiple visits: page break + new heading.
-For female patients: add ΓΥΝΑΙΚΟΛΟΓΙΚΟ ΙΣΤΟΡΙΚΟ.
-
-### 3c. Generate
+### 2c. Generate the Document
 
 ```bash
 node ./scratch/create_patientXXX_v9.js
 ```
 
-### 3d. Update Knowledge Base
-
-Update `./transcription_knowledge.json` with:
-- New terms, medications, abbreviations
-- New error patterns from the fusion step
-- Cases where Google Vision was consistently better or worse
-- Uncertain readings
+Verify the output file exists and report row count + file size.
 
 ---
 
 ## Rules
 
-### Privacy & Redacted Fields
-- **Identity fields (name, AMKA, DOB, phone, address) are redacted** in the source JPGs with **magenta (#FF00FF)** rectangles.
-- **Do NOT attempt to read** any redacted field from the image. Always use `./id.json` for these values.
-- `id.json` is stored locally only and never committed to version control.
+### Identity Fields
+- The input text has redacted identity fields. Always replace with values from `./id.json`.
 - AMKA values in `id.json` are already masked (last 4 digits only).
 
-### Transcription Accuracy
-- The fusion of two independent sources is the primary accuracy mechanism.
-- Still cross-reference against the image during Phase 1b.
-- Mark ALL remaining uncertain items in RED after fusion.
-- Year confusion: validate all years against patient age.
+### No Image Reading
+- V9 does NOT read or transcribe from images. The input is pre-transcribed text only.
+- Original JPG scans ARE appended to the docx as reference, but never read for content.
 
 ### Formatting
-- ALL disease names → `medical("text")` (PURPLE + UPPERCASE + BOLD)
-- ALL drug names → `drug("text")` (PURPLE + UPPERCASE + BOLD)
-- ALL uncertain readings → `uncertain("text")` (RED + [text?])
-- Section titles: BLUE (#2E75B6)
-- Row numbers: GRAY (#999999) in Courier New
+- Follow all formatting rules defined in CLAUDE.md (Shared Output Format section).
+- ALL disease names → `medical()`, ALL drug names → `drug()`, ALL uncertain → `uncertain()`
 
 ### Technical
-- **Do NOT write docx code from scratch.** Copy `v9_template_generator.js`.
-- Image section MUST be separate docx section (0.5cm vs 2cm margins)
-- `fitToPage(imgW, imgH)` for sizing — 750×1070 max
-- **CRITICAL: Appended scan images must NEVER be cropped.**
-
-## Known Abbreviations
-
-| Abbreviation | Meaning |
-|-------------|---------|
-| κφ | κανονικά φυσιολογικά (normal) |
-| ΦΤ | φυσιολογικές τιμές (normal range) |
-| ΟΛΛ | Οξεία Λεμφοβλαστική Λευχαιμία (ALL) |
-| ΤΑΚ | τακτικός (regular/normal) |
-| ΑΝ | αναπνευστικό (respiratory) |
-| Φ | Φυσιολογικό / negative / No |
-| ΤΚΕ | Ταχύτητα Καθίζησης Ερυθρών (ESR) |
-| Χρ. | Χρόνια (Chronic) |
+- **Do NOT write docx code from scratch.** Copy `v9_template_generator.js` and adapt it.
+- `nLine()` and `nLabelVal()` return Paragraph objects. NEVER wrap them in `new Paragraph(...)`.
+- Image section MUST be a separate docx section (0.5cm margins vs 2cm for content).
+- Use `fitToPage(imgW, imgH)` for image sizing. Original scans must never be cropped. Use JPG format.
 
 ## Timing and Cost Estimation
 
-Record and report at the end:
-
-1. **Wall-clock time**: Per-phase and total.
-2. **Token estimation**: V9 uses slightly more than v8 (Phase 2 is larger due to dual-source comparison).
-   - Phase 1a: ~500 tokens (reading a text file)
-   - Phase 1b: ~1,600 tokens per image + instructions
-   - Phase 2: ~5,000-12,000 tokens (both transcriptions + knowledge base + fusion reasoning)
-   - Phase 3: ~4,000-10,000 tokens
-3. **Cost**:
-   - Claude Opus 4.6: $15 / 1M input, $75 / 1M output
-   - Claude Sonnet 4.6: $3 / 1M input, $15 / 1M output
-
-Summary table:
+Print a summary at the end:
 ```
 ┌──────────────────────────────────────────────────┐
-│ V9 FUSION TRANSCRIPTION SUMMARY                  │
+│ V9 RENDERING SUMMARY                             │
 ├──────────────────────────────────────────────────┤
-│ Patient:             PatientXXX                  │
-│ Pages:               N                           │
-│ Rows:                XX                          │
-│ Agreement rate:      XX%                         │
-│ Resolved by Google:  N items                     │
-│ Resolved by Claude:  N items                     │
-│ Still uncertain:     N items                     │
+│ Patient:           PatientXXX                    │
+│ Rows:              XX                            │
+│ Visits:            N                             │
 ├──────────────────────────────────────────────────┤
-│ Phase 1a (Google):     X min Y sec               │
-│ Phase 1b (Claude):     X min Y sec               │
-│ Phase 2 (fusion):      X min Y sec               │
-│ Phase 3 (assemble):    X min Y sec               │
-│ Total elapsed:         X min Y sec               │
+│ Phase 1 (parse):     X min Y sec                │
+│ Phase 2 (assemble):  X min Y sec                │
+│ Total elapsed:       X min Y sec                │
 ├──────────────────────────────────────────────────┤
-│ Est. input tokens:     ~XX,XXX                   │
-│ Est. output tokens:    ~XX,XXX                   │
-│ Est. cost (Opus 4.6):    $X.XX                   │
-│ Est. cost (Sonnet 4.6):  $X.XX                   │
+│ Est. input tokens:    ~XX,XXX                    │
+│ Est. output tokens:   ~XX,XXX                    │
+│ Est. cost (Opus 4.6):   $X.XX                   │
+│ Est. cost (Sonnet 4.6): $X.XX                   │
 └──────────────────────────────────────────────────┘
 ```
-
-## Reference Outputs
-
-Examine existing v7 outputs for formatting reference:
-- `./transcribed/v7/Patient004_1_digitized_v7.docx` — 88 rows, 2 visits, 1 page scan
-- `./transcribed/v7/Patient005_1_digitized_v7.docx` — 112 rows, 2 visits, 2 page scan
