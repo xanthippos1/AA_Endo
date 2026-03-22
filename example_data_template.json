@@ -1,0 +1,88 @@
+{
+  "patient_id": "Patient004",
+  "source": "gemini_response/Patient004_1_gemini31.txt",
+  "generated": "2026-03-22",
+  "version": "v9",
+  
+  "identity": {
+    "name": "from id.json",
+    "dob": "DD/MM/YYYY",
+    "age_at_visit": 26,
+    "address": "from id.json",
+    "phone": "from id.json",
+    "amka": "*******0821"
+  },
+
+  "social": {
+    "profession": "Φοιτητής Ψυχολογίας",
+    "smoking": "Από 16 ετών (2-3 τσιγάρα/ημέρα)",
+    "alcohol": "Κοινωνικός πότης",
+    "allergies": "Φ"
+  },
+
+  "visits": [
+    {
+      "visit_number": 1,
+      "date": "03/04/2023",
+      
+      "current_medication": [
+        { "name": "ZOLOFT", "dose": "50mg", "frequency": "x1" }
+      ],
+
+      "presenting_illness": [
+        "ΔΙΑΤΑΡΑΧΗ ΥΠΝΟΥ",
+        "ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ"
+      ],
+
+      "referral": {
+        "from": "κ. Αμπατζή Λυδία",
+        "type": "φίλη"
+      },
+
+      "medical_history": [
+        { "item": "ΛΗΨΗ ΜΥΕΛΟΥ ΟΣΤΩΝ για αδελφή (ΟΛΛ)", "year": 2012 }
+      ],
+
+      "family_history": {
+        "mother": {
+          "age": 56,
+          "conditions": ["ΕΜΜΗΝΟΠΑΥΣΗ στα 50", "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "ΠΡΟΔΙΑΒΗΤΗΣ", "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ (Χ/Γ 2018)"]
+        },
+        "father": {
+          "age": 64,
+          "conditions": ["ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "Χρ. ΠΡΟΣΤΑΤΙΤΙΔΑ", "ΝΕΦΡΟΛΙΘΙΑΣΗ"]
+        },
+        "siblings": [
+          { "relation": "Αδελφή", "conditions": ["ΟΛΛ (+)"] }
+        ]
+      },
+
+      "clinical_exam": {
+        "weight_kg": 67,
+        "height_cm": 182,
+        "bp": "110/70",
+        "pulse": 60,
+        "findings": [
+          { "system": "Καρδιά", "value": "s1, s2, SR, φυσιολογικοί ήχοι" },
+          { "system": "Πνεύμονες", "value": "κφ" },
+          { "system": "Κοιλία", "value": "κφ" }
+        ]
+      },
+
+      "labs": {
+        "date": "10/04/2023",
+        "results": [
+          { "test": "WBC", "value": "6800", "unit": "", "ref_range": "", "flag": null },
+          { "test": "SGPT", "value": "115", "unit": "", "ref_range": "", "flag": "HIGH" },
+          { "test": "CPK", "value": "2598", "unit": "", "ref_range": "20-180", "flag": "HIGH" }
+        ]
+      },
+
+      "instructions": [
+        "Υπερηχογράφημα (ECHO) άνω κοιλίας",
+        "ΤΚΕ",
+        "Επανάληψη: SGOT, SGPT, γGT, CPK, ALP, LDH"
+      ]
+    }
+  ]
+}

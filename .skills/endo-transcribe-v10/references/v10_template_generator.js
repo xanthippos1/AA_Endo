@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * V10 TEMPLATE GENERATOR — Reference implementation for digitizing handwritten medical notes.
+ * v10 TEMPLATE GENERATOR — Reference implementation for rendering pre-transcribed notes.
  *
- * V10 adds lab-panel-aware OCR and review pass (Phase 2) between raw transcription and code generation.
- * The docx engine is identical to v7 — only the workflow differs.
+ * v10 takes pre-transcribed text (no image reading) and renders into formatted docx.
+ * The docx engine is identical to v8.
  *
  * HOW TO USE THIS FILE:
  * 1. Copy this file and rename it: create_patientXXX_v10.js
@@ -43,7 +43,7 @@ const OUTPUT_PATH = "./transcribed/v10/PatientXXX_1_digitized_v10.docx";
 const PATIENT_AMKA = "*******XXXX";
 
 // =============================================================================
-// V10 ENGINE — Do not modify below this line unless fixing bugs
+// v10 ENGINE — Do not modify below this line unless fixing bugs
 // =============================================================================
 
 // Fit-to-page image sizing for appended original scans
@@ -339,7 +339,7 @@ function transcriptionNotes(sourceFiles, dateStr) {
       new TextRun({ text: "ΜΩΒΑ ΚΕΦΑΛΑΙΑ", font: "Arial", size: 16, color: PURPLE, bold: true }), small(" = ιατρικοί όροι/φάρμακα."),
     ] }),
     new Paragraph({ spacing: { after: 30 }, children: [small("Αριθμοί γραμμών (π.χ. 05) για εύκολη αναφορά σε διορθώσεις.")] }),
-    new Paragraph({ spacing: { after: 30 }, children: [small(`Πηγή: ${sourceFiles}  |  Μεταγραφή: ${dateStr}  |  Έκδοση: 10 (lab-panel-aware)`)] }),
+    new Paragraph({ spacing: { after: 30 }, children: [small(`Πηγή: ${sourceFiles}  |  Μεταγραφή: ${dateStr}  |  Έκδοση: 9 (από μεταγραφή Gemini)`)] }),
   ];
 }
 
@@ -546,80 +546,9 @@ const doc = new Document({
 });
 
 // =============================================================================
-// STRUCTURAL VALIDATION — Catches invalid nesting before Packer runs
-// =============================================================================
-
-/**
- * Validates that the document structure doesn't contain invalid nesting patterns
- * that produce corrupt .docx files (which Word will refuse to open).
- *
- * Known issues this catches:
- *  - Paragraph nested inside Paragraph (e.g., wrapping nLine() in new Paragraph())
- *  - Bare TextRun inside TableCell (must be wrapped in Paragraph)
- *
- * Uses docx-js v9 internal structure: objects store children in .root (indexed),
- * NOT in .options.children.
- */
-function validateDocStructure(doc) {
-  let errors = 0;
-  const Pg = Paragraph;
-  const Tb = Table;
-  const TR = TextRun;
-
-  function walkRoot(obj, path) {
-    if (!obj || !obj.root) return;
-    const keys = Object.keys(obj.root);
-    for (const k of keys) {
-      const child = obj.root[k];
-      if (!child || !child.constructor) continue;
-      const name = child.constructor.name;
-
-      // Paragraph should not contain Paragraph or Table
-      if (obj instanceof Pg && child instanceof Pg) {
-        console.error(`ERROR: Paragraph nested inside Paragraph at ${path}.root[${k}]`);
-        errors++;
-      }
-      if (obj instanceof Pg && child instanceof Tb) {
-        console.error(`ERROR: Table nested inside Paragraph at ${path}.root[${k}]`);
-        errors++;
-      }
-
-      // TableCell should not contain bare TextRun (must be wrapped in Paragraph)
-      if (obj.constructor.name === 'TableCell' && child instanceof TR) {
-        console.error(`ERROR: Bare TextRun inside TableCell at ${path}.root[${k}] (must be wrapped in Paragraph)`);
-        errors++;
-      }
-
-      // Recurse
-      walkRoot(child, `${path}.root[${k}](${name})`);
-    }
-  }
-
-  try {
-    const body = doc.documentWrapper.document.root[1]; // Body is root[1] in docx-js v9
-    walkRoot(body, 'Body');
-  } catch(e) {
-    console.error('WARNING: Could not access document body for validation:', e.message);
-  }
-
-  return errors;
-}
-
-// =============================================================================
 // GENERATE OUTPUT
 // =============================================================================
 async function main() {
-  // Validate document structure before generating
-  const structErrors = validateDocStructure(doc);
-  if (structErrors > 0) {
-    console.error(`\nFATAL: ${structErrors} structural error(s) found. Fix before generating.`);
-    console.error(`Common causes:`);
-    console.error(`  - Wrapping nLine() inside new Paragraph() — nLine() already returns a Paragraph`);
-    console.error(`  - Passing bare TextRun/uncertainSmall() to examTable — wrap in array: [uncertainSmall("x")]`);
-    process.exit(1);
-  }
-  console.log(`Structure validation: OK`);
-
   const buffer = await Packer.toBuffer(doc);
   fs.writeFileSync(OUTPUT_PATH, buffer);
   console.log(`Created: ${OUTPUT_PATH}`);

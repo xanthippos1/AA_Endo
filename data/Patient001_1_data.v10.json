@@ -1,0 +1,609 @@
+{
+  "patient_id": "Patient001",
+  "source": "gemini_response/Patient001_gemini31.txt",
+  "generated": "2026-03-22",
+  "version": "v10",
+
+  "identity": {
+    "name": "Ελένη Κ. Παπαδοπούλου",
+    "dob": "14/03/1938",
+    "age_at_first_visit": 76,
+    "address": "Τσιμισκή 78, Θεσσαλονίκη 54622",
+    "phone": "6974 521 839",
+    "amka": "*******4217"
+  },
+
+  "social": {
+    "profession": "Φιλόλογος",
+    "smoking": "Φ",
+    "alcohol": "Φ",
+    "allergies": ["MESULID", "VIBRAMYCIN [?]"]
+  },
+
+  "presenting_illness": [
+    "ΑΔΕΝΩΜΑ ΕΠΙΝΕΦΡΙΔΙΟΥ ΔΕ",
+    "ΠΡΟΥΠΕΡΤΑΣΗ"
+  ],
+
+  "referral": {
+    "from": "κ. Χριστοφορίδης Βενιζέλος",
+    "relation": "σύζυγος"
+  },
+
+  "medical_history": [
+    { "item": "ΠΟΛΛΑΠΛΑ ΙΣΧΑΙΜΙΚΑ ΕΜΦΡΑΚΤΑ ΕΓΚΕΦΑΛΟΥ", "number": 1 },
+    { "item": "Αίσθημα νυγμών στην οπίσθια μοίρα της γλώσσας (από 6ετίας) — μετά αντιγριππικό εμβολιασμό", "number": 2 },
+    { "item": "Εξαίρεση ΠΟΛΥΠΟΔΑ ΤΡΑΧΗΛΟΥ ΜΗΤΡΑΣ", "year_approx": "προ 30ετίας", "number": 3 },
+    { "item": "ΝΕΦΡΟΛΙΘΙΑΣΗ άμφω — πολλαπλοί κωλικοί", "number": 4 },
+    { "item": "ΠΡΟΠΤΩΣΗ MV", "year": 1996, "number": 5 },
+    { "item": "ΔΙΑΦΡΑΓΜΑΤΟΚΗΛΗ", "number": 6 },
+    { "item": "Ήπια ΦΛΕΒΙΚΗ ΑΝΕΠΑΡΚΕΙΑ ΔΕ", "number": 7 },
+    { "item": "ΟΡΩΔΕΙΣ ΚΥΣΤΕΙΣ ΩΟΘΗΚΩΝ άμφω (dΔΕ: 1,5cm — dΑΡ: 2,5cm)", "number": 8 },
+    { "item": "ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ ΗΠΑΤΟΣ", "number": 9 }
+  ],
+
+  "gynecological_history": {
+    "menarche": 13,
+    "cycle": "28/7",
+    "menopause": 48,
+    "deliveries": "2 κφ",
+    "miscarriages": 1,
+    "abortions": "Φ",
+    "first_pregnancy_age": "22-23",
+    "fertility": "40"
+  },
+
+  "family_history": {
+    "father": {
+      "age": 94,
+      "status": "deceased (+)",
+      "conditions": ["ΑΡΤΗΡΙΑΚΗ ΥΠΕΡΤΑΣΗ", "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "ΑΝΟΙΑ (91 ετών)"]
+    },
+    "mother": {
+      "age": 69,
+      "status": "deceased (†)",
+      "conditions": ["ΛΕΥΧΑΙΜΙΑ"]
+    },
+    "patient_summary": ["ΣΤΕΦΑΝΙΑΙΑ ΝΟΣΟΣ (ΣΑΠ-Σ/Ν)", "ΑΡΤΗΡΙΑΚΗ ΥΠΕΡΤΑΣΗ", "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "ΑΔΕΝΩΜΑ ΕΠΙΝΕΦΡΙΔΙΟΥ"],
+    "spouse": {
+      "status": "deceased (†)",
+      "conditions": ["ΣΤΕΦΑΝΙΑΙΑ ΝΟΣΟΣ"]
+    },
+    "siblings": [
+      { "relation": "Αδελφή", "conditions": ["CA ΠΝΕΥΜΟΝΟΣ"] },
+      { "relation": "Ξαδέλφη", "conditions": ["ΣΔ ΤΥΠΟΥ ΙΙ"] }
+    ]
+  },
+
+  "visits": [
+    {
+      "visit_number": 1,
+      "date": "16/10/2014",
+
+      "current_medication": [
+        { "name": "ZOCOR", "dose": "40", "frequency": "x1" },
+        { "name": "XANAX", "dose": "1", "frequency": "x1/2 x1" },
+        { "name": "SALOSPIR", "dose": "100", "frequency": "x1" }
+      ],
+
+      "clinical_exam": {
+        "weight_kg": 64,
+        "height_cm": 159,
+        "bp": "160/80",
+        "pulse": 78,
+        "findings": [
+          { "system": "Κοιλία", "value": "κφ" },
+          { "system": "Πνεύμονες", "value": "ΑΨ κφ" },
+          { "system": "Καρδιά", "value": "S1, S2, SR, φυσήματα" },
+          { "system": "Οιδήματα", "value": "πακ" },
+          { "system": "Νευρολογικό", "value": "κφ" },
+          { "system": "Θυρεοειδής", "value": "Ευθυρεοειδική" },
+          { "system": "Λοιπά", "value": "Ευαισθησία στην πλήξη ΑΝ" }
+        ]
+      },
+
+      "labs": [
+        {
+          "type": "imaging",
+          "date": "11/06/2013",
+          "description": "MRI Ν. κοιλίας",
+          "findings": "ΑΔΕΝΩΜΑ ΔΕ ΕΠΙΝΕΦΡΙΔΙΟΥ (όμοια εικόνα με MRI 2009)"
+        },
+        {
+          "type": "cbc",
+          "date": "16/06/2014",
+          "results": [
+            { "test": "WBC", "value": "5650" },
+            { "test": "Τύπος", "value": "51|38|6|3|1" },
+            { "test": "PLT", "value": "299000" },
+            { "test": "RBC", "value": "4,26x10⁶" },
+            { "test": "HGB", "value": "13,1" },
+            { "test": "HCT", "value": "39,6" },
+            { "test": "MCV", "value": "93" },
+            { "test": "MCH", "value": "30,8" },
+            { "test": "MCHC", "value": "33,1" },
+            { "test": "ΤΚΕ", "value": "19" }
+          ]
+        },
+        {
+          "type": "biochemistry",
+          "date": "16/06/2014",
+          "results": [
+            { "test": "Glu", "value": "92" },
+            { "test": "Ουρία", "value": "40" },
+            { "test": "Κρεατινίνη", "value": "0,7" },
+            { "test": "Ουρικό οξύ", "value": "3,8" },
+            { "test": "CHOL", "value": "188" },
+            { "test": "HDL", "value": "78" },
+            { "test": "LDL", "value": "86" },
+            { "test": "Τριγλυκερίδια", "value": "122" },
+            { "test": "Ca", "value": "9,7 (9,14)" },
+            { "test": "P", "value": "3,6" },
+            { "test": "K", "value": "4,3" },
+            { "test": "Na", "value": "143" },
+            { "test": "Cl", "value": "107" },
+            { "test": "TP", "value": "7,1" },
+            { "test": "ALB", "value": "4,7" },
+            { "test": "SGOT", "value": "22" },
+            { "test": "SGPT", "value": "13" },
+            { "test": "γGT", "value": "9" },
+            { "test": "ALP", "value": "94" },
+            { "test": "CPK", "value": "60" }
+          ]
+        },
+        {
+          "type": "urinalysis",
+          "date": "16/06/2014",
+          "results": [
+            { "test": "Ειδ. Βάρος", "value": "1019" },
+            { "test": "pH", "value": "6,5" },
+            { "test": "Hb", "value": "+++" },
+            { "test": "Πυοσφαίρια", "value": "2-5" },
+            { "test": "Ερυθρά", "value": "2-5" }
+          ]
+        }
+      ],
+
+      "instructions": [
+        "F, ACTH, ALDO, PRA, Ανδρογόνα",
+        "Γεν. ούρων",
+        "ECHO Νεφρών",
+        "Μετρήσεις ΑΠ"
+      ]
+    },
+
+    {
+      "visit_number": 2,
+      "date": "24/11/2014",
+
+      "labs": [
+        {
+          "type": "hormonal",
+          "date": "21/10/2014",
+          "results": [
+            { "test": "TSH", "value": "4,35", "ref_range": "0,27-4,7" },
+            { "test": "FT4", "value": "1,09" },
+            { "test": "Testo", "value": "12", "ref_range": "5-52" },
+            { "test": "SHBG", "value": "88,4" },
+            { "test": "Δ4", "value": "1,16" },
+            { "test": "DHEA-S", "value": "58,9", "ref_range": "12-154" },
+            { "test": "F (Κορτιζόλη)", "value": "21,5" },
+            { "test": "ACTH", "value": "259" },
+            { "test": "ALDO", "value": "136", "ref_range": "4-31" },
+            { "test": "PRA", "value": "0,05", "ref_range": "0,5-4,7" },
+            { "test": "CRP", "value": "0,6", "ref_range": "<6" }
+          ]
+        },
+        {
+          "type": "urinalysis",
+          "date": "21/10/2014",
+          "results": [
+            { "test": "Ειδ. Βάρος", "value": "1011" },
+            { "test": "pH", "value": "5" },
+            { "test": "Πυοσφαίρια", "value": "0-1" },
+            { "test": "Ερυθρά", "value": "0-1" }
+          ]
+        }
+      ],
+
+      "instructions": [
+        "DEXA (ΑΡ ισχίου)",
+        "Μετρήσεις ΑΠ",
+        "Γνωματεύσεις: ECHO άνω κοιλίας + U/S πυέλου / ΟΜΣΣ (profil) + TRIPLEX ΚΑΡΔΙΑΣ",
+        "Γυναικολογική εκτίμηση κύστεων ωοθήκης"
+      ]
+    },
+
+    {
+      "visit_number": 3,
+      "date": "13/11/2018",
+
+      "current_medication": [
+        { "name": "ATARAX", "dose": "25", "frequency": "1/4 x1" },
+        { "name": "XANAX", "dose": "0,5", "frequency": "x1/2 x1" },
+        { "name": "SALOSPIR", "dose": "80", "frequency": "x1" },
+        { "name": "ZOCOR", "dose": "40", "frequency": "x1" },
+        { "name": "NEXIUM", "dose": "", "frequency": "x1 μ.η. μέρα" },
+        { "name": "OLARTAN PLUS", "dose": "20/12,5", "frequency": "x1" },
+        { "name": "LOBIVON", "dose": "5", "frequency": "1/2 x1" }
+      ],
+
+      "notes": [
+        "Η 4η υπερτασική θεραπεία διεκόπη προ μηνός",
+        "ΤΡΟΧΑΙΟ (04/07/2017) → ΚΑΚΩΣΗ ΚΕΦΑΛΗΣ"
+      ],
+
+      "labs": [
+        {
+          "type": "biochemistry",
+          "date": "10/09/2018",
+          "note": "Άνευ αγωγής",
+          "results": [
+            { "test": "Φυλλικό οξύ", "value": "4,7" },
+            { "test": "TSH", "value": "3,22", "ref_range": "0,35-4,94" }
+          ]
+        }
+      ],
+
+      "clinical_exam": {
+        "note": "Διεγράφη στο πρωτότυπο"
+      },
+
+      "instructions": [
+        "Έλεγχος αυτονομίας ΑΔΕΝΩΜΑΤΟΣ ΕΠΙΝΕΦΡΙΔΙΟΥ",
+        "Μεταβολικός έλεγχος"
+      ]
+    },
+
+    {
+      "visit_number": 4,
+      "date": "26/11/2018",
+
+      "labs": [
+        {
+          "type": "cbc",
+          "date": "22/11/2018",
+          "results": [
+            { "test": "WBC", "value": "6010" },
+            { "test": "Τύπος", "value": "47/41/6/5/1" },
+            { "test": "PLT", "value": "282000" },
+            { "test": "RBC", "value": "4,21x10⁶" },
+            { "test": "HGB", "value": "13" },
+            { "test": "HCT", "value": "39,4 (39%)" },
+            { "test": "MCV", "value": "93,6" },
+            { "test": "MCH", "value": "30,9" },
+            { "test": "MCHC", "value": "33" },
+            { "test": "RDW", "value": "12,7%" }
+          ]
+        },
+        {
+          "type": "biochemistry",
+          "date": "22/11/2018",
+          "results": [
+            { "test": "Glu", "value": "84" },
+            { "test": "Ουρία", "value": "34" },
+            { "test": "Κρεατινίνη", "value": "0,8" },
+            { "test": "Ουρικό οξύ", "value": "3,6" },
+            { "test": "CHOL", "value": "184" },
+            { "test": "HDL", "value": "59" },
+            { "test": "LDL", "value": "84" },
+            { "test": "Τριγλυκερίδια", "value": "204" },
+            { "test": "B12", "value": "460" },
+            { "test": "Φυλλικό οξύ", "value": ">20" },
+            { "test": "SGOT", "value": "10" },
+            { "test": "SGPT", "value": "11" },
+            { "test": "25-OHD3", "value": "<9,5" }
+          ]
+        },
+        {
+          "type": "hormonal",
+          "date": "22/11/2018",
+          "label": "Βασικές τιμές",
+          "results": [
+            { "test": "TSH", "value": "5,65", "ref_range": "0,27-4,7" },
+            { "test": "Testo", "value": "4", "ref_range": "5-52" },
+            { "test": "DHEA-S", "value": "29,3", "ref_range": "12-154" },
+            { "test": "Δ4", "value": "0,457", "ref_range": "0,3-33" },
+            { "test": "SHBG", "value": "63,9", "ref_range": "20-130" },
+            { "test": "PRA", "value": "0,08", "ref_range": "0,5-4,7" },
+            { "test": "ALDO", "value": "9,1" },
+            { "test": "F (Κορτιζόλη)", "value": "11,3" },
+            { "test": "ALDO (2η μέτρηση)", "value": "26,1" }
+          ]
+        },
+        {
+          "type": "biochemistry",
+          "date": "24/02/2017",
+          "results": [
+            { "test": "Ca", "value": "8,3" },
+            { "test": "P", "value": "4,8" }
+          ]
+        },
+        {
+          "type": "imaging",
+          "date": "15/11/2018",
+          "description": "CT ΑΚΟ (άνευ σκιαστικού)",
+          "findings": [
+            "ΔΙΑΦΡΑΓΜΑΤΟΚΗΛΗ ολισθαίνουσα μικρού μεγέθους",
+            "Γραμμοειδείς ΑΤΕΛΕΚΤΑΣΙΕΣ κάτω λοβού άμφω, με ΒΡΟΓΧΕΚΤΑΤΙΚΑ στοιχεία",
+            "Ήπια στοιχεία θαμβής υάλου στις βάσεις πνευμόνων",
+            "ΑΔΕΝΩΜΑ ΔΕ ΕΠΙΝΕΦΡΙΔΙΟΥ (d: 1,5 x 22 x 26mm)",
+            "ΟΖΩΔΗΣ ΠΑΧΥΝΣΗ έσω σκέλους, ΑΡ επινεφρίδιο (d: 1cm)",
+            "Ευμεγέθης ΚΥΣΤΗ άνω πόλου ΑΡ νεφρού (d: 7,5cm)",
+            "ΠΑΡΑΠΥΕΛΙΚΕΣ ΚΥΣΤΕΙΣ άμφω",
+            "ΜΙΚΡΟΛΙΘΙΑΣΗ ΔΕ νεφρού",
+            "ΟΜΦΑΛΟΚΗΛΗ (d: 1,8cm)",
+            "ΕΚΚΟΛΠΩΜΑΤΑ π. εντέρου",
+            "Κυστικό μόρφωμα ΑΡ ωοθήκης (d: 3,6cm)",
+            "Κύστη ΔΕ ωοθήκης (d: 2cm)",
+            "ΟΑ ΑΛΛΟΙΩΣΕΙΣ ΔΕ ισχίου",
+            "ΕΚΦΥΛΙΣΤΙΚΕΣ ΑΛΛΟΙΩΣΕΙΣ ΟΜΣΣ"
+          ]
+        },
+        {
+          "type": "imaging",
+          "date": "09/12/2014",
+          "description": "DEXA",
+          "findings": [
+            "ΟΜΣΣ Tsc (L1-L4): -0,9",
+            "ΔΕ ισχίου Tsc (neck): -1,4 → ΟΣΤΕΟΠΕΝΙΑ"
+          ]
+        },
+        {
+          "type": "imaging",
+          "date": "12/10/2018",
+          "description": "TRIPLEX ΚΑΡΔΙΑΣ",
+          "findings": [
+            "EF: 69%",
+            "Ελάχιστη ποσότητα περικαρδιακού υγρού (d: 5-8mm)",
+            "Ήπια ΜΥΞΩΜΑΤΩΔΗΣ ΕΚΦΥΛΙΣΗ MV, ελαφρά τελοσυστολική ΠΡΟΠΤΩΣΗ",
+            "ΔΙΑΣΤΟΛΙΚΗ ΔΥΣΛΕΙΤΟΥΡΓΙΑ τύπου παρατεταμένης χάλασης — Ε/Α: 0,77, E/E': 11"
+          ]
+        }
+      ],
+
+      "instructions": [
+        "Ορμονικός έλεγχος",
+        "Μεταβολικός έλεγχος",
+        "Μεταβολισμός Ca++",
+        "DEXA (ΔΕ ισχίου)"
+      ]
+    },
+
+    {
+      "visit_number": 5,
+      "date": "20/12/2018",
+
+      "labs": [
+        {
+          "type": "imaging",
+          "date": "29/11/2018",
+          "description": "ECHO ΘΥΡΕΟΕΙΔΟΥΣ",
+          "findings": [
+            "Τραχεία, ανομοιογενής, υποηχοϊκότερη, αγγειοβριθής ως επί ΧΡΟΝΙΑΣ ΘΥΡΕΟΕΙΔΙΤΙΔΑΣ",
+            "Όζος (d: 12,5x8,1mm) κάτω 3μόριο ΔΕ λοβού, κοκκώδης ενασβέστωση",
+            "Διαστάσεις: 42,4x17,5x15,1mm / V: 5,8cm³ = 39,3x13,5x13,9mm / V: 3,9cm³",
+            "0 λεμφαδένες"
+          ]
+        },
+        {
+          "type": "imaging",
+          "date": "12/12/2018",
+          "description": "DEXA",
+          "findings": [
+            "ΟΜΣΣ Tsc (L1-L4): +0,8",
+            "ΔΕ ισχίου: +0,7 → κ.φ. ευρήματα"
+          ]
+        },
+        {
+          "type": "imaging",
+          "date": "06/12/2018",
+          "description": "ΚΟΛΟΝΟΣΚΟΠΗΣΗ",
+          "findings": [
+            "ΕΚΚΟΛΠΩΜΑΤΙΚΗ ΝΟΣΟΣ ΣΙΓΜΟΕΙΔΟΥΣ",
+            "ΑΙΜΟΡΡΟΙΔΕΣ (στάδιο ΙΙ)"
+          ]
+        },
+        {
+          "type": "overnight_suppression",
+          "date": null,
+          "label": "Τροποποιημένη Δοκιμασία Overnight Καταστολής",
+          "note": "Υπό T4 50μg x1",
+          "results": [
+            { "test": "PRA", "value": "0,12", "ref_range": "0,5-4,7" },
+            { "test": "ALDO", "value": "8,6", "ref_range": "4-31" },
+            { "test": "ACTH", "value": "1,5", "ref_range": "7-64" },
+            { "test": "F (Κορτιζόλη)", "value": "1,3", "ref_range": "6,2-19,4" },
+            { "test": "PTH", "value": "37,7" },
+            { "test": "BGP", "value": "42,5" },
+            { "test": "TSH", "value": "1,72", "ref_range": "0,27-4,7" },
+            { "test": "CHOL", "value": "165" },
+            { "test": "Τριγλυκερίδια", "value": "107" },
+            { "test": "HDL", "value": "72" },
+            { "test": "LDL", "value": "71" },
+            { "test": "Ca", "value": "9,1 (9,04)" },
+            { "test": "P", "value": "3,6" },
+            { "test": "Mg", "value": "2,1" },
+            { "test": "K", "value": "4,9" },
+            { "test": "Na", "value": "142" },
+            { "test": "Αλβουμίνη", "value": "4,1" }
+          ]
+        },
+        {
+          "type": "imaging",
+          "date": "12/10/2018",
+          "description": "TRIPLEX ΚΑΡΔΙΑΣ",
+          "findings": ["EF: 60% / ΠΡΟΠΤΩΣΗ MV / Λοιπά: κφ"]
+        }
+      ],
+
+      "diagnosis": [
+        "ΠΡΩΤΟΠΑΘΗΣ ΥΠΕΡΑΛΔΟΣΤΕΡΟΝΙΣΜΟΣ",
+        "ΟΖΩΔΗΣ ΥΠΕΡΠΛΑΣΙΑ ΕΠΙΝΕΦΡΙΔΙΩΝ"
+      ],
+
+      "instructions": [
+        "Αγωγή ως έχει",
+        "Επανεκτίμηση μετά 6 μήνες",
+        "FNA όζου"
+      ]
+    },
+
+    {
+      "visit_number": 6,
+      "date": "15/02/2019",
+
+      "clinical_exam": {
+        "weight_kg": 68,
+        "height_cm": 159,
+        "bp": "160/100",
+        "bp_home": "125-140/60-70"
+      },
+
+      "labs": [
+        {
+          "type": "cytology",
+          "date": "12/02/2019",
+          "description": "FNA ΘΥΡΕΟΕΙΔΟΥΣ",
+          "findings": [
+            "FNA όζου (d: 1,28cm) ΔΕ λοβού: Κατηγορία II Bethesda — ΑΔΕΝΩΜΑΤΩΔΗΣ ΟΖΟΣ, οξύφιλη μετάπλαση, ενδείξεις ΑΥΤΟΑΝΟΣΗΣ ΘΥΡΕΟΕΙΔΙΤΙΔΑΣ, κυστική εκφύλιση. Άνευ κακοήθειας.",
+            "FNA όζου (d: 0,55cm) ΔΕ λοβού: Κατηγορία II Bethesda — μικρή κυτταροβρίθεια, ΑΔΕΝΩΜΑΤΩΔΗΣ ΟΖΟΣ. Άνευ κακοήθειας."
+          ]
+        }
+      ],
+
+      "instructions": [
+        "ALDACTONE 100 — 1/2 x2",
+        "LECALCIF amp x1/εβδ",
+        "CALCIFOS x2 x1",
+        "ZOCOR 40 x1",
+        "SALOSPIR 100 x1",
+        "NEXIUM x1 μ.π. μέρα",
+        "XANAX 0,5 x1"
+      ],
+
+      "current_medication": [
+        { "name": "ALDACTONE", "dose": "100", "frequency": "1/2 x2" },
+        { "name": "LECALCIF", "dose": "amp", "frequency": "x1/εβδ" },
+        { "name": "CALCIFOS", "dose": "", "frequency": "x2 x1" },
+        { "name": "ZOCOR", "dose": "40", "frequency": "x1" },
+        { "name": "SALOSPIR", "dose": "100", "frequency": "x1" },
+        { "name": "NEXIUM", "dose": "", "frequency": "x1 μ.π. μέρα" },
+        { "name": "XANAX", "dose": "0,5", "frequency": "x1" }
+      ]
+    },
+
+    {
+      "visit_number": 7,
+      "date": "31/10/2019",
+
+      "notes": [
+        "07/06/2019: ΕΞΑΡΘΡΩΣΗ ΑΡ ΩΜΟΥ (πτώση)",
+        "Μετρήσεις ΑΠ: 125-135/65-70 mmHg"
+      ],
+
+      "labs": [
+        {
+          "type": "cbc",
+          "date": "18/10/2019",
+          "results": [
+            { "test": "WBC", "value": "7800" },
+            { "test": "Τύπος", "value": "57/32/8/3" },
+            { "test": "PLT", "value": "399000" },
+            { "test": "RBC", "value": "4,1x10⁶" },
+            { "test": "HGB", "value": "13" },
+            { "test": "HCT", "value": "38,9" },
+            { "test": "MCV", "value": "94,9" },
+            { "test": "MCH", "value": "31,7" },
+            { "test": "MCHC", "value": "33,4" },
+            { "test": "RDW", "value": "11,9%" },
+            { "test": "ΤΚΕ", "value": "36" }
+          ]
+        },
+        {
+          "type": "biochemistry",
+          "date": "18/10/2019",
+          "results": [
+            { "test": "Glu", "value": "94" },
+            { "test": "Κρεατινίνη", "value": "1,05" },
+            { "test": "CHOL", "value": "215" },
+            { "test": "Τριγλυκερίδια", "value": "161" },
+            { "test": "HDL", "value": "54" },
+            { "test": "LDL", "value": "129" },
+            { "test": "SGOT", "value": "15" },
+            { "test": "SGPT", "value": "11" },
+            { "test": "γGT", "value": "19" },
+            { "test": "Ca", "value": "9,5 (9,42)" },
+            { "test": "Na", "value": "140" },
+            { "test": "K", "value": "4,7" }
+          ]
+        }
+      ],
+
+      "clinical_exam": {
+        "weight_kg": 68,
+        "bp": "135/75",
+        "pulse": 78,
+        "findings": [
+          { "system": "Καρδιά", "value": "S1, S2, SR, Συστολικό φύσημα (1+/4+) MV (προϋπήρχε)" },
+          { "system": "Τενόντια", "value": "κφ" },
+          { "system": "Νευρολογική", "value": "κφ" },
+          { "system": "Λοιπά", "value": "κφ" }
+        ]
+      },
+
+      "instructions": [
+        "Ορμονικός έλεγχος",
+        "Μεταβολικός έλεγχος",
+        "ECHO άνω-κάτω κοιλίας"
+      ]
+    },
+
+    {
+      "visit_number": 8,
+      "date": "11/12/2019",
+
+      "labs": [
+        {
+          "type": "imaging",
+          "date": "13/11/2019",
+          "description": "ECHO ΑΝΩ-ΚΑΤΩ ΚΟΙΛΙΑΣ",
+          "findings": [
+            "Ήπαρ: κφ, ήπια ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ",
+            "ΠΑΡΑΠΥΕΛΙΚΗ ΚΥΣΤΗ ΔΕ νεφρού (d: 1,47cm)",
+            "ΜΙΚΡΟΛΙΘΙΑΣΙΚΑ ΣΥΓΚΡΙΜΜΑΤΑ ΔΕ νεφρού",
+            "ΠΑΡΑΠΥΕΛΙΚΕΣ ΚΥΣΤΕΙΣ ΑΡ νεφρού (d: 0,9cm)",
+            "Εκσήμανση πυελοκαλυκικού ΑΡ",
+            "Ευμεγέθης κυστικός σχηματισμός (d: 8,7x7,3cm) — άνω πόλος ΑΡ νεφρού",
+            "Κυστικός σχηματισμός ΑΡ ωοθήκης (d: 2,7x2,5cm)"
+          ]
+        },
+        {
+          "type": "mixed",
+          "date": "05/11/2019",
+          "note": "Υπό T4 50μg x1",
+          "results": [
+            { "test": "CRP", "value": "0,7", "ref_range": "<6" },
+            { "test": "B12", "value": "377" },
+            { "test": "Φυλλικό οξύ", "value": ">20" },
+            { "test": "Ινσουλίνη", "value": "15,4" },
+            { "test": "TSH", "value": "1,99", "ref_range": "0,27-4,7" },
+            { "test": "FT4", "value": "1,17", "ref_range": "0,7-2" },
+            { "test": "PTH", "value": "20,4" },
+            { "test": "25-OH D3", "value": "43,3" },
+            { "test": "BGP", "value": "35,1" },
+            { "test": "Abs", "value": "(-) αρνητικά" }
+          ]
+        }
+      ],
+
+      "instructions": [
+        "B12 FIX (1000) x1 x 6 μήνες",
+        "Διακοπή FILICINE 5",
+        "Διακοπή ZOCOR 40mg → Έναρξη ROSUBEN 20 x1",
+        "Ουρολογική εκτίμηση",
+        "Υπόλοιπη αγωγή ως έχει"
+      ]
+    }
+  ]
+}

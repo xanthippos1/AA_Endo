@@ -1,0 +1,157 @@
+{
+  "patient_id": "Patient002",
+  "source": "original_jpg/Patient002_1.jpg, Patient002_2.jpg, Patient002_3.jpg",
+  "generated": "2026-03-22",
+  "version": "v10",
+  "note": "Direct transcription from scanned images (no Gemini pre-transcript). Many readings uncertain due to challenging handwriting.",
+
+  "identity": {
+    "name": "Νικόλαος Γ. Αντωνίου",
+    "dob": "22/08/1980",
+    "age_at_visit": 33,
+    "address": "Εγνατία 145, Θεσσαλονίκη 54636",
+    "phone": "6938 274 610",
+    "amka": "*******6053"
+  },
+
+  "social": {
+    "profession": "ΥΠΑΛΛΗΛΟΣ / ΛΟΓΙΣΤΗΣ — Πληροφορική",
+    "profession_note_uncertain": "Α΄ Στρατ. Α΄",
+    "smoking": "Φ",
+    "alcohol": "Φ (uncertain)",
+    "allergies": "ΜΕΤΑΛΛΑ, Χ-Sol μ αρωμ ομοιοπ. (uncertain), + Βιταμίνη C"
+  },
+
+  "visits": [
+    {
+      "visit_number": 1,
+      "date": "03/02/2014",
+      "date_uncertain": true,
+
+      "current_medication": [
+        { "name": "BISOPROLOL", "dose": "5mg", "dose_uncertain": true }
+      ],
+
+      "presenting_illness": [
+        "ΔΕΡΜΑΤΙΚΕΣ ΒΛΑΒΕΣ τριχωτού σώματος",
+        "ΒΟΥΛΩΝΟΚΗΛΗ δεξιά — Χ/Γ (2010)",
+        "ΥΠΕΡΤΡΙΧΩΣΕΙΣ (2013)"
+      ],
+
+      "referral": {
+        "from": "Ενδοκρ. εξέταση — Τηλεφωνική",
+        "uncertain": true
+      },
+
+      "medical_history": [
+        { "item": "ΒΟΥΛΩΝΟΚΗΛΗ δεξιά — Χ/Γ", "year": 2010 },
+        { "item": "ΥΠΕΡΤΡΙΧΩΣΕΙΣ — εμφάνιση", "year": 2013 },
+        { "item": "ΔΕΡΜΑΤΙΚΕΣ ΒΛΑΒΕΣ τριχωτού σώματος", "year": null },
+        { "item": "Σταδιακή αύξηση τριχοφυΐας σε κορμό και άκρα", "uncertain": true },
+        { "item": "Εμφάνιση δερματικών βλαβών σταδιακά τα τελευταία χρόνια", "uncertain": true },
+        { "item": "Αλλαγές σωματικής κατανομής τριχών, κνησμός κατά καιρούς", "uncertain": true },
+        { "item": "Προηγούμενη αξιολόγηση — MRI χωρίς ευρήματα", "uncertain": true },
+        { "item": "Παραπομπή σε ενδοκρινολόγο για περαιτέρω διερεύνηση", "uncertain": true }
+      ],
+
+      "family_history": {
+        "father": {
+          "conditions": [
+            { "condition": "ΥΠΕΡΤΑΣΗ", "uncertain": true },
+            { "condition": "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "uncertain": true }
+          ]
+        },
+        "mother": {
+          "conditions": [
+            { "condition": "ΘΥΡΕΟΕΙΔΟΠΑΘΕΙΑ", "uncertain": true },
+            { "condition": "ΥΠΕΡΤΑΣΗ", "uncertain": true }
+          ]
+        }
+      },
+
+      "clinical_exam": {
+        "weight_kg": 62,
+        "height_cm": 174,
+        "height_uncertain": true,
+        "bp": "110/70",
+        "pulse": 84,
+        "pulse_uncertain": true,
+        "findings": [
+          { "system": "Καρδιά", "value": "S1, S2, SR, κφ" },
+          { "system": "Πνεύμονες", "value": "κφ" },
+          { "system": "Κοιλία", "value": "κφ" },
+          { "system": "Θυρεοειδής", "value": "ψηλαφητός, κφ", "uncertain": true }
+        ]
+      },
+
+      "labs": null,
+
+      "instructions": [
+        "Αιματολογικές εξετάσεις: TSH, FT4, FT3",
+        "Τεστοστερόνη, DHEA-S (uncertain), SHBG (uncertain)",
+        "Κορτιζόλη 8πμ, Προλακτίνη (uncertain)",
+        "17-OH Προγεστερόνη (uncertain)",
+        "Γενική αίματος, Βιοχημικός έλεγχος (uncertain)"
+      ]
+    },
+    {
+      "visit_number": 2,
+      "date": "10/03/2014",
+      "date_uncertain": true,
+
+      "labs": {
+        "date": "10/03/2014",
+        "date_uncertain": true,
+        "results": [
+          { "test": "TSH", "value": "4,25", "ref_range": "0,27-4,20 mIU/L", "flag": "HIGH", "uncertain": true },
+          { "test": "FT4", "value": "1,57", "ref_range": "0,93-1,70 ng/dL", "flag": null, "uncertain": true },
+          { "test": "FT3", "value": "1,30", "ref_range": "2,0-4,4 pg/mL", "flag": "LOW", "uncertain": true },
+          { "test": "Τεστοστερόνη", "value": null, "ref_range": "", "flag": null, "uncertain": true, "note": "δυσανάγνωστο" },
+          { "test": "Κορτιζόλη 8πμ", "value": null, "ref_range": "", "flag": null, "uncertain": true, "note": "δυσανάγνωστο" },
+          { "test": "DHEA-S", "value": null, "ref_range": "", "flag": null, "uncertain": true, "note": "δυσανάγνωστο" }
+        ]
+      },
+
+      "instructions": [
+        "Παρακολούθηση — επανεξέταση (uncertain)",
+        "Συνέχιση αγωγής (uncertain)",
+        "Βλ. πρωτότυπη σάρωση για λεπτομέρειες"
+      ]
+    },
+    {
+      "visit_number": 3,
+      "date": "xx/xx/2014",
+      "date_uncertain": true,
+
+      "clinical_exam": {
+        "note": "Σταθερή κλινική εικόνα, Βάρος ~62 Kgr (uncertain)"
+      },
+
+      "instructions": [
+        "ΜΕΘΦΟΡΜΙΝΗ 850mg x2 (uncertain dosage)",
+        "Επανάληψη: T3, FT3, FT4",
+        "ECHO ΤΡΑΧΗΛΟΥ / Δίαιτα (uncertain)",
+        "Επανεξέταση σε 3 μήνες (uncertain)"
+      ]
+    },
+    {
+      "visit_number": 4,
+      "date": "xx/xx/2014",
+      "date_uncertain": true,
+
+      "clinical_exam": {
+        "note": "Μεθφορμίνη: σταθερή δόση, Βάρος ~60 Kgr (uncertain)"
+      },
+
+      "labs": {
+        "note": "Επαναληπτικές εξετάσεις — βλ. πρωτότυπη σάρωση"
+      },
+
+      "instructions": [
+        "TSH, FT4 — επανάληψη (uncertain)",
+        "Κορτιζόλη / Τεστοστερόνη (uncertain)",
+        "ECHO ΤΡΑΧΗΛΟΥ / Δίαιτα (uncertain)"
+      ]
+    }
+  ]
+}

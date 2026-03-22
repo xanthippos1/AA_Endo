@@ -1,0 +1,263 @@
+{
+  "patient_id": "Patient005",
+  "source": "gemini_response/Patient005_gemini31.txt",
+  "generated": "2026-03-22",
+  "version": "v10",
+
+  "identity": {
+    "name": "Θεόδωρος Α. Γεωργίου",
+    "dob": "28/01/1975",
+    "age_at_first_visit": 58,
+    "address": "Αγ. Σοφίας 19, Θεσσαλονίκη 54623",
+    "phone": "6942 168 305",
+    "amka": "*******3748"
+  },
+
+  "social": {
+    "profession": "Συνταξ. Νοσηλεύτρια",
+    "smoking": "Ø",
+    "alcohol": "Ø",
+    "allergies": "Γαρίδα, κόκκινα ψάρια — ΕΝΔΟΓΕΝΕΣ ΒΡΟΓΧΙΚΟ ΑΣΘΜΑ (από 15ετίας)"
+  },
+
+  "medical_history": [
+    { "item": "ΑΓΚΥΛΟΠΟΙΗΤΙΚΗ ΣΠΟΝΔΥΛΙΤΙΔΑ", "detail": "Διάγνωση από ηλικία 25 ετών" },
+    { "item": "Α. ΥΠΕΡΤΑΣΗ", "detail": "Προ 4ετίας" },
+    { "item": "ΕΝΔΟΜΗΤΡΙΩΣΗ", "detail": "Χ/Γ (40 ετών) → ARVECAP x 6 μήνες → Αρνήθηκε τη λήψη αντισυλληπτικών" },
+    { "item": "ΧΡ. ΔΥΣΚΟΙΛΙΟΤΗΤΑ / ΠΑΧΥΝΣΗ ΒΛΕΝ. / ΠΑΝΓΑΣΤΡΙΤΙΔΑ", "detail": "H. pyl +" },
+    { "item": "ΙΝΟΜΥΩΜΑ ΜΗΤΡΑΣ", "detail": "Χ/Γ (50 ετών)" },
+    { "item": "ΝΕΦΡΟΛΙΘΙΑΣΗ", "detail": "Ιστορικό (14χρ - 17χρ)" },
+    { "item": "ΠΟΛΥΠΟΔΑΣ ΧΟΛΗΔΟΧΟΥ ΚΥΣΤΕΩΣ", "detail": "d: 1,6 εκ" }
+  ],
+
+  "gynecological_history": {
+    "menarche_age": 12,
+    "marriage_age": 27,
+    "menopause_age": "48-52",
+    "deliveries": "1 ΚΦ",
+    "miscarriages": "Ø",
+    "abortions": "Ø",
+    "other": "ΚΡΥΟΠΗΞΙΑ ΤΡΑΧΗΛΟΥ (ΤΡΑΧΗΛΙΤΙΣ — 27χρ)"
+  },
+
+  "family_history": {
+    "mother": {
+      "age": 85,
+      "status": "αποβιώσασα",
+      "conditions": [
+        "Α. ΥΠΕΡΤΑΣΗ",
+        "ΟΣΤΕΟΠΟΡΩΣΗ / ΣΠΟΝΔΥΛΙΚΑ ΚΑΤΑΓΜΑΤΑ",
+        "ΧΡ. ΒΡΟΓΧΙΚΟ ΑΣΘΜΑ",
+        "ΧΟΛΟΚΥΣΤΕΚΤΟΜΗ",
+        "ΡΕΥΜΑΤΟΕΙΔΗΣ ΑΡΘΡΙΤΙΔΑ"
+      ]
+    },
+    "father": {
+      "age": 86,
+      "status": "αποβιώσας",
+      "conditions": [
+        "ΣΤΕΦΑΝΙΑΙΑ ΝΟΣΟΣ (ΠΕΜ)",
+        "Ca ΠΡΟΣΤΑΤΟΥ"
+      ]
+    },
+    "siblings": [
+      {
+        "relation": "Αδελφός",
+        "age": 65,
+        "conditions": ["ΣΤΕΦΑΝΙΑΙΑ ΝΟΣΟΣ", "ΣΔ ΙΙ"]
+      },
+      {
+        "relation": "Αδελφός",
+        "age": 66,
+        "conditions": ["Α. ΥΠΕΡΤΑΣΗ", "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ"]
+      }
+    ]
+  },
+
+  "visits": [
+    {
+      "visit_number": 1,
+      "date": "01/11/2021",
+
+      "current_medication": [
+        { "name": "SERETIDE", "dose": "δι 2x2 εισπνοές" },
+        { "name": "TRIATEC", "dose": "5/25", "frequency": "x1 πρωί" },
+        { "name": "MINITRAN", "dose": "2-10", "frequency": "x1" },
+        { "name": "EFECOL", "dose": "", "frequency": "x1 (κατ' επίκληση)" }
+      ],
+
+      "presenting_illness": [
+        "ΕΚΤΙΜΗΣΗ ΘΥΡΕΟΕΙΔΙΚΗΣ ΛΕΙΤΟΥΡΓΙΑΣ"
+      ],
+
+      "referral": {
+        "from": "κ. Τιτίκα Ξανθοπούλου",
+        "specialty": "Νεφρο"
+      },
+
+      "clinical_exam": {
+        "weight_kg": 83,
+        "height_cm": 168,
+        "bp": "135/80",
+        "pulse": 72,
+        "findings": [
+          { "system": "Καρδιά", "value": "S1, S2, SR, °φυσήματα" },
+          { "system": "Πνεύμονες", "value": "ΑΨ κφ" },
+          { "system": "Κοιλία", "value": "κφ / Διάχυτη ευαισθησία στην ψηλάφηση του κοιλιακού χώρου" },
+          { "system": "Τενόντια", "value": "κφ" },
+          { "system": "Θυρεοειδής", "value": "Ευθυρεοειδική" },
+          { "system": "Νευρολογικά", "value": "κφ" },
+          { "system": "Οιδήματα", "value": "ΠΔΚ" },
+          { "system": "Αγγεία", "value": "κφ" }
+        ]
+      },
+
+      "labs": {
+        "date": "25/10/2021",
+        "panels": {
+          "cbc": [
+            { "test": "RBC", "value": "4,72 x10⁶", "ref_range": "", "flag": null },
+            { "test": "HGB", "value": "13,1", "ref_range": "", "flag": null },
+            { "test": "HCT", "value": "41,6", "ref_range": "ΦΤ: 39,3%", "flag": null },
+            { "test": "MCV", "value": "88,1", "ref_range": "", "flag": null },
+            { "test": "MCH", "value": "27,8", "ref_range": "", "flag": null },
+            { "test": "MCHC", "value": "31,5", "ref_range": "", "flag": null },
+            { "test": "RDW", "value": "13,8%", "ref_range": "", "flag": null },
+            { "test": "WBC", "value": "10.090", "ref_range": "", "flag": null },
+            { "test": "Τύπος (ΟΥΔΕΤ|ΛΕΜΦ|ΜΟΝΟ|ΗΩΣΙΝ|ΒΑΣΟ)", "value": "38|52|6|4|1", "ref_range": "", "flag": null },
+            { "test": "PLT", "value": "255.000", "ref_range": "", "flag": null },
+            { "test": "ΤΚΕ", "value": "35", "ref_range": "", "flag": null },
+            { "test": "CRP", "value": "0,6", "ref_range": "ΦΤ: < 0,5", "flag": "HIGH" }
+          ],
+          "biochemistry": [
+            { "test": "Glu", "value": "98", "ref_range": "", "flag": null },
+            { "test": "Ουρία", "value": "32", "ref_range": "", "flag": null },
+            { "test": "Κρεατινίνη", "value": "0,63", "ref_range": "", "flag": null },
+            { "test": "Ουρικό οξύ", "value": "5", "ref_range": "", "flag": null },
+            { "test": "SGOT", "value": "19", "ref_range": "", "flag": null },
+            { "test": "SGPT", "value": "19", "ref_range": "", "flag": null },
+            { "test": "γGT", "value": "12", "ref_range": "", "flag": null },
+            { "test": "ALP", "value": "63", "ref_range": "", "flag": null },
+            { "test": "LDH", "value": "171", "ref_range": "", "flag": null },
+            { "test": "CPK", "value": "70", "ref_range": "", "flag": null }
+          ],
+          "lipids": [
+            { "test": "CHOL", "value": "243", "ref_range": "", "flag": "HIGH" },
+            { "test": "HDL", "value": "58", "ref_range": "", "flag": null },
+            { "test": "LDL", "value": "155", "ref_range": "", "flag": "HIGH" },
+            { "test": "Τριγλυκερίδια", "value": "151", "ref_range": "", "flag": null }
+          ],
+          "thyroid": [
+            { "test": "TSH", "value": "4,77", "ref_range": "ΦΤ: 0,27-4,2", "flag": "HIGH", "note": "Άνευ αγωγής" }
+          ]
+        }
+      },
+
+      "instructions": [
+        "ECHO ΘΥΡΕΟΕΙΔΟΥΣ + Ε/Γ ΚΟΙΛΙΑΣ",
+        "ΟΡΜΟΝΙΚΟΣ ΕΛΕΓΧΟΣ",
+        "ΜΕΤΑΒΟΛΙΚΟΣ ΕΛΕΓΧΟΣ",
+        "DEXA (ΟΜΣΣ)"
+      ]
+    },
+
+    {
+      "visit_number": 2,
+      "date": "10/11/2021",
+
+      "current_medication": [
+        { "name": "MANIPER", "dose": "10", "frequency": "x1 απόγευμα" },
+        { "name": "ZIRUS", "dose": "5mg", "frequency": "x1" },
+        { "name": "Λοιπά", "dose": "", "frequency": "κφ (Κ/Α)" }
+      ],
+
+      "imaging": [
+        {
+          "type": "ECHO Ε/Γ ΚΟΙΛΙΑΣ",
+          "date": "17/01/2020",
+          "findings": [
+            "Ήπαρ: κφ διαστάσεων, ομαλό περίγραμμα, ανομοιογενές — ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ (μέτριου προς σοβαρού βαθμού)",
+            "Δε λοβός ήπατος, παρά την πύλη: υπερηχοϊκός σχηματισμός (d: 3cm) — Δ.Δ: Περιοχή μη αυξημένης εναπόθεσης λίπους / ΑΙΜΑΓΓΕΙΩΜΑ?",
+            "Χοληδόχος κύστη: Τοιχωματικός ΠΟΛΥΠΟΔΑΣ (d: 1,6cm ↑)",
+            "Κάτω πόλος ΔΕ νεφρού: μικρός υπερηχοϊκός σχηματισμός (d: 5,7mm) ως επί πιθανού ΑΙΜΑΓΓΕΙΟΛΙΠΩΜΑΤΟΣ",
+            "Ενδομήτριο: 4,8mm / Λοιπά: κφ"
+          ]
+        },
+        {
+          "type": "TRIPLEX ΚΑΡΔΙΑΣ",
+          "date": "08/11/2021",
+          "findings": [
+            "EF: 60%",
+            "Ήπια ΔΙΑΣΤΟΛΙΚΗ ΔΥΣΛΕΙΤΟΥΡΓΙΑ ΑΡ κοιλίας (E/A: 0,79 — TDI: E' < A' — E': 0,07 — E/E': 9,24)",
+            "Ελάχιστη παλινδρόμηση MV και TRV"
+          ]
+        },
+        {
+          "type": "ECHO Ε/Γ ΚΟΙΛΙΑΣ",
+          "date": "09/11/2021",
+          "findings": [
+            "Χοληδόχος κύστη: Πολλαπλοί ΧΟΛΟΛΙΘΟΙ (d ≤ 1,8cm), κφ μεγέθους και πάχους τοιχώματος, χωρίς σημεία φλεγμονής",
+            "Ενδομήτριο: 0,4cm / Λοιπά: παρόμοια εικόνα με U/S (17/01/2020)"
+          ]
+        },
+        {
+          "type": "ECHO ΘΥΡΕΟΕΙΔΟΥΣ",
+          "date": "09/11/2021",
+          "findings": [
+            "Πιθανή εικόνα ΧΡ. ΑΥΤΟΑΝΟΣΗΣ ΘΥΡΕΟΕΙΔΙΤΙΔΑΣ",
+            "Αγγείωση: κφ",
+            "Μικροί ενδοπαρωτιδικοί λεμφαδένες καλοήθους μορφολογίας",
+            "Ορατοί, μη παθολογικά διογκωμένοι τραχηλικοί λεμφαδένες"
+          ]
+        },
+        {
+          "type": "DEXA",
+          "date": "11/11/2021",
+          "findings": [
+            "ΟΜΣΣ (L1-L4): T-score: -0,5",
+            "ΔΕ Ισχίο (neck): T-score: -1,2 → ΟΣΤΕΟΠΕΝΙΑ",
+            "ΑΡ Ισχίο (neck): T-score: -1,3 → ΟΣΤΕΟΠΕΝΙΑ"
+          ]
+        }
+      ],
+
+      "labs": {
+        "date": "03/11/2021",
+        "panels": {
+          "thyroid": [
+            { "test": "TSH", "value": "1,54", "ref_range": "ΦΤ: 0,51-4,3", "flag": null, "note": "Άνευ αγωγής" },
+            { "test": "FT4", "value": "1,21", "ref_range": "ΦΤ: 0,98-1,63", "flag": null },
+            { "test": "FT3", "value": "3,11", "ref_range": "ΦΤ: 2-3,71", "flag": null },
+            { "test": "Ab(-)", "value": "αρν", "ref_range": "", "flag": null }
+          ],
+          "bone_metabolism": [
+            { "test": "PTH", "value": "39,3", "ref_range": "ΦΤ: 15-65", "flag": null },
+            { "test": "25-OHD3", "value": "15,83", "ref_range": "", "flag": "LOW" },
+            { "test": "BGP (Οστεοκαλσίνη)", "value": "15,2", "ref_range": "", "flag": null }
+          ],
+          "metabolic": [
+            { "test": "Ινσουλίνη", "value": "5,6", "ref_range": "", "flag": null },
+            { "test": "B12", "value": "232,8", "ref_range": "", "flag": null },
+            { "test": "Φυλλικό οξύ", "value": "5,45", "ref_range": "", "flag": null },
+            { "test": "Ομοκυστεΐνη", "value": "10", "ref_range": "", "flag": null },
+            { "test": "Κρεατινίνη", "value": "0,61", "ref_range": "", "flag": null }
+          ],
+          "lipids_extended": [
+            { "test": "Lp(a)", "value": "16,8", "ref_range": "ΦΤ: < 30", "flag": null },
+            { "test": "ApoA1", "value": "166", "ref_range": "ΦΤ: 101-223", "flag": null },
+            { "test": "ApoB", "value": "112", "ref_range": "ΦΤ: 53-182", "flag": null },
+            { "test": "Λόγος ApoB/ApoA1", "value": "0,67", "ref_range": "ΦΤ: < 0,6", "flag": "HIGH" }
+          ]
+        }
+      },
+
+      "instructions": [
+        "B12fix (1000) x1 x 6 μήνες",
+        "Filicine 5 x1 x 6 μήνες",
+        "LECALCIF 0,25 x1 / εβδ",
+        "TSH μετά 6 μήνες",
+        "Επανεκτίμηση μετά 1 έτος"
+      ]
+    }
+  ]
+}
