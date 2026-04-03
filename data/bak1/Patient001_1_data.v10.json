@@ -1,5 +1,4 @@
 {
-  "_schema": "endo-data-v1",
   "patient_id": "Patient001",
   "source": "gemini_response/Patient001_gemini31.txt",
   "generated": "2026-03-22",
@@ -11,8 +10,7 @@
     "age_at_first_visit": 76,
     "address": "Τσιμισκή 78, Θεσσαλονίκη 54622",
     "phone": "6974 521 839",
-    "amka": "*******4217",
-    "amka4": "4217"
+    "amka": "*******4217"
   },
 
   "social": {
@@ -33,26 +31,26 @@
   },
 
   "medical_history": [
-    { "item": "ΠΟΛΛΑΠΛΑ ΙΣΧΑΙΜΙΚΑ ΕΜΦΡΑΚΤΑ ΕΓΚΕΦΑΛΟΥ" },
-    { "item": "Αίσθημα νυγμών στην οπίσθια μοίρα της γλώσσας (από 6ετίας) — μετά αντιγριππικό εμβολιασμό" },
-    { "item": "Εξαίρεση ΠΟΛΥΠΟΔΑ ΤΡΑΧΗΛΟΥ ΜΗΤΡΑΣ", "year_approx": "προ 30ετίας" },
-    { "item": "ΝΕΦΡΟΛΙΘΙΑΣΗ άμφω — πολλαπλοί κωλικοί" },
-    { "item": "ΠΡΟΠΤΩΣΗ MV", "year": 1996 },
-    { "item": "ΔΙΑΦΡΑΓΜΑΤΟΚΗΛΗ" },
-    { "item": "Ήπια ΦΛΕΒΙΚΗ ΑΝΕΠΑΡΚΕΙΑ ΔΕ" },
-    { "item": "ΟΡΩΔΕΙΣ ΚΥΣΤΕΙΣ ΩΟΘΗΚΩΝ άμφω (dΔΕ: 1,5cm — dΑΡ: 2,5cm)" },
-    { "item": "ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ ΗΠΑΤΟΣ" }
+    { "item": "ΠΟΛΛΑΠΛΑ ΙΣΧΑΙΜΙΚΑ ΕΜΦΡΑΚΤΑ ΕΓΚΕΦΑΛΟΥ", "number": 1 },
+    { "item": "Αίσθημα νυγμών στην οπίσθια μοίρα της γλώσσας (από 6ετίας) — μετά αντιγριππικό εμβολιασμό", "number": 2 },
+    { "item": "Εξαίρεση ΠΟΛΥΠΟΔΑ ΤΡΑΧΗΛΟΥ ΜΗΤΡΑΣ", "year_approx": "προ 30ετίας", "number": 3 },
+    { "item": "ΝΕΦΡΟΛΙΘΙΑΣΗ άμφω — πολλαπλοί κωλικοί", "number": 4 },
+    { "item": "ΠΡΟΠΤΩΣΗ MV", "year": 1996, "number": 5 },
+    { "item": "ΔΙΑΦΡΑΓΜΑΤΟΚΗΛΗ", "number": 6 },
+    { "item": "Ήπια ΦΛΕΒΙΚΗ ΑΝΕΠΑΡΚΕΙΑ ΔΕ", "number": 7 },
+    { "item": "ΟΡΩΔΕΙΣ ΚΥΣΤΕΙΣ ΩΟΘΗΚΩΝ άμφω (dΔΕ: 1,5cm — dΑΡ: 2,5cm)", "number": 8 },
+    { "item": "ΛΙΠΩΔΗΣ ΔΙΗΘΗΣΗ ΗΠΑΤΟΣ", "number": 9 }
   ],
 
   "gynecological_history": {
-    "menarche_age": 13,
+    "menarche": 13,
     "cycle": "28/7",
-    "menopause_age": 48,
+    "menopause": 48,
     "deliveries": "2 κφ",
     "miscarriages": 1,
     "abortions": "Φ",
     "first_pregnancy_age": "22-23",
-    "fertility_age": "40"
+    "fertility": "40"
   },
 
   "family_history": {
@@ -77,21 +75,10 @@
     ]
   },
 
-  "latest_medication": [
-    { "name": "ALDACTONE", "dose": "100", "frequency": "1/2 x2" },
-    { "name": "LECALCIF", "dose": "amp", "frequency": "x1/εβδ" },
-    { "name": "CALCIFOS", "frequency": "x2 x1" },
-    { "name": "ZOCOR", "dose": "40", "frequency": "x1" },
-    { "name": "SALOSPIR", "dose": "100", "frequency": "x1" },
-    { "name": "NEXIUM", "frequency": "x1 μ.π. μέρα" },
-    { "name": "XANAX", "dose": "0,5", "frequency": "x1" }
-  ],
-
   "visits": [
     {
       "visit_number": 1,
       "date": "16/10/2014",
-      "type": "in-person",
 
       "current_medication": [
         { "name": "ZOCOR", "dose": "40", "frequency": "x1" },
@@ -120,7 +107,7 @@
           "type": "imaging",
           "date": "11/06/2013",
           "description": "MRI Ν. κοιλίας",
-          "findings": ["ΑΔΕΝΩΜΑ ΔΕ ΕΠΙΝΕΦΡΙΔΙΟΥ (όμοια εικόνα με MRI 2009)"]
+          "findings": "ΑΔΕΝΩΜΑ ΔΕ ΕΠΙΝΕΦΡΙΔΙΟΥ (όμοια εικόνα με MRI 2009)"
         },
         {
           "type": "cbc",
@@ -188,7 +175,6 @@
     {
       "visit_number": 2,
       "date": "24/11/2014",
-      "type": "in-person",
 
       "labs": [
         {
@@ -231,14 +217,13 @@
     {
       "visit_number": 3,
       "date": "13/11/2018",
-      "type": "in-person",
 
       "current_medication": [
         { "name": "ATARAX", "dose": "25", "frequency": "1/4 x1" },
         { "name": "XANAX", "dose": "0,5", "frequency": "x1/2 x1" },
         { "name": "SALOSPIR", "dose": "80", "frequency": "x1" },
         { "name": "ZOCOR", "dose": "40", "frequency": "x1" },
-        { "name": "NEXIUM", "frequency": "x1 μ.η. μέρα" },
+        { "name": "NEXIUM", "dose": "", "frequency": "x1 μ.η. μέρα" },
         { "name": "OLARTAN PLUS", "dose": "20/12,5", "frequency": "x1" },
         { "name": "LOBIVON", "dose": "5", "frequency": "1/2 x1" }
       ],
@@ -273,7 +258,6 @@
     {
       "visit_number": 4,
       "date": "26/11/2018",
-      "type": "in-person",
 
       "labs": [
         {
@@ -389,7 +373,6 @@
     {
       "visit_number": 5,
       "date": "20/12/2018",
-      "type": "in-person",
 
       "labs": [
         {
@@ -469,7 +452,6 @@
     {
       "visit_number": 6,
       "date": "15/02/2019",
-      "type": "in-person",
 
       "clinical_exam": {
         "weight_kg": 68,
@@ -503,10 +485,10 @@
       "current_medication": [
         { "name": "ALDACTONE", "dose": "100", "frequency": "1/2 x2" },
         { "name": "LECALCIF", "dose": "amp", "frequency": "x1/εβδ" },
-        { "name": "CALCIFOS", "frequency": "x2 x1" },
+        { "name": "CALCIFOS", "dose": "", "frequency": "x2 x1" },
         { "name": "ZOCOR", "dose": "40", "frequency": "x1" },
         { "name": "SALOSPIR", "dose": "100", "frequency": "x1" },
-        { "name": "NEXIUM", "frequency": "x1 μ.π. μέρα" },
+        { "name": "NEXIUM", "dose": "", "frequency": "x1 μ.π. μέρα" },
         { "name": "XANAX", "dose": "0,5", "frequency": "x1" }
       ]
     },
@@ -514,7 +496,6 @@
     {
       "visit_number": 7,
       "date": "31/10/2019",
-      "type": "in-person",
 
       "notes": [
         "07/06/2019: ΕΞΑΡΘΡΩΣΗ ΑΡ ΩΜΟΥ (πτώση)",
@@ -581,7 +562,6 @@
     {
       "visit_number": 8,
       "date": "11/12/2019",
-      "type": "in-person",
 
       "labs": [
         {

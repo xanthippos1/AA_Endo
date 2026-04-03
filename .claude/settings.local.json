@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e \":*)",
+      "Bash(python3 -c \":*)",
+      "Bash(ls data/Patient002*)",
+      "Bash(ls scratch/create_patient002*)"
+    ]
+  }
+}

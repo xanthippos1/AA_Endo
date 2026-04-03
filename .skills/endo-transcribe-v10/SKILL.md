@@ -125,15 +125,20 @@ Verify the output file exists and report row count + file size.
 ### 2d. Generate the data file
 
 Key rule: keep the same organization as the docx file. The idea is to create that data structure as we are processing the gemini transcript and as the docx file is being created. That way the data is already in a convenient format to be ingested into a back-end database for the application.
-- output location: `./data/Patient004_1_data.v10.json`
-- example: `./example_data_template.json`
+- output location: `./data/PatientXXX_N_data_v10.json`
+- schema reference: `./example_data_template.json` (defines the unified `endo-data-v1` schema)
+- After writing the file, also copy it to `C:/Users/xanar/Documents/AA_Endo_App/data/` (the app's data directory)
 ---
 
 ## Rules
 
+### Fresh Start
+- Each transcription run MUST start from scratch. Do NOT use any prior knowledge, cached data, or output from previous runs for this patient. The ONLY inputs are the Gemini transcript file and `id.json`. Ignore any existing `.json` or `.docx` output for the patient.
+
 ### Identity Fields
 - The input text has redacted identity fields. Always replace with values from `./id.json`.
 - AMKA values in `id.json` are already masked (last 4 digits only).
+- When building the JSON data file, extract the last 4 digits from the `amka` field and store them as `amka4` in the `identity` object (e.g. `"amka": "*******4217"` → `"amka4": "4217"`).
 
 ### No Image Reading
 - v10 does NOT read or transcribe from images. The input is pre-transcribed text only.

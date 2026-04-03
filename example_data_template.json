@@ -1,87 +1,177 @@
 {
-  "patient_id": "Patient004",
-  "source": "gemini_response/Patient004_1_gemini31.txt",
-  "generated": "2026-03-22",
-  "version": "v9",
-  
+  "_schema": "endo-data-v1",
+  "patient_id": "PatientXXX",
+  "source": "gemini_response/PatientXXX_gemini31.txt",
+  "generated": "YYYY-MM-DD",
+  "version": "v10",
+
   "identity": {
     "name": "from id.json",
     "dob": "DD/MM/YYYY",
-    "age_at_visit": 26,
+    "age_at_first_visit": 26,
     "address": "from id.json",
     "phone": "from id.json",
-    "amka": "*******0821"
+    "amka": "*******XXXX",
+    "amka4": "XXXX"
   },
 
   "social": {
-    "profession": "Φοιτητής Ψυχολογίας",
-    "smoking": "Από 16 ετών (2-3 τσιγάρα/ημέρα)",
-    "alcohol": "Κοινωνικός πότης",
-    "allergies": "Φ"
+    "profession": "string",
+    "smoking": "string or Ø",
+    "alcohol": "string or Ø",
+    "allergies": ["DRUG1", "DRUG2"]
   },
+
+  "presenting_illness": [
+    "CONDITION1",
+    "CONDITION2"
+  ],
+
+  "referral": {
+    "from": "name",
+    "relation": "σύζυγος | φίλη | specialty etc."
+  },
+
+  "medical_history": [
+    { "item": "CONDITION or description", "year": 2018, "detail": "optional extra info", "uncertain": false }
+  ],
+
+  "gynecological_history": {
+    "menarche_age": 13,
+    "cycle": "28/7",
+    "menopause_age": 48,
+    "marriage_age": 27,
+    "deliveries": "2 κφ",
+    "miscarriages": "Ø",
+    "abortions": "Ø",
+    "first_pregnancy_age": 22,
+    "fertility_age": 40,
+    "other": "optional notes"
+  },
+
+  "family_history": {
+    "father": {
+      "age": 64,
+      "status": "living | deceased",
+      "conditions": ["CONDITION1", "CONDITION2"]
+    },
+    "mother": {
+      "age": 56,
+      "status": "living | deceased",
+      "conditions": ["CONDITION1"]
+    },
+    "siblings": [
+      { "relation": "Αδελφή", "age": 30, "conditions": ["CONDITION1"] }
+    ],
+    "spouse": {
+      "status": "living | deceased",
+      "conditions": ["CONDITION1"]
+    },
+    "patient_summary": ["CONDITION1"]
+  },
+
+  "latest_medication": [
+    { "name": "DRUG_NAME", "dose": "40mg", "frequency": "x1" }
+  ],
 
   "visits": [
     {
       "visit_number": 1,
-      "date": "03/04/2023",
-      
+      "date": "DD/MM/YYYY",
+      "type": "in-person | e-mail | phone",
+      "date_uncertain": false,
+
       "current_medication": [
-        { "name": "ZOLOFT", "dose": "50mg", "frequency": "x1" }
+        { "name": "DRUG_NAME", "dose": "40mg", "frequency": "x1", "uncertain": false }
       ],
-
-      "presenting_illness": [
-        "ΔΙΑΤΑΡΑΧΗ ΥΠΝΟΥ",
-        "ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ"
-      ],
-
-      "referral": {
-        "from": "κ. Αμπατζή Λυδία",
-        "type": "φίλη"
-      },
-
-      "medical_history": [
-        { "item": "ΛΗΨΗ ΜΥΕΛΟΥ ΟΣΤΩΝ για αδελφή (ΟΛΛ)", "year": 2012 }
-      ],
-
-      "family_history": {
-        "mother": {
-          "age": 56,
-          "conditions": ["ΕΜΜΗΝΟΠΑΥΣΗ στα 50", "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "ΠΡΟΔΙΑΒΗΤΗΣ", "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ (Χ/Γ 2018)"]
-        },
-        "father": {
-          "age": 64,
-          "conditions": ["ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ", "Χρ. ΠΡΟΣΤΑΤΙΤΙΔΑ", "ΝΕΦΡΟΛΙΘΙΑΣΗ"]
-        },
-        "siblings": [
-          { "relation": "Αδελφή", "conditions": ["ΟΛΛ (+)"] }
-        ]
-      },
 
       "clinical_exam": {
         "weight_kg": 67,
         "height_cm": 182,
         "bp": "110/70",
+        "bp_home": "125-140/60-70",
         "pulse": 60,
+        "note": "optional free-text note",
         "findings": [
-          { "system": "Καρδιά", "value": "s1, s2, SR, φυσιολογικοί ήχοι" },
-          { "system": "Πνεύμονες", "value": "κφ" },
-          { "system": "Κοιλία", "value": "κφ" }
+          { "system": "Καρδιά", "value": "S1, S2, SR, κφ", "uncertain": false }
         ]
       },
 
-      "labs": {
-        "date": "10/04/2023",
-        "results": [
-          { "test": "WBC", "value": "6800", "unit": "", "ref_range": "", "flag": null },
-          { "test": "SGPT", "value": "115", "unit": "", "ref_range": "", "flag": "HIGH" },
-          { "test": "CPK", "value": "2598", "unit": "", "ref_range": "20-180", "flag": "HIGH" }
-        ]
-      },
+      "labs": [
+        {
+          "type": "cbc",
+          "date": "DD/MM/YYYY",
+          "label": "optional label",
+          "note": "optional note e.g. Άνευ αγωγής",
+          "results": [
+            { "test": "WBC", "value": "6800", "ref_range": "", "flag": null, "note": "", "uncertain": false }
+          ]
+        },
+        {
+          "type": "biochemistry",
+          "date": "DD/MM/YYYY",
+          "results": [
+            { "test": "Glu", "value": "92", "ref_range": "", "flag": null }
+          ]
+        },
+        {
+          "type": "lipids",
+          "date": "DD/MM/YYYY",
+          "results": [
+            { "test": "CHOL", "value": "206", "ref_range": "", "flag": "HIGH" }
+          ]
+        },
+        {
+          "type": "thyroid",
+          "date": "DD/MM/YYYY",
+          "results": [
+            { "test": "TSH", "value": "4,77", "ref_range": "0,27-4,2", "flag": "HIGH" }
+          ]
+        },
+        {
+          "type": "hormonal",
+          "date": "DD/MM/YYYY",
+          "results": [
+            { "test": "F (Κορτιζόλη)", "value": "21,5", "ref_range": "", "flag": null }
+          ]
+        },
+        {
+          "type": "urinalysis",
+          "date": "DD/MM/YYYY",
+          "results": [
+            { "test": "pH", "value": "6", "ref_range": "", "flag": null }
+          ]
+        },
+        {
+          "type": "imaging",
+          "date": "DD/MM/YYYY",
+          "description": "ECHO ΘΥΡΕΟΕΙΔΟΥΣ",
+          "findings": [
+            "Finding line 1",
+            "Finding line 2"
+          ]
+        },
+        {
+          "type": "cytology",
+          "date": "DD/MM/YYYY",
+          "description": "FNA ΘΥΡΕΟΕΙΔΟΥΣ",
+          "findings": [
+            "Finding line 1"
+          ]
+        }
+      ],
+
+      "diagnosis": [
+        "CONDITION1"
+      ],
+
+      "notes": [
+        "Free-text note"
+      ],
 
       "instructions": [
-        "Υπερηχογράφημα (ECHO) άνω κοιλίας",
-        "ΤΚΕ",
-        "Επανάληψη: SGOT, SGPT, γGT, CPK, ALP, LDH"
+        "Instruction 1",
+        "Instruction 2"
       ]
     }
   ]

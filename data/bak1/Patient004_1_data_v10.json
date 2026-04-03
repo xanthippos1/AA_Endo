@@ -1,0 +1,184 @@
+{
+  "patient_id": "Patient004",
+  "source": "gemini_response/Patient004_gemini31.txt",
+  "generated": "2026-03-22",
+  "version": "v10",
+
+  "identity": {
+    "name": "Αικατερίνη Σ. Δημητρίου",
+    "dob": "10/06/1998",
+    "age_at_first_visit": 26,
+    "address": "Λ. Νίκης 55, Θεσσαλονίκη 54623",
+    "phone": "6981 597 086",
+    "amka": "*******0891"
+  },
+
+  "social": {
+    "profession": "Φοιτητής Ψυχολογίας",
+    "smoking": "Από 16 ετών (2-3/ημέρα)",
+    "alcohol": "Κοινωνικός πότης",
+    "allergies": "Ø"
+  },
+
+  "current_medication": [
+    { "name": "ZOLOFT", "dose": "50mg", "frequency": "x1" }
+  ],
+
+  "presenting_illness": [
+    "ΔΙΑΤΑΡΑΧΗ ΥΠΝΟΥ",
+    "ΑΠΩΛΕΙΑ ΒΑΡΟΥΣ"
+  ],
+
+  "referral": {
+    "from": "κ. Αμπατζή Λυδία",
+    "type": "φίλη"
+  },
+
+  "medical_history": [
+    { "item": "Λήψη μυελού οστών για την αδελφή του (ΟΛΛ)", "year": 2018 }
+  ],
+
+  "family_history": {
+    "mother": {
+      "age": 56,
+      "conditions": [
+        "ΕΜΜΗΝΟΠΑΥΣΗ στα 50",
+        "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ",
+        "ΠΡΟΔΙΑΒΗΤΗΣ",
+        "ΑΚΟΥΣΤΙΚΟ ΝΕΥΡΙΝΩΜΑ αρ. (2018 — Χ/Γ)"
+      ]
+    },
+    "father": {
+      "age": 64,
+      "conditions": [
+        "ΥΠΕΡΛΙΠΙΔΑΙΜΙΑ",
+        "ΧΡ. ΠΡΟΣΤΑΤΙΤΙΔΑ",
+        "ΝΕΦΡΟΛΙΘΙΑΣΗ"
+      ]
+    },
+    "siblings": [
+      { "relation": "Αδελφή", "conditions": ["ΟΛΛ (+)"] }
+    ]
+  },
+
+  "visits": [
+    {
+      "visit_number": 1,
+      "date": "03/04/2023",
+      "type": "in-person",
+
+      "clinical_exam": {
+        "weight_kg": 67,
+        "height_cm": 182,
+        "bp": "110/70",
+        "pulse": 60,
+        "findings": [
+          { "system": "Καρδιά", "value": "S1, S2, SR, χωρίς φυσήματα" },
+          { "system": "Πνεύμονες", "value": "ΑΨ κφ" },
+          { "system": "Κοιλία", "value": "κφ" },
+          { "system": "Τενόντια", "value": "κφ" },
+          { "system": "Θυρεοειδής", "value": "κφ" },
+          { "system": "Νευρολογικό", "value": "κφ" },
+          { "system": "Οιδήματα κ. άκρων", "value": "κφ" },
+          { "system": "Αγγεία", "value": "κφ" }
+        ]
+      },
+
+      "labs": null,
+
+      "instructions": [
+        "Ορμονικός έλεγχος",
+        "Μεταβολικός έλεγχος"
+      ]
+    },
+    {
+      "visit_number": 2,
+      "date": "12/04/2023",
+      "type": "e-mail",
+
+      "clinical_exam": null,
+
+      "labs": {
+        "date": "10/04/2023",
+        "cbc": [
+          { "test": "WBC", "value": "6.800", "ref": "" },
+          { "test": "Τύπος (Ου/Λεμ/Μον/Ηω/Βασ)", "value": "50/39/8/3/1", "ref": "" },
+          { "test": "PLT", "value": "213.000", "ref": "" },
+          { "test": "RBC", "value": "5,3 x10⁶", "ref": "" },
+          { "test": "HGB", "value": "16,4", "ref": "" },
+          { "test": "HCT", "value": "49,2", "ref": "" },
+          { "test": "MCV", "value": "92,8", "ref": "" },
+          { "test": "MCH", "value": "31", "ref": "" },
+          { "test": "MCHC", "value": "33,4", "ref": "" },
+          { "test": "RDW", "value": "12,7", "ref": "" }
+        ],
+        "inflammation": [
+          { "test": "CRP", "value": "0,36", "ref": "ΦΤ < 6" }
+        ],
+        "biochemistry": [
+          { "test": "Γλυκόζη (Glu)", "value": "92", "ref": "" },
+          { "test": "Ουρία", "value": "36", "ref": "" },
+          { "test": "Κρεατινίνη", "value": "1,0", "ref": "" },
+          { "test": "Ουρικό Οξύ", "value": "4,2", "ref": "" },
+          { "test": "Αλβουμίνη", "value": "4,6", "ref": "" },
+          { "test": "Ca", "value": "10,1 (διορθ. 9,62)", "ref": "" },
+          { "test": "P", "value": "4,5", "ref": "" },
+          { "test": "Mg", "value": "2,0", "ref": "" },
+          { "test": "K", "value": "4,1", "ref": "" },
+          { "test": "Na", "value": "143", "ref": "" }
+        ],
+        "lipids": [
+          { "test": "CHOL", "value": "206", "ref": "" },
+          { "test": "HDL", "value": "55,2", "ref": "" },
+          { "test": "Τριγλυκερίδια", "value": "80", "ref": "" },
+          { "test": "LDL", "value": "135", "ref": "" }
+        ],
+        "liver": [
+          { "test": "SGPT", "value": "115", "ref": "", "flag": "HIGH" },
+          { "test": "γGT", "value": "15", "ref": "" },
+          { "test": "ALP", "value": "119", "ref": "ΦΤ: 40-280" }
+        ],
+        "enzymes": [
+          { "test": "CPK", "value": "2.598", "ref": "ΦΤ: 20-180", "flag": "HIGH" },
+          { "test": "ANA", "value": "(-) αρν.", "ref": "" }
+        ],
+        "iron_vitamins": [
+          { "test": "Φερριτίνη", "value": "303", "ref": "ΦΤ: 15-400" },
+          { "test": "Ομοκυστεΐνη", "value": "8,0", "ref": "" },
+          { "test": "Β12", "value": "464,0", "ref": "" },
+          { "test": "Φυλλικό Οξύ", "value": "3,0", "ref": "" }
+        ],
+        "bone_metabolism": [
+          { "test": "25-OH D3", "value": "24", "ref": "" },
+          { "test": "PTH", "value": "16", "ref": "ΦΤ: 8-75" }
+        ],
+        "hormones": [
+          { "test": "Testo", "value": "9,0", "ref": "ΦΤ: φυσιολ." },
+          { "test": "SHBG", "value": "78", "ref": "ΦΤ: 10-70", "flag": "HIGH" }
+        ],
+        "thyroid": [
+          { "test": "TSH", "value": "2,18", "ref": "ΦΤ: 0,2-4,5" },
+          { "test": "Anti-TPO", "value": "20", "ref": "ΦΤ < 150" },
+          { "test": "Anti-Tg", "value": "15", "ref": "ΦΤ < 150" }
+        ],
+        "urinalysis": [
+          { "test": "Ειδικό Βάρος", "value": "1015", "ref": "" },
+          { "test": "pH", "value": "6", "ref": "" },
+          { "test": "Πρωτεΐνη", "value": "0-1", "ref": "" },
+          { "test": "Ερυθρά", "value": "0-1", "ref": "" }
+        ],
+        "note": "Άνευ αγωγής"
+      },
+
+      "instructions": [
+        "ECHO υπερηχογράφημα άνω κοιλίας",
+        "ΤΚΕ",
+        "SGOT, SGPT, γGT, CPK, ALP, LDH",
+        "ApoA1/ApoB, Lp(a)",
+        "Έλεγχος ηπατιτίδων",
+        "F, ACTH, β-hCG, aFP",
+        "Ανδρολόγος, Rast test"
+      ]
+    }
+  ]
+}
